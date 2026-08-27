@@ -1,0 +1,26 @@
+settings:
+  require-confirmation: true
+  allow-unknown-items: false
+  debug: false
+
+currency:
+  shard-material: AMETHYST_SHARD
+  shard-name: "&dOdłamek Customu"
+  nugget-material: NETHERITE_SCRAP
+  nugget-name: "&6Bryłka Reforge"
+  shards-per-nugget: 32
+
+recycling:
+  default-value: 0
+  blacklisted-ids: []
+  values:
+    example_common_item: 1
+    example_rare_item: 4
+    example_legendary_item: 10
+
+messages:
+  prefix: "&8[&dLainaReforge&8] &7"
+  no-permission: "&cNie masz uprawnien do tej komendy."
+  reloaded: "&aKonfiguracja zostala przeladowana."
+  unknown-item: "&cTego przedmiotu nie mozna przetopic."
+  recycled: "&aPrzetopiono przedmioty. Otrzymano &d{shards} &aodlamkow."
