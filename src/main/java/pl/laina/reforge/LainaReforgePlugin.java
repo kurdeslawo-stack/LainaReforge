@@ -7,12 +7,14 @@ import pl.laina.reforge.listener.RecyclerListener;
 import pl.laina.reforge.service.CurrencyService;
 import pl.laina.reforge.service.ItemIdentityService;
 import pl.laina.reforge.service.RecycleValueService;
+import pl.laina.reforge.service.TransactionLogService;
 
 public final class LainaReforgePlugin extends JavaPlugin {
 
     private RecycleValueService recycleValueService;
     private ItemIdentityService itemIdentityService;
     private CurrencyService currencyService;
+    private TransactionLogService transactionLogService;
     private RecyclerMenu recyclerMenu;
 
     @Override
@@ -22,7 +24,14 @@ public final class LainaReforgePlugin extends JavaPlugin {
         recycleValueService = new RecycleValueService(this);
         itemIdentityService = new ItemIdentityService(this);
         currencyService = new CurrencyService(this);
-        recyclerMenu = new RecyclerMenu(this, itemIdentityService, recycleValueService, currencyService);
+        transactionLogService = new TransactionLogService(this);
+        recyclerMenu = new RecyclerMenu(
+                this,
+                itemIdentityService,
+                recycleValueService,
+                currencyService,
+                transactionLogService
+        );
 
         ReforgeCommand command = new ReforgeCommand(this, recycleValueService, itemIdentityService, recyclerMenu);
         if (getCommand("reforge") != null) {
