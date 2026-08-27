@@ -1,0 +1,21 @@
+name: LainaReforge
+version: 0.1.0-SNAPSHOT
+main: pl.laina.reforge.LainaReforgePlugin
+api-version: '26.2'
+author: slawek2131
+description: System recyclingu i reforgingu customowych przedmiotow dla Laina.pl
+
+commands:
+  reforge:
+    description: Glowna komenda LainaReforge
+    usage: /reforge
+    aliases: [recykling, recycler]
+    permission: lainareforge.use
+
+permissions:
+  lainareforge.use:
+    description: Pozwala korzystac z systemu reforgingu
+    default: true
+  lainareforge.admin:
+    description: Dostep do komend administracyjnych LainaReforge
+    default: op
