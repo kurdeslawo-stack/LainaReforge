@@ -12,10 +12,15 @@ import pl.laina.reforge.LainaReforgePlugin;
 import pl.laina.reforge.service.CurrencyService;
 import pl.laina.reforge.service.ItemIdentityService;
 import pl.laina.reforge.service.RecycleValueService;
+import pl.laina.reforge.service.TransactionLogService;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public final class RecyclerMenu {
 
@@ -29,15 +34,18 @@ public final class RecyclerMenu {
     private final ItemIdentityService itemIdentityService;
     private final RecycleValueService recycleValueService;
     private final CurrencyService currencyService;
+    private final TransactionLogService transactionLogService;
 
     public RecyclerMenu(LainaReforgePlugin plugin,
                         ItemIdentityService itemIdentityService,
                         RecycleValueService recycleValueService,
-                        CurrencyService currencyService) {
+                        CurrencyService currencyService,
+                        TransactionLogService transactionLogService) {
         this.plugin = plugin;
         this.itemIdentityService = itemIdentityService;
         this.recycleValueService = recycleValueService;
         this.currencyService = currencyService;
+        this.transactionLogService = transactionLogService;
     }
 
     public void open(Player player) {
@@ -55,22 +63,60 @@ public final class RecyclerMenu {
             inventory.setItem(slot, filler);
         }
 
-        inventory.setItem(INFO_SLOT, named(Material.PAPER,
-                "Wrzuc customowe przedmioty do gornych 5 rzedow", NamedTextColor.AQUA));
         inventory.setItem(CONFIRM_SLOT, named(Material.LIME_DYE,
                 "Przetop przedmioty", NamedTextColor.GREEN));
         inventory.setItem(CANCEL_SLOT, named(Material.BARRIER,
                 "Anuluj", NamedTextColor.RED));
+        updatePreview(inventory);
+    }
+
+    public void queuePreviewRefresh(Inventory inventory) {
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (inventory.getHolder() instanceof RecyclerHolder) {
+                updatePreview(inventory);
+            }
+        });
+    }
+
+    public void updatePreview(Inventory inventory) {
+        RecycleResult result = calculate(inventory);
+        ItemStack info = new ItemStack(Material.PAPER);
+        ItemMeta meta = info.getItemMeta();
+        meta.displayName(Component.text("Podglad przetopienia", NamedTextColor.AQUA));
+
+        List<Component> lore = new ArrayList<>();
+        if (result.itemAmounts().isEmpty() && result.invalidItems().isEmpty()) {
+            lore.add(Component.text("Wrzuc customowe przedmioty do gornych 5 rzedow.", NamedTextColor.GRAY));
+        } else {
+            lore.add(Component.text("Wartosc: " + result.totalShards() + " odlamkow", NamedTextColor.LIGHT_PURPLE));
+            lore.add(Component.text("Rozpoznane typy: " + result.itemAmounts().size(), NamedTextColor.GRAY));
+            if (!result.invalidItems().isEmpty()) {
+                lore.add(Component.text("Nie mozna przetopic: "
+                        + String.join(", ", result.invalidItems()), NamedTextColor.RED));
+            } else {
+                lore.add(Component.text("Wszystkie przedmioty sa poprawne.", NamedTextColor.GREEN));
+            }
+        }
+
+        meta.lore(lore);
+        info.setItemMeta(meta);
+        inventory.setItem(INFO_SLOT, info);
     }
 
     public RecycleResult calculate(Inventory inventory) {
-        int totalShards = 0;
+        long totalShards = 0;
         int stacks = 0;
-        List<String> invalid = new ArrayList<>();
+        Set<String> invalid = new LinkedHashSet<>();
+        Map<String, Integer> itemAmounts = new LinkedHashMap<>();
 
         for (int slot = 0; slot <= INPUT_MAX_SLOT; slot++) {
             ItemStack item = inventory.getItem(slot);
             if (item == null || item.getType().isAir()) {
+                continue;
+            }
+
+            if (currencyService.isPluginCurrency(item)) {
+                invalid.add("waluta_lainareforge");
                 continue;
             }
 
@@ -86,11 +132,13 @@ public final class RecyclerMenu {
                 continue;
             }
 
-            totalShards += value * item.getAmount();
+            totalShards += (long) value * item.getAmount();
+            itemAmounts.merge(id.get(), item.getAmount(), Integer::sum);
             stacks++;
         }
 
-        return new RecycleResult(totalShards, stacks, invalid);
+        int safeTotal = totalShards > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) totalShards;
+        return new RecycleResult(safeTotal, stacks, List.copyOf(invalid), Map.copyOf(itemAmounts));
     }
 
     public boolean confirm(Player player, Inventory inventory) {
@@ -100,20 +148,25 @@ public final class RecyclerMenu {
             String prefix = plugin.getConfig().getString("messages.prefix", "");
             player.sendMessage(Component.text(stripLegacy(prefix))
                     .append(Component.text("Nie mozna przetopic: " + String.join(", ", result.invalidItems()), NamedTextColor.RED)));
+            updatePreview(inventory);
             return false;
         }
 
-        if (result.totalShards() <= 0) {
+        if (result.totalShards() <= 0 || result.itemAmounts().isEmpty()) {
             player.sendMessage(Component.text("Najpierw wrzuc przedmioty do recyclingu.", NamedTextColor.RED));
             return false;
         }
 
+        // RecycleResult zostal policzony bezposrednio przed usunieciem itemow.
+        // Dopiero teraz czyscimy input i wyplacamy walute.
         for (int slot = 0; slot <= INPUT_MAX_SLOT; slot++) {
             inventory.setItem(slot, null);
         }
 
         currencyService.giveShards(player, result.totalShards());
-        player.sendMessage(Component.text("Przetopiono przedmioty. Otrzymano " + result.totalShards() + " odlamkow.", NamedTextColor.GREEN));
+        transactionLogService.logRecycle(player, result.itemAmounts(), result.totalShards());
+        player.sendMessage(Component.text("Przetopiono przedmioty. Otrzymano "
+                + result.totalShards() + " odlamkow.", NamedTextColor.GREEN));
         player.closeInventory();
         return true;
     }
@@ -143,6 +196,9 @@ public final class RecyclerMenu {
         return text == null ? "" : text.replaceAll("(?i)&[0-9A-FK-ORX]", "");
     }
 
-    public record RecycleResult(int totalShards, int stacks, List<String> invalidItems) {
+    public record RecycleResult(int totalShards,
+                                int stacks,
+                                List<String> invalidItems,
+                                Map<String, Integer> itemAmounts) {
     }
 }
