@@ -3,6 +3,10 @@ settings:
   allow-unknown-items: false
   debug: false
 
+development:
+  # Tylko do lokalnych testow. Przed wydaniem produkcyjnym ustaw false.
+  enabled: true
+
 item-identification:
   # Docelowo wpiszemy tutaj prawdziwy klucz customowych itemow z Lainy.
   # /reforge inspect pokazuje klucze PDC przedmiotu trzymanego w rece.
