@@ -3,6 +3,16 @@ settings:
   allow-unknown-items: false
   debug: false
 
+item-identification:
+  # Docelowo wpiszemy tutaj prawdziwy klucz customowych itemow z Lainy.
+  # /reforge inspect pokazuje klucze PDC przedmiotu trzymanego w rece.
+  pdc-string-keys:
+    - "laina:item_id"
+  allow-material-fallback: false
+
+gui:
+  title: "LainaReforge - Recykling"
+
 currency:
   shard-material: AMETHYST_SHARD
   shard-name: "&dOdłamek Customu"
