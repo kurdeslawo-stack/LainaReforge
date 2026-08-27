@@ -51,6 +51,10 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(color("&d/reforge reload &7- przeladowuje konfiguracje"));
                 sender.sendMessage(color("&d/reforge value <id> &7- pokazuje wartosc recyclingu"));
                 sender.sendMessage(color("&d/reforge inspect &7- pokazuje dane przedmiotu w rece"));
+                if (itemIdentityService.isDevelopmentEnabled()) {
+                    sender.sendMessage(color("&d/reforge devitem <id> &7- nadaje testowe ID przedmiotowi w rece"));
+                    sender.sendMessage(color("&d/reforge devclear &7- usuwa testowe ID z przedmiotu"));
+                }
             }
             return true;
         }
@@ -99,6 +103,58 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if (args[0].equalsIgnoreCase("devitem")) {
+            if (!sender.hasPermission("lainareforge.admin")) {
+                sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
+                return true;
+            }
+            if (!itemIdentityService.isDevelopmentEnabled()) {
+                sender.sendMessage(color("&cTryb developerski jest wylaczony w config.yml."));
+                return true;
+            }
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(color("&cTa komenda wymaga gracza."));
+                return true;
+            }
+            if (args.length < 2) {
+                sender.sendMessage(color("&cUzycie: /reforge devitem <item_id>"));
+                return true;
+            }
+
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (!itemIdentityService.applyDevId(item, args[1])) {
+                sender.sendMessage(color("&cNie udalo sie nadac ID. Trzymaj normalny przedmiot w glownej rece."));
+                return true;
+            }
+
+            int value = recycleValueService.getValue(args[1]);
+            sender.sendMessage(color("&aNadano testowe ID &f" + args[1].toLowerCase() + "&a. Wartosc recyclingu: &d" + value + "&a."));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("devclear")) {
+            if (!sender.hasPermission("lainareforge.admin")) {
+                sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
+                return true;
+            }
+            if (!itemIdentityService.isDevelopmentEnabled()) {
+                sender.sendMessage(color("&cTryb developerski jest wylaczony w config.yml."));
+                return true;
+            }
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(color("&cTa komenda wymaga gracza."));
+                return true;
+            }
+
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (itemIdentityService.clearDevId(item)) {
+                sender.sendMessage(color("&aUsunieto testowe ID z przedmiotu."));
+            } else {
+                sender.sendMessage(color("&eTen przedmiot nie ma testowego ID."));
+            }
+            return true;
+        }
+
         sender.sendMessage(color("&cNieznana komenda. Uzyj /reforge help."));
         return true;
     }
@@ -107,15 +163,22 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                  @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
-            List<String> options = sender.hasPermission("lainareforge.admin")
-                    ? List.of("help", "inspect", "reload", "value")
-                    : List.of("help");
+            List<String> options;
+            if (sender.hasPermission("lainareforge.admin")) {
+                options = itemIdentityService.isDevelopmentEnabled()
+                        ? List.of("help", "inspect", "reload", "value", "devitem", "devclear")
+                        : List.of("help", "inspect", "reload", "value");
+            } else {
+                options = List.of("help");
+            }
             return options.stream()
                     .filter(value -> value.startsWith(args[0].toLowerCase()))
                     .toList();
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("value") && sender.hasPermission("lainareforge.admin")) {
+        if (args.length == 2
+                && (args[0].equalsIgnoreCase("value") || args[0].equalsIgnoreCase("devitem"))
+                && sender.hasPermission("lainareforge.admin")) {
             return recycleValueService.getValues().keySet().stream()
                     .filter(value -> value.startsWith(args[1].toLowerCase()))
                     .sorted()
