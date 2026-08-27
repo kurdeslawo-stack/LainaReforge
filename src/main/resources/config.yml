@@ -24,13 +24,30 @@ currency:
   nugget-name: "&6Bryłka Reforge"
   shards-per-nugget: 32
 
+logging:
+  transactions: true
+
 recycling:
   default-value: 0
   blacklisted-ids: []
-  values:
-    example_common_item: 1
-    example_rare_item: 4
-    example_legendary_item: 10
+
+  # Domyslna wartosc itemu wynika z jego tieru.
+  tiers:
+    common: 1
+    uncommon: 2
+    rare: 4
+    epic: 8
+    legendary: 12
+
+  # Konkretne itemy przypisujemy do tierow. Pole shards jest opcjonalnym nadpisaniem.
+  items:
+    example_common_item:
+      tier: common
+    example_rare_item:
+      tier: rare
+    example_legendary_item:
+      tier: legendary
+      shards: 16
 
 messages:
   prefix: "&8[&dLainaReforge&8] &7"
