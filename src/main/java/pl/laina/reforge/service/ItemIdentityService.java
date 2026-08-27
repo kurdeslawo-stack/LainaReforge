@@ -15,17 +15,21 @@ import java.util.Optional;
 public final class ItemIdentityService {
 
     private final LainaReforgePlugin plugin;
+    private final NamespacedKey devItemIdKey;
     private final List<NamespacedKey> stringKeys = new ArrayList<>();
     private boolean allowMaterialFallback;
+    private boolean developmentEnabled;
 
     public ItemIdentityService(LainaReforgePlugin plugin) {
         this.plugin = plugin;
+        this.devItemIdKey = new NamespacedKey(plugin, "dev_item_id");
         reload();
     }
 
     public void reload() {
         stringKeys.clear();
         allowMaterialFallback = plugin.getConfig().getBoolean("item-identification.allow-material-fallback", false);
+        developmentEnabled = plugin.getConfig().getBoolean("development.enabled", false);
 
         for (String rawKey : plugin.getConfig().getStringList("item-identification.pdc-string-keys")) {
             NamespacedKey key = NamespacedKey.fromString(rawKey.trim().toLowerCase(Locale.ROOT));
@@ -45,6 +49,14 @@ public final class ItemIdentityService {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             PersistentDataContainer container = meta.getPersistentDataContainer();
+
+            if (developmentEnabled) {
+                String devId = container.get(devItemIdKey, PersistentDataType.STRING);
+                if (devId != null && !devId.isBlank()) {
+                    return Optional.of(normalize(devId));
+                }
+            }
+
             for (NamespacedKey key : stringKeys) {
                 String value = container.get(key, PersistentDataType.STRING);
                 if (value != null && !value.isBlank()) {
@@ -58,6 +70,45 @@ public final class ItemIdentityService {
         }
 
         return Optional.empty();
+    }
+
+    public boolean applyDevId(ItemStack item, String itemId) {
+        if (!developmentEnabled || item == null || item.getType().isAir() || itemId == null || itemId.isBlank()) {
+            return false;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return false;
+        }
+
+        meta.getPersistentDataContainer().set(devItemIdKey, PersistentDataType.STRING, normalize(itemId));
+        item.setItemMeta(meta);
+        return true;
+    }
+
+    public boolean clearDevId(ItemStack item) {
+        if (!developmentEnabled || item == null || item.getType().isAir()) {
+            return false;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return false;
+        }
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if (!container.has(devItemIdKey, PersistentDataType.STRING)) {
+            return false;
+        }
+
+        container.remove(devItemIdKey);
+        item.setItemMeta(meta);
+        return true;
+    }
+
+    public boolean isDevelopmentEnabled() {
+        return developmentEnabled;
     }
 
     public List<String> inspect(ItemStack item) {
