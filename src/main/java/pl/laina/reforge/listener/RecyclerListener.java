@@ -3,6 +3,7 @@ package pl.laina.reforge.listener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -25,13 +26,22 @@ public final class RecyclerListener implements Listener {
             return;
         }
 
-        if (event.getWhoClicked() instanceof Player player && event.isShiftClick()) {
+        if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (event.isShiftClick()) {
             event.setCancelled(true);
             return;
         }
 
         int rawSlot = event.getRawSlot();
         if (rawSlot < 0) {
+            return;
+        }
+
+        if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
 
@@ -43,14 +53,18 @@ public final class RecyclerListener implements Listener {
             event.setCancelled(true);
         }
 
-        if (!(event.getWhoClicked() instanceof Player player)) {
+        if (rawSlot == RecyclerMenu.CONFIRM_SLOT) {
+            recyclerMenu.confirm(player, top);
             return;
         }
 
-        if (rawSlot == RecyclerMenu.CONFIRM_SLOT) {
-            recyclerMenu.confirm(player, top);
-        } else if (rawSlot == RecyclerMenu.CANCEL_SLOT) {
+        if (rawSlot == RecyclerMenu.CANCEL_SLOT) {
             player.closeInventory();
+            return;
+        }
+
+        if (rawSlot <= RecyclerMenu.INPUT_MAX_SLOT) {
+            recyclerMenu.queuePreviewRefresh(top);
         }
     }
 
@@ -61,11 +75,19 @@ public final class RecyclerListener implements Listener {
             return;
         }
 
+        boolean touchesInput = false;
         for (int rawSlot : event.getRawSlots()) {
             if (rawSlot < top.getSize() && rawSlot > RecyclerMenu.INPUT_MAX_SLOT) {
                 event.setCancelled(true);
                 return;
             }
+            if (rawSlot <= RecyclerMenu.INPUT_MAX_SLOT) {
+                touchesInput = true;
+            }
+        }
+
+        if (touchesInput) {
+            recyclerMenu.queuePreviewRefresh(top);
         }
     }
 
