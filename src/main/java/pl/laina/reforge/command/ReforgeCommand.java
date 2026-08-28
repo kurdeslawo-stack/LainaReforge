@@ -49,7 +49,7 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(color("&d/reforge &7- otwiera recycler"));
             if (sender.hasPermission("lainareforge.admin")) {
                 sender.sendMessage(color("&d/reforge reload &7- przeladowuje konfiguracje"));
-                sender.sendMessage(color("&d/reforge value <id> &7- pokazuje wartosc recyclingu"));
+                sender.sendMessage(color("&d/reforge value <id> &7- pokazuje polityke i wartosc recyclingu"));
                 sender.sendMessage(color("&d/reforge inspect &7- pokazuje dane przedmiotu w rece"));
                 if (itemIdentityService.isDevelopmentEnabled()) {
                     sender.sendMessage(color("&d/reforge devitem <id> &7- nadaje testowe ID przedmiotowi w rece"));
@@ -81,9 +81,20 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            String itemId = args[1];
+            String itemId = args[1].toLowerCase();
             int value = recycleValueService.getValue(itemId);
-            sender.sendMessage(color("&7Wartosc &f" + itemId + "&7: &d" + value + " &7odlamkow."));
+            String category = recycleValueService.getCategory(itemId).orElse("brak");
+            String tier = recycleValueService.getTier(itemId).orElse("brak");
+            String status = recycleValueService.getRejectionReason(itemId)
+                    .map(reason -> "&cBLOKADA: " + reason)
+                    .orElse("&aDOZWOLONY");
+
+            sender.sendMessage(color("&d--- LainaReforge policy ---"));
+            sender.sendMessage(color("&7ID: &f" + itemId));
+            sender.sendMessage(color("&7Kategoria: &f" + category));
+            sender.sendMessage(color("&7Tier: &f" + tier));
+            sender.sendMessage(color("&7Wartosc: &d" + value + " &7odlamkow"));
+            sender.sendMessage(color("&7Status: " + status));
             return true;
         }
 
@@ -100,6 +111,15 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
             ItemStack item = player.getInventory().getItemInMainHand();
             sender.sendMessage(color("&d--- LainaReforge inspect ---"));
             itemIdentityService.inspect(item).forEach(line -> sender.sendMessage(color("&7" + line)));
+            itemIdentityService.identify(item).ifPresent(id -> {
+                sender.sendMessage(color("&7Kategoria: &f" + recycleValueService.getCategory(id).orElse("brak")));
+                sender.sendMessage(color("&7Tier: &f" + recycleValueService.getTier(id).orElse("brak")));
+                sender.sendMessage(color("&7Wartosc: &d" + recycleValueService.getValue(id)));
+                recycleValueService.getRejectionReason(id).ifPresentOrElse(
+                        reason -> sender.sendMessage(color("&7Status: &cBLOKADA - " + reason)),
+                        () -> sender.sendMessage(color("&7Status: &aDOZWOLONY"))
+                );
+            });
             return true;
         }
 
@@ -122,13 +142,17 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
             }
 
             ItemStack item = player.getInventory().getItemInMainHand();
-            if (!itemIdentityService.applyDevId(item, args[1])) {
+            String itemId = args[1].toLowerCase();
+            if (!itemIdentityService.applyDevId(item, itemId)) {
                 sender.sendMessage(color("&cNie udalo sie nadac ID. Trzymaj normalny przedmiot w glownej rece."));
                 return true;
             }
 
-            int value = recycleValueService.getValue(args[1]);
-            sender.sendMessage(color("&aNadano testowe ID &f" + args[1].toLowerCase() + "&a. Wartosc recyclingu: &d" + value + "&a."));
+            int value = recycleValueService.getValue(itemId);
+            String status = recycleValueService.getRejectionReason(itemId)
+                    .map(reason -> "&cBLOKADA: " + reason)
+                    .orElse("&aDOZWOLONY");
+            sender.sendMessage(color("&aNadano testowe ID &f" + itemId + "&a. Wartosc: &d" + value + "&a. Status: " + status));
             return true;
         }
 
