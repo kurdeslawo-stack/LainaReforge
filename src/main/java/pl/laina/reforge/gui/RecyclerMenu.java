@@ -91,8 +91,10 @@ public final class RecyclerMenu {
             lore.add(Component.text("Wartosc: " + result.totalShards() + " odlamkow", NamedTextColor.LIGHT_PURPLE));
             lore.add(Component.text("Rozpoznane typy: " + result.itemAmounts().size(), NamedTextColor.GRAY));
             if (!result.invalidItems().isEmpty()) {
-                lore.add(Component.text("Nie mozna przetopic: "
-                        + String.join(", ", result.invalidItems()), NamedTextColor.RED));
+                lore.add(Component.text("Zablokowane:", NamedTextColor.RED));
+                for (String invalid : result.invalidItems()) {
+                    lore.add(Component.text("- " + invalid, NamedTextColor.RED));
+                }
             } else {
                 lore.add(Component.text("Wszystkie przedmioty sa poprawne.", NamedTextColor.GREEN));
             }
@@ -116,22 +118,23 @@ public final class RecyclerMenu {
             }
 
             if (currencyService.isPluginCurrency(item)) {
-                invalid.add("waluta_lainareforge");
+                invalid.add("waluta LainaReforge - nie mozna przetopic");
                 continue;
             }
 
             Optional<String> id = itemIdentityService.identify(item);
             if (id.isEmpty()) {
-                invalid.add(item.getType().getKey().toString());
+                invalid.add(item.getType().getKey() + " - nierozpoznany custom");
+                continue;
+            }
+
+            Optional<String> rejection = recycleValueService.getRejectionReason(id.get());
+            if (rejection.isPresent()) {
+                invalid.add(id.get() + " - " + rejection.get());
                 continue;
             }
 
             int value = recycleValueService.getValue(id.get());
-            if (value <= 0 || recycleValueService.isBlacklisted(id.get())) {
-                invalid.add(id.get());
-                continue;
-            }
-
             totalShards += (long) value * item.getAmount();
             itemAmounts.merge(id.get(), item.getAmount(), Integer::sum);
             stacks++;
