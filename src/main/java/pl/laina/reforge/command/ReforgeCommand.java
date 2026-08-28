@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import pl.laina.reforge.LainaReforgePlugin;
 import pl.laina.reforge.gui.RecyclerMenu;
 import pl.laina.reforge.service.ItemIdentityService;
+import pl.laina.reforge.service.PendingItemService;
 import pl.laina.reforge.service.RecycleValueService;
 
 import java.util.List;
@@ -22,15 +23,18 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
     private final RecycleValueService recycleValueService;
     private final ItemIdentityService itemIdentityService;
     private final RecyclerMenu recyclerMenu;
+    private final PendingItemService pendingItemService;
 
     public ReforgeCommand(LainaReforgePlugin plugin,
                           RecycleValueService recycleValueService,
                           ItemIdentityService itemIdentityService,
-                          RecyclerMenu recyclerMenu) {
+                          RecyclerMenu recyclerMenu,
+                          PendingItemService pendingItemService) {
         this.plugin = plugin;
         this.recycleValueService = recycleValueService;
         this.itemIdentityService = itemIdentityService;
         this.recyclerMenu = recyclerMenu;
+        this.pendingItemService = pendingItemService;
     }
 
     @Override
@@ -51,6 +55,7 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(color("&d/reforge reload &7- przeladowuje konfiguracje"));
                 sender.sendMessage(color("&d/reforge value <id> &7- pokazuje polityke i wartosc recyclingu"));
                 sender.sendMessage(color("&d/reforge inspect &7- pokazuje dane przedmiotu w rece"));
+                sender.sendMessage(color("&d/reforge pending &7- pokazuje kolejke nowych customow wykrytych przez recycler"));
                 if (itemIdentityService.isDevelopmentEnabled()) {
                     sender.sendMessage(color("&d/reforge devitem <id> &7- nadaje testowe ID przedmiotowi w rece"));
                     sender.sendMessage(color("&d/reforge devclear &7- usuwa testowe ID z przedmiotu"));
@@ -67,6 +72,37 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
 
             plugin.reloadPlugin();
             sender.sendMessage(message("messages.reloaded", "&aKonfiguracja zostala przeladowana."));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("pending")) {
+            if (!sender.hasPermission("lainareforge.admin")) {
+                sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
+                return true;
+            }
+
+            if (!pendingItemService.isEnabled()) {
+                sender.sendMessage(color("&eDiscovery queue jest wylaczona w config.yml."));
+                return true;
+            }
+
+            List<PendingItemService.PendingItemInfo> pending = pendingItemService.list(10);
+            sender.sendMessage(color("&d--- LainaReforge discovery queue ---"));
+            sender.sendMessage(color("&7Oczekujace customy: &f" + pendingItemService.count()));
+            if (pending.isEmpty()) {
+                sender.sendMessage(color("&aBrak nowych itemow do sklasyfikowania."));
+                return true;
+            }
+
+            for (PendingItemService.PendingItemInfo info : pending) {
+                sender.sendMessage(color("&f" + info.id()
+                        + " &8| &7material: &f" + info.material()
+                        + " &8| &7wykrycia: &d" + info.sightings()
+                        + " &8| &7ostatnio: &f" + info.lastPlayer()));
+            }
+            if (pendingItemService.count() > pending.size()) {
+                sender.sendMessage(color("&8Pokazano 10 najczesciej wykrywanych itemow."));
+            }
             return true;
         }
 
@@ -190,8 +226,8 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
             List<String> options;
             if (sender.hasPermission("lainareforge.admin")) {
                 options = itemIdentityService.isDevelopmentEnabled()
-                        ? List.of("help", "inspect", "reload", "value", "devitem", "devclear")
-                        : List.of("help", "inspect", "reload", "value");
+                        ? List.of("help", "inspect", "pending", "reload", "value", "devitem", "devclear")
+                        : List.of("help", "inspect", "pending", "reload", "value");
             } else {
                 options = List.of("help");
             }
