@@ -27,6 +27,15 @@ currency:
 logging:
   transactions: true
 
+# Moj dodatek: LainaReforge sam buduje kolejke nowych customow.
+# Jesli gracz sprobuje przetopic rozpoznany, ale jeszcze nieskonfigurowany item,
+# plugin NIE niszczy go. Zapisuje ID, material, gracza i liczbe wykryc do pending-items.yml.
+# Po dopisaniu itemu do recycling.items wpis automatycznie znika przy /reforge reload.
+discovery:
+  enabled: true
+  file: "pending-items.yml"
+  record-cooldown-seconds: 60
+
 recycling:
   # Bezpieczny tryb: item musi byc jawnie wpisany do sekcji items albo starej sekcji values.
   require-registered-item: true
