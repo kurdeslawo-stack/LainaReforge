@@ -16,12 +16,14 @@ import pl.laina.reforge.service.RecycleValueService;
 import pl.laina.reforge.service.TransactionLogService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 public final class RecyclerMenu {
 
@@ -30,6 +32,7 @@ public final class RecyclerMenu {
     public static final int INFO_SLOT = 45;
     public static final int CONFIRM_SLOT = 49;
     public static final int CANCEL_SLOT = 53;
+    private static final long INVALID_FEEDBACK_COOLDOWN_MILLIS = 1500L;
 
     private final LainaReforgePlugin plugin;
     private final ItemIdentityService itemIdentityService;
@@ -37,6 +40,7 @@ public final class RecyclerMenu {
     private final CurrencyService currencyService;
     private final TransactionLogService transactionLogService;
     private final PendingItemService pendingItemService;
+    private final Map<UUID, InvalidFeedback> invalidFeedbackByPlayer = new HashMap<>();
 
     public RecyclerMenu(LainaReforgePlugin plugin,
                         ItemIdentityService itemIdentityService,
@@ -152,19 +156,26 @@ public final class RecyclerMenu {
     }
 
     public boolean confirm(Player player, Inventory inventory) {
-        discoverUnregistered(player, inventory);
+        boolean containsUnregisteredItem = discoverUnregistered(player, inventory);
         RecycleResult result = calculate(inventory);
 
         if (!result.invalidItems().isEmpty()) {
-            String prefix = plugin.getConfig().getString("messages.prefix", "");
-            player.sendMessage(Component.text(stripLegacy(prefix))
-                    .append(Component.text("Nie mozna przetopic: " + String.join(", ", result.invalidItems()), NamedTextColor.RED)));
-            if (pendingItemService.isEnabled()) {
-                player.sendMessage(Component.text("Jesli to nowy custom, jego ID zostalo zapisane do kolejki dla administracji.", NamedTextColor.YELLOW));
+            String rejectionText = String.join(", ", result.invalidItems());
+            if (shouldSendInvalidFeedback(player, rejectionText)) {
+                String prefix = plugin.getConfig().getString("messages.prefix", "");
+                player.sendMessage(Component.text(stripLegacy(prefix))
+                        .append(Component.text("Nie mozna przetopic: " + rejectionText, NamedTextColor.RED)));
+                if (containsUnregisteredItem && pendingItemService.isEnabled()) {
+                    player.sendMessage(Component.text(
+                            "Nieskonfigurowane ID znajduje sie w kolejce dla administracji.",
+                            NamedTextColor.YELLOW));
+                }
             }
             updatePreview(inventory);
             return false;
         }
+
+        invalidFeedbackByPlayer.remove(player.getUniqueId());
 
         if (result.totalShards() <= 0 || result.itemAmounts().isEmpty()) {
             player.sendMessage(Component.text("Najpierw wrzuc przedmioty do recyclingu.", NamedTextColor.RED));
@@ -185,26 +196,43 @@ public final class RecyclerMenu {
         return true;
     }
 
-    private void discoverUnregistered(Player player, Inventory inventory) {
+    private boolean discoverUnregistered(Player player, Inventory inventory) {
         if (!pendingItemService.isEnabled()) {
-            return;
+            return false;
         }
 
+        boolean foundUnregistered = false;
         for (int slot = 0; slot <= INPUT_MAX_SLOT; slot++) {
             ItemStack item = inventory.getItem(slot);
             if (item == null || item.getType().isAir() || currencyService.isPluginCurrency(item)) {
                 continue;
             }
 
-            itemIdentityService.identify(item).ifPresent(id -> {
-                if (!recycleValueService.isRegistered(id)) {
-                    pendingItemService.record(player, id, item);
-                }
-            });
+            Optional<String> id = itemIdentityService.identify(item);
+            if (id.isPresent() && !recycleValueService.isRegistered(id.get())) {
+                foundUnregistered = true;
+                pendingItemService.record(player, id.get(), item);
+            }
         }
+        return foundUnregistered;
+    }
+
+    private boolean shouldSendInvalidFeedback(Player player, String signature) {
+        long now = System.currentTimeMillis();
+        UUID playerId = player.getUniqueId();
+        InvalidFeedback previous = invalidFeedbackByPlayer.get(playerId);
+        if (previous != null
+                && previous.signature().equals(signature)
+                && now - previous.timestampMillis() < INVALID_FEEDBACK_COOLDOWN_MILLIS) {
+            return false;
+        }
+
+        invalidFeedbackByPlayer.put(playerId, new InvalidFeedback(signature, now));
+        return true;
     }
 
     public void returnItems(Player player, Inventory inventory) {
+        invalidFeedbackByPlayer.remove(player.getUniqueId());
         for (int slot = 0; slot <= INPUT_MAX_SLOT; slot++) {
             ItemStack item = inventory.getItem(slot);
             if (item == null || item.getType().isAir()) {
@@ -227,6 +255,9 @@ public final class RecyclerMenu {
 
     private String stripLegacy(String text) {
         return text == null ? "" : text.replaceAll("(?i)&[0-9A-FK-ORX]", "");
+    }
+
+    private record InvalidFeedback(String signature, long timestampMillis) {
     }
 
     public record RecycleResult(int totalShards,
