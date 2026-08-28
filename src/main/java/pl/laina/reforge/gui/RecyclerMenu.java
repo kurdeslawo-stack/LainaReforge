@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import pl.laina.reforge.LainaReforgePlugin;
 import pl.laina.reforge.service.CurrencyService;
 import pl.laina.reforge.service.ItemIdentityService;
+import pl.laina.reforge.service.PendingItemService;
 import pl.laina.reforge.service.RecycleValueService;
 import pl.laina.reforge.service.TransactionLogService;
 
@@ -35,17 +36,20 @@ public final class RecyclerMenu {
     private final RecycleValueService recycleValueService;
     private final CurrencyService currencyService;
     private final TransactionLogService transactionLogService;
+    private final PendingItemService pendingItemService;
 
     public RecyclerMenu(LainaReforgePlugin plugin,
                         ItemIdentityService itemIdentityService,
                         RecycleValueService recycleValueService,
                         CurrencyService currencyService,
-                        TransactionLogService transactionLogService) {
+                        TransactionLogService transactionLogService,
+                        PendingItemService pendingItemService) {
         this.plugin = plugin;
         this.itemIdentityService = itemIdentityService;
         this.recycleValueService = recycleValueService;
         this.currencyService = currencyService;
         this.transactionLogService = transactionLogService;
+        this.pendingItemService = pendingItemService;
     }
 
     public void open(Player player) {
@@ -94,6 +98,9 @@ public final class RecyclerMenu {
                 lore.add(Component.text("Zablokowane:", NamedTextColor.RED));
                 for (String invalid : result.invalidItems()) {
                     lore.add(Component.text("- " + invalid, NamedTextColor.RED));
+                }
+                if (pendingItemService.isEnabled()) {
+                    lore.add(Component.text("Nieznane ID trafiaja do kolejki discovery.", NamedTextColor.YELLOW));
                 }
             } else {
                 lore.add(Component.text("Wszystkie przedmioty sa poprawne.", NamedTextColor.GREEN));
@@ -145,12 +152,16 @@ public final class RecyclerMenu {
     }
 
     public boolean confirm(Player player, Inventory inventory) {
+        discoverUnregistered(player, inventory);
         RecycleResult result = calculate(inventory);
 
         if (!result.invalidItems().isEmpty()) {
             String prefix = plugin.getConfig().getString("messages.prefix", "");
             player.sendMessage(Component.text(stripLegacy(prefix))
                     .append(Component.text("Nie mozna przetopic: " + String.join(", ", result.invalidItems()), NamedTextColor.RED)));
+            if (pendingItemService.isEnabled()) {
+                player.sendMessage(Component.text("Jesli to nowy custom, jego ID zostalo zapisane do kolejki dla administracji.", NamedTextColor.YELLOW));
+            }
             updatePreview(inventory);
             return false;
         }
@@ -172,6 +183,25 @@ public final class RecyclerMenu {
                 + result.totalShards() + " odlamkow.", NamedTextColor.GREEN));
         player.closeInventory();
         return true;
+    }
+
+    private void discoverUnregistered(Player player, Inventory inventory) {
+        if (!pendingItemService.isEnabled()) {
+            return;
+        }
+
+        for (int slot = 0; slot <= INPUT_MAX_SLOT; slot++) {
+            ItemStack item = inventory.getItem(slot);
+            if (item == null || item.getType().isAir() || currencyService.isPluginCurrency(item)) {
+                continue;
+            }
+
+            itemIdentityService.identify(item).ifPresent(id -> {
+                if (!recycleValueService.isRegistered(id)) {
+                    pendingItemService.record(player, id, item);
+                }
+            });
+        }
     }
 
     public void returnItems(Player player, Inventory inventory) {
