@@ -28,8 +28,40 @@ logging:
   transactions: true
 
 recycling:
+  # Bezpieczny tryb: item musi byc jawnie wpisany do sekcji items albo starej sekcji values.
+  require-registered-item: true
   default-value: 0
+
+  # Pojedyncze ID, ktorych nigdy nie wolno przetapiac.
   blacklisted-ids: []
+
+  # Kategorie zgodne z zalozeniem Ezo: ekwipunek tak, waluty/specjalne przedmioty nie.
+  blocked-categories:
+    - currency
+    - token
+    - event_collectible
+    - special_crystal
+    - quest_item
+
+  categories:
+    equipment:
+      recyclable: true
+    weapon:
+      recyclable: true
+    tool:
+      recyclable: true
+    armor:
+      recyclable: true
+    currency:
+      recyclable: false
+    token:
+      recyclable: false
+    event_collectible:
+      recyclable: false
+    special_crystal:
+      recyclable: false
+    quest_item:
+      recyclable: false
 
   # Domyslna wartosc itemu wynika z jego tieru.
   tiers:
@@ -39,15 +71,35 @@ recycling:
     epic: 8
     legendary: 12
 
-  # Konkretne itemy przypisujemy do tierow. Pole shards jest opcjonalnym nadpisaniem.
+  # Kazdy custom dostaje kategorie i tier.
+  # shards pozwala nadpisac wartosc, recyclable: false blokuje pojedynczy item.
   items:
     example_common_item:
+      category: equipment
       tier: common
+
     example_rare_item:
+      category: weapon
       tier: rare
+
     example_legendary_item:
+      category: weapon
       tier: legendary
       shards: 16
+
+    # Przyklady rzeczy, ktorych wedlug zalozen serwera nie wolno przetapiac.
+    example_event_token:
+      category: event_collectible
+      tier: rare
+
+    example_special_crystal:
+      category: special_crystal
+      tier: epic
+
+    example_manual_block:
+      category: equipment
+      tier: epic
+      recyclable: false
 
 messages:
   prefix: "&8[&dLainaReforge&8] &7"
