@@ -131,15 +131,7 @@ public final class ItemIdentityService {
         } else {
             lines.add("PDC keys:");
             for (NamespacedKey key : container.getKeys()) {
-                String text = "- " + key;
-                String stringValue = container.get(key, PersistentDataType.STRING);
-                Integer intValue = container.get(key, PersistentDataType.INTEGER);
-                if (stringValue != null) {
-                    text += " = \"" + stringValue + "\" (STRING)";
-                } else if (intValue != null) {
-                    text += " = " + intValue + " (INTEGER)";
-                }
-                lines.add(text);
+                lines.add(describePdcValue(container, key));
             }
         }
 
@@ -148,6 +140,57 @@ public final class ItemIdentityService {
                 () -> lines.add("LainaReforge ID: nierozpoznany")
         );
         return lines;
+    }
+
+    private String describePdcValue(PersistentDataContainer container, NamespacedKey key) {
+        String prefix = "- " + key;
+        try {
+            if (container.has(key, PersistentDataType.STRING)) {
+                String value = container.get(key, PersistentDataType.STRING);
+                return prefix + " = \"" + value + "\" (STRING)";
+            }
+            if (container.has(key, PersistentDataType.INTEGER)) {
+                Integer value = container.get(key, PersistentDataType.INTEGER);
+                return prefix + " = " + value + " (INTEGER)";
+            }
+            if (container.has(key, PersistentDataType.LONG)) {
+                Long value = container.get(key, PersistentDataType.LONG);
+                return prefix + " = " + value + " (LONG)";
+            }
+            if (container.has(key, PersistentDataType.DOUBLE)) {
+                Double value = container.get(key, PersistentDataType.DOUBLE);
+                return prefix + " = " + value + " (DOUBLE)";
+            }
+            if (container.has(key, PersistentDataType.FLOAT)) {
+                Float value = container.get(key, PersistentDataType.FLOAT);
+                return prefix + " = " + value + " (FLOAT)";
+            }
+            if (container.has(key, PersistentDataType.BYTE)) {
+                Byte value = container.get(key, PersistentDataType.BYTE);
+                return prefix + " = " + value + " (BYTE)";
+            }
+            if (container.has(key, PersistentDataType.SHORT)) {
+                Short value = container.get(key, PersistentDataType.SHORT);
+                return prefix + " = " + value + " (SHORT)";
+            }
+            if (container.has(key, PersistentDataType.INTEGER_ARRAY)) {
+                int[] value = container.get(key, PersistentDataType.INTEGER_ARRAY);
+                return prefix + " (INTEGER_ARRAY, length=" + (value == null ? 0 : value.length) + ")";
+            }
+            if (container.has(key, PersistentDataType.LONG_ARRAY)) {
+                long[] value = container.get(key, PersistentDataType.LONG_ARRAY);
+                return prefix + " (LONG_ARRAY, length=" + (value == null ? 0 : value.length) + ")";
+            }
+            if (container.has(key, PersistentDataType.BYTE_ARRAY)) {
+                byte[] value = container.get(key, PersistentDataType.BYTE_ARRAY);
+                return prefix + " (BYTE_ARRAY, length=" + (value == null ? 0 : value.length) + ")";
+            }
+            return prefix + " (typ PDC nieobslugiwany przez inspect)";
+        } catch (RuntimeException exception) {
+            plugin.getLogger().warning("Nie udalo sie odczytac PDC " + key + " podczas /reforge inspect: "
+                    + exception.getClass().getSimpleName() + ": " + exception.getMessage());
+            return prefix + " (nie udalo sie bezpiecznie odczytac wartosci)";
+        }
     }
 
     private String normalize(String value) {
