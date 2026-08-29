@@ -26,32 +26,37 @@ public final class RecyclerListener implements Listener {
             return;
         }
 
+        // Collect-to-cursor może pobierać podobne elementy z obu ekwipunków,
+        // dlatego blokujemy tę akcję w całym widoku recyclera.
         if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
             event.setCancelled(true);
             return;
         }
 
+        // Shift-click pozostaje celowo zablokowany: vanilla sam dobiera slot
+        // docelowy i mógłby włożyć item w chroniony element interfejsu.
         if (event.isShiftClick()) {
             event.setCancelled(true);
             return;
         }
 
         int rawSlot = event.getRawSlot();
-        if (rawSlot < 0) {
+        if (rawSlot < 0 || rawSlot >= top.getSize()) {
             return;
         }
 
         if (!(event.getWhoClicked() instanceof Player player)) {
-            return;
-        }
-
-        if (rawSlot >= top.getSize()) {
-            return;
-        }
-
-        if (rawSlot > RecyclerMenu.INPUT_MAX_SLOT) {
             event.setCancelled(true);
+            return;
         }
+
+        if (RecyclerMenu.isInputSlot(rawSlot)) {
+            recyclerMenu.queuePreviewRefresh(top);
+            return;
+        }
+
+        // Każdy slot GUI poza jawną strefą wejściową jest elementem interfejsu.
+        event.setCancelled(true);
 
         if (rawSlot == RecyclerMenu.CONFIRM_SLOT) {
             recyclerMenu.confirm(player, top);
@@ -60,11 +65,6 @@ public final class RecyclerListener implements Listener {
 
         if (rawSlot == RecyclerMenu.CANCEL_SLOT) {
             player.closeInventory();
-            return;
-        }
-
-        if (rawSlot <= RecyclerMenu.INPUT_MAX_SLOT) {
-            recyclerMenu.queuePreviewRefresh(top);
         }
     }
 
@@ -77,13 +77,14 @@ public final class RecyclerListener implements Listener {
 
         boolean touchesInput = false;
         for (int rawSlot : event.getRawSlots()) {
-            if (rawSlot < top.getSize() && rawSlot > RecyclerMenu.INPUT_MAX_SLOT) {
+            if (rawSlot >= top.getSize()) {
+                continue;
+            }
+            if (!RecyclerMenu.isInputSlot(rawSlot)) {
                 event.setCancelled(true);
                 return;
             }
-            if (rawSlot <= RecyclerMenu.INPUT_MAX_SLOT) {
-                touchesInput = true;
-            }
+            touchesInput = true;
         }
 
         if (touchesInput) {

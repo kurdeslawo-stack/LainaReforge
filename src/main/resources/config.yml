@@ -15,7 +15,7 @@ item-identification:
   allow-material-fallback: false
 
 gui:
-  title: "LainaReforge - Recykling"
+  title: "Recykler • LainaReforge"
 
 currency:
   shard-material: AMETHYST_SHARD
