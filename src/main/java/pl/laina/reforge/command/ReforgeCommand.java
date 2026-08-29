@@ -5,9 +5,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pl.laina.reforge.LainaReforgePlugin;
+import pl.laina.reforge.gui.RecyclerMenu;
+import pl.laina.reforge.service.ItemIdentityService;
+import pl.laina.reforge.service.PendingItemService;
 import pl.laina.reforge.service.RecycleValueService;
 
 import java.util.List;
@@ -16,26 +21,45 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
 
     private final LainaReforgePlugin plugin;
     private final RecycleValueService recycleValueService;
+    private final ItemIdentityService itemIdentityService;
+    private final RecyclerMenu recyclerMenu;
+    private final PendingItemService pendingItemService;
 
-    public ReforgeCommand(LainaReforgePlugin plugin, RecycleValueService recycleValueService) {
+    public ReforgeCommand(LainaReforgePlugin plugin,
+                          RecycleValueService recycleValueService,
+                          ItemIdentityService itemIdentityService,
+                          RecyclerMenu recyclerMenu,
+                          PendingItemService pendingItemService) {
         this.plugin = plugin;
         this.recycleValueService = recycleValueService;
+        this.itemIdentityService = itemIdentityService;
+        this.recyclerMenu = recyclerMenu;
+        this.pendingItemService = pendingItemService;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
                              @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
-            sender.sendMessage(color("&dLainaReforge &7- system recyclingu i reforgingu przedmiotow."));
-            sender.sendMessage(color("&7Uzyj &f/reforge help &7aby zobaczyc dostepne komendy."));
+            if (sender instanceof Player player) {
+                recyclerMenu.open(player);
+            } else {
+                sender.sendMessage(color("&dLainaReforge &7- uzyj /reforge help."));
+            }
             return true;
         }
 
         if (args[0].equalsIgnoreCase("help")) {
-            sender.sendMessage(color("&d/reforge &7- informacje o pluginie"));
+            sender.sendMessage(color("&d/reforge &7- otwiera recycler"));
             if (sender.hasPermission("lainareforge.admin")) {
                 sender.sendMessage(color("&d/reforge reload &7- przeladowuje konfiguracje"));
-                sender.sendMessage(color("&d/reforge value <id> &7- pokazuje wartosc recyclingu"));
+                sender.sendMessage(color("&d/reforge value <id> &7- pokazuje polityke i wartosc recyclingu"));
+                sender.sendMessage(color("&d/reforge inspect &7- pokazuje dane przedmiotu w rece"));
+                sender.sendMessage(color("&d/reforge pending &7- pokazuje kolejke nowych customow wykrytych przez recycler"));
+                if (itemIdentityService.isDevelopmentEnabled()) {
+                    sender.sendMessage(color("&d/reforge devitem <id> &7- nadaje testowe ID przedmiotowi w rece"));
+                    sender.sendMessage(color("&d/reforge devclear &7- usuwa testowe ID z przedmiotu"));
+                }
             }
             return true;
         }
@@ -51,6 +75,37 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if (args[0].equalsIgnoreCase("pending")) {
+            if (!sender.hasPermission("lainareforge.admin")) {
+                sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
+                return true;
+            }
+
+            if (!pendingItemService.isEnabled()) {
+                sender.sendMessage(color("&eDiscovery queue jest wylaczona w config.yml."));
+                return true;
+            }
+
+            List<PendingItemService.PendingItemInfo> pending = pendingItemService.list(10);
+            sender.sendMessage(color("&d--- LainaReforge discovery queue ---"));
+            sender.sendMessage(color("&7Oczekujace customy: &f" + pendingItemService.count()));
+            if (pending.isEmpty()) {
+                sender.sendMessage(color("&aBrak nowych itemow do sklasyfikowania."));
+                return true;
+            }
+
+            for (PendingItemService.PendingItemInfo info : pending) {
+                sender.sendMessage(color("&f" + info.id()
+                        + " &8| &7material: &f" + info.material()
+                        + " &8| &7wykrycia: &d" + info.sightings()
+                        + " &8| &7ostatnio: &f" + info.lastPlayer()));
+            }
+            if (pendingItemService.count() > pending.size()) {
+                sender.sendMessage(color("&8Pokazano 10 najczesciej wykrywanych itemow."));
+            }
+            return true;
+        }
+
         if (args[0].equalsIgnoreCase("value")) {
             if (!sender.hasPermission("lainareforge.admin")) {
                 sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
@@ -62,9 +117,101 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            String itemId = args[1];
+            String itemId = args[1].toLowerCase();
             int value = recycleValueService.getValue(itemId);
-            sender.sendMessage(color("&7Wartosc &f" + itemId + "&7: &d" + value + " &7odlamkow."));
+            String category = recycleValueService.getCategory(itemId).orElse("brak");
+            String tier = recycleValueService.getTier(itemId).orElse("brak");
+            String status = recycleValueService.getRejectionReason(itemId)
+                    .map(reason -> "&cBLOKADA: " + reason)
+                    .orElse("&aDOZWOLONY");
+
+            sender.sendMessage(color("&d--- LainaReforge policy ---"));
+            sender.sendMessage(color("&7ID: &f" + itemId));
+            sender.sendMessage(color("&7Kategoria: &f" + category));
+            sender.sendMessage(color("&7Tier: &f" + tier));
+            sender.sendMessage(color("&7Wartosc: &d" + value + " &7odlamkow"));
+            sender.sendMessage(color("&7Status: " + status));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("inspect")) {
+            if (!sender.hasPermission("lainareforge.admin")) {
+                sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
+                return true;
+            }
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(color("&cTa komenda wymaga gracza."));
+                return true;
+            }
+
+            ItemStack item = player.getInventory().getItemInMainHand();
+            sender.sendMessage(color("&d--- LainaReforge inspect ---"));
+            itemIdentityService.inspect(item).forEach(line -> sender.sendMessage(color("&7" + line)));
+            itemIdentityService.identify(item).ifPresent(id -> {
+                sender.sendMessage(color("&7Kategoria: &f" + recycleValueService.getCategory(id).orElse("brak")));
+                sender.sendMessage(color("&7Tier: &f" + recycleValueService.getTier(id).orElse("brak")));
+                sender.sendMessage(color("&7Wartosc: &d" + recycleValueService.getValue(id)));
+                recycleValueService.getRejectionReason(id).ifPresentOrElse(
+                        reason -> sender.sendMessage(color("&7Status: &cBLOKADA - " + reason)),
+                        () -> sender.sendMessage(color("&7Status: &aDOZWOLONY"))
+                );
+            });
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("devitem")) {
+            if (!sender.hasPermission("lainareforge.admin")) {
+                sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
+                return true;
+            }
+            if (!itemIdentityService.isDevelopmentEnabled()) {
+                sender.sendMessage(color("&cTryb developerski jest wylaczony w config.yml."));
+                return true;
+            }
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(color("&cTa komenda wymaga gracza."));
+                return true;
+            }
+            if (args.length < 2) {
+                sender.sendMessage(color("&cUzycie: /reforge devitem <item_id>"));
+                return true;
+            }
+
+            ItemStack item = player.getInventory().getItemInMainHand();
+            String itemId = args[1].toLowerCase();
+            if (!itemIdentityService.applyDevId(item, itemId)) {
+                sender.sendMessage(color("&cNie udalo sie nadac ID. Trzymaj normalny przedmiot w glownej rece."));
+                return true;
+            }
+
+            int value = recycleValueService.getValue(itemId);
+            String status = recycleValueService.getRejectionReason(itemId)
+                    .map(reason -> "&cBLOKADA: " + reason)
+                    .orElse("&aDOZWOLONY");
+            sender.sendMessage(color("&aNadano testowe ID &f" + itemId + "&a. Wartosc: &d" + value + "&a. Status: " + status));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("devclear")) {
+            if (!sender.hasPermission("lainareforge.admin")) {
+                sender.sendMessage(message("messages.no-permission", "&cNie masz uprawnien."));
+                return true;
+            }
+            if (!itemIdentityService.isDevelopmentEnabled()) {
+                sender.sendMessage(color("&cTryb developerski jest wylaczony w config.yml."));
+                return true;
+            }
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(color("&cTa komenda wymaga gracza."));
+                return true;
+            }
+
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (itemIdentityService.clearDevId(item)) {
+                sender.sendMessage(color("&aUsunieto testowe ID z przedmiotu."));
+            } else {
+                sender.sendMessage(color("&eTen przedmiot nie ma testowego ID."));
+            }
             return true;
         }
 
@@ -76,17 +223,22 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                                  @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
+            List<String> options;
             if (sender.hasPermission("lainareforge.admin")) {
-                return List.of("help", "reload", "value").stream()
-                        .filter(value -> value.startsWith(args[0].toLowerCase()))
-                        .toList();
+                options = itemIdentityService.isDevelopmentEnabled()
+                        ? List.of("help", "inspect", "pending", "reload", "value", "devitem", "devclear")
+                        : List.of("help", "inspect", "pending", "reload", "value");
+            } else {
+                options = List.of("help");
             }
-            return List.of("help").stream()
+            return options.stream()
                     .filter(value -> value.startsWith(args[0].toLowerCase()))
                     .toList();
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("value") && sender.hasPermission("lainareforge.admin")) {
+        if (args.length == 2
+                && (args[0].equalsIgnoreCase("value") || args[0].equalsIgnoreCase("devitem"))
+                && sender.hasPermission("lainareforge.admin")) {
             return recycleValueService.getValues().keySet().stream()
                     .filter(value -> value.startsWith(args[1].toLowerCase()))
                     .sorted()
