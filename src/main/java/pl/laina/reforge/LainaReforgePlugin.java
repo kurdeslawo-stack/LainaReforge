@@ -57,6 +57,13 @@ public final class LainaReforgePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (recyclerMenu != null) {
+            int restoredMenus = recyclerMenu.closeOpenMenus();
+            if (restoredMenus > 0) {
+                getLogger().info("Zwrócono przedmioty z " + restoredMenus
+                        + " otwartych recyclerów przed wyłączeniem pluginu.");
+            }
+        }
         getLogger().info("LainaReforge wylaczony.");
     }
 

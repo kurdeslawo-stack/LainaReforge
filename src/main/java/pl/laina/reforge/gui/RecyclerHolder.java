@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public final class RecyclerHolder implements InventoryHolder {
 
     private Inventory inventory;
+    private boolean active = true;
 
     public void attach(Inventory inventory) {
         this.inventory = inventory;
@@ -18,5 +19,13 @@ public final class RecyclerHolder implements InventoryHolder {
             throw new IllegalStateException("Recycler inventory has not been attached yet");
         }
         return inventory;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void markClosed() {
+        active = false;
     }
 }
