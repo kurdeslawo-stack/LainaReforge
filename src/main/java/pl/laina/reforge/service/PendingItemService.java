@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import pl.laina.reforge.LainaReforgePlugin;
+import pl.laina.reforge.rules.RecyclingRulesEngine;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +84,7 @@ public final class PendingItemService {
         return firstEver;
     }
 
-    public int cleanupConfigured(RecycleValueService recycleValueService) {
+    public int cleanupConfigured(RecyclingRulesEngine rulesEngine) {
         if (data == null) {
             return 0;
         }
@@ -96,7 +97,7 @@ public final class PendingItemService {
         int removed = 0;
         for (String key : new ArrayList<>(items.getKeys(false))) {
             String id = data.getString("items." + key + ".id", "");
-            if (!id.isBlank() && recycleValueService.isRegistered(id)) {
+            if (!id.isBlank() && rulesEngine.isConfigured(id)) {
                 data.set("items." + key, null);
                 lastRecorded.remove(normalize(id));
                 removed++;
