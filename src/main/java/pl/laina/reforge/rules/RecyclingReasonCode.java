@@ -1,0 +1,18 @@
+package pl.laina.reforge.rules;
+
+/** Stable machine-readable outcomes consumed by GUI, commands, logs and tests. */
+public enum RecyclingReasonCode {
+    ALLOWED_EXPLICIT_ITEM,
+    ALLOWED_CATEGORY,
+    BLOCKED_NO_ITEM,
+    BLOCKED_PLUGIN_CURRENCY,
+    BLOCKED_UNRECOGNIZED,
+    BLOCKED_PENDING_CLASSIFICATION,
+    BLOCKED_BLACKLISTED_ID,
+    BLOCKED_EXPLICIT_ITEM,
+    BLOCKED_CATEGORY,
+    BLOCKED_CATEGORY_POLICY,
+    BLOCKED_MISSING_VALUE,
+    BLOCKED_INVALID_CONFIGURATION,
+    BLOCKED_REWARD_OVERFLOW
+}

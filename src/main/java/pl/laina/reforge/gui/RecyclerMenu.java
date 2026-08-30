@@ -10,10 +10,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pl.laina.reforge.LainaReforgePlugin;
+import pl.laina.reforge.rules.RecyclingDecision;
+import pl.laina.reforge.rules.RecyclingReasonCode;
+import pl.laina.reforge.rules.RecyclingReasonText;
+import pl.laina.reforge.rules.RecyclingRulesEngine;
+import pl.laina.reforge.rules.RecyclingTransactionValidator;
 import pl.laina.reforge.service.CurrencyService;
-import pl.laina.reforge.service.ItemIdentityService;
 import pl.laina.reforge.service.PendingItemService;
-import pl.laina.reforge.service.RecycleValueService;
 import pl.laina.reforge.service.TransactionLogService;
 
 import java.util.ArrayList;
@@ -23,7 +26,6 @@ import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,24 +49,22 @@ public final class RecyclerMenu {
     private static final long INVALID_FEEDBACK_COOLDOWN_MILLIS = 1500L;
 
     private final LainaReforgePlugin plugin;
-    private final ItemIdentityService itemIdentityService;
-    private final RecycleValueService recycleValueService;
+    private final RecyclingRulesEngine rulesEngine;
     private final CurrencyService currencyService;
     private final TransactionLogService transactionLogService;
     private final PendingItemService pendingItemService;
+    private final RecyclingTransactionValidator transactionValidator = new RecyclingTransactionValidator();
     private final Map<UUID, InvalidFeedback> invalidFeedbackByPlayer = new HashMap<>();
     private final Set<RecyclerHolder> pendingPreviewRefreshes =
             Collections.newSetFromMap(new IdentityHashMap<>());
 
     public RecyclerMenu(LainaReforgePlugin plugin,
-                        ItemIdentityService itemIdentityService,
-                        RecycleValueService recycleValueService,
+                        RecyclingRulesEngine rulesEngine,
                         CurrencyService currencyService,
                         TransactionLogService transactionLogService,
                         PendingItemService pendingItemService) {
         this.plugin = plugin;
-        this.itemIdentityService = itemIdentityService;
-        this.recycleValueService = recycleValueService;
+        this.rulesEngine = rulesEngine;
         this.currencyService = currencyService;
         this.transactionLogService = transactionLogService;
         this.pendingItemService = pendingItemService;
@@ -84,16 +84,13 @@ public final class RecyclerMenu {
         for (int slot = 0; slot < SIZE; slot++) {
             inventory.setItem(slot, background);
         }
-
         for (int slot : INPUT_SLOTS) {
             inventory.setItem(slot, null);
         }
-
         ItemStack divider = item(Material.PURPLE_STAINED_GLASS_PANE, " ", NamedTextColor.DARK_PURPLE, List.of());
         for (int slot : List.of(3, 5, 15, 24, 33, 42, 45, 53)) {
             inventory.setItem(slot, divider);
         }
-
         inventory.setItem(INFO_SLOT, informationItem());
         inventory.setItem(CANCEL_SLOT, cancelItem());
         updatePreview(inventory);
@@ -105,7 +102,6 @@ public final class RecyclerMenu {
                 || !pendingPreviewRefreshes.add(holder)) {
             return;
         }
-
         Bukkit.getScheduler().runTask(plugin, () -> {
             pendingPreviewRefreshes.remove(holder);
             if (holder.isActive() && inventory.getHolder() == holder) {
@@ -126,33 +122,32 @@ public final class RecyclerMenu {
     }
 
     public boolean confirm(Player player, Inventory inventory) {
-        boolean containsUnregisteredItem = discoverUnregistered(player, inventory);
-        RecycleAnalysis analysis = analyze(inventory);
-        RecycleResult result = analysis.result();
+        // This is intentionally a fresh pass. Preview state is never trusted for destruction or payout.
+        RecycleAnalysis finalAnalysis = analyze(inventory);
+        boolean discovered = recordPending(player, finalAnalysis);
+        RecycleResult result = finalAnalysis.result();
 
-        if (!analysis.issues().isEmpty()) {
+        if (!finalAnalysis.issues().isEmpty()) {
             String signature = String.join("|", result.invalidItems());
             if (shouldSendInvalidFeedback(player, signature)) {
-                sendProblemFeedback(player, analysis, containsUnregisteredItem);
+                sendProblemFeedback(player, finalAnalysis, discovered);
             }
             updatePreview(inventory);
             return false;
         }
 
         invalidFeedbackByPlayer.remove(player.getUniqueId());
-
         if (!isTransactionPossible(result)) {
             player.sendMessage(text("Dodaj przedmioty, które chcesz przetopić.", NamedTextColor.RED));
             updatePreview(inventory);
             return false;
         }
 
-        // Wynik jest liczony bezpośrednio przed usunięciem itemów. Dopiero po
-        // pełnej walidacji czyścimy input, wypłacamy walutę i zapisujemy transakcję.
+        // All decisions are valid at this point in the same server tick. Mutations begin only after
+        // the all-or-nothing validator has produced a complete payout plan.
         for (int slot : INPUT_SLOTS) {
             inventory.setItem(slot, null);
         }
-
         currencyService.giveShards(player, result.totalShards());
         transactionLogService.logRecycle(player, result.itemAmounts(), result.totalShards());
         player.sendMessage(text("Przetopienie zakończone. Przedmioty: " + acceptedItemCount(result)
@@ -166,14 +161,12 @@ public final class RecyclerMenu {
             holder.markClosed();
             pendingPreviewRefreshes.remove(holder);
         }
-
         invalidFeedbackByPlayer.remove(player.getUniqueId());
         for (int slot : INPUT_SLOTS) {
             ItemStack item = inventory.getItem(slot);
             if (item == null || item.getType().isAir()) {
                 continue;
             }
-
             inventory.setItem(slot, null);
             player.getInventory().addItem(item).values()
                     .forEach(leftover -> player.getWorld().dropItemNaturally(player.getLocation(), leftover));
@@ -187,12 +180,10 @@ public final class RecyclerMenu {
             if (!(inventory.getHolder() instanceof RecyclerHolder)) {
                 continue;
             }
-
             returnItems(player, inventory);
             player.closeInventory();
             closedMenus++;
         }
-
         pendingPreviewRefreshes.clear();
         invalidFeedbackByPlayer.clear();
         return closedMenus;
@@ -214,69 +205,56 @@ public final class RecyclerMenu {
     }
 
     static int acceptedItemCount(RecycleResult result) {
-        long count = result.itemAmounts().values().stream()
-                .mapToLong(Integer::longValue)
-                .sum();
+        long count = result.itemAmounts().values().stream().mapToLong(Integer::longValue).sum();
         return count > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) count;
     }
 
     private RecycleAnalysis analyze(Inventory inventory) {
-        long totalShards = 0;
-        int stacks = 0;
-        Map<String, Integer> itemAmounts = new LinkedHashMap<>();
+        int acceptedStacks = 0;
         Map<IssueKey, MutableIssue> issues = new LinkedHashMap<>();
+        List<RecyclingTransactionValidator.EvaluatedStack> evaluated = new ArrayList<>();
+        List<PendingCandidate> pending = new ArrayList<>();
 
         for (int slot : INPUT_SLOTS) {
             ItemStack item = inventory.getItem(slot);
             if (item == null || item.getType().isAir()) {
                 continue;
             }
-
-            if (currencyService.isPluginCurrency(item)) {
-                addIssue(issues, IssueType.PROTECTED_CURRENCY, displayName(item), "",
-                        "Waluta systemowa nie podlega recyklingowi.", item.getAmount());
+            RecyclingDecision decision = rulesEngine.evaluate(item);
+            evaluated.add(new RecyclingTransactionValidator.EvaluatedStack(item.getAmount(), decision));
+            if (decision.recyclable()) {
+                acceptedStacks++;
                 continue;
             }
 
-            Optional<String> id = itemIdentityService.identify(item);
-            if (id.isEmpty()) {
-                addIssue(issues, IssueType.UNIDENTIFIED, displayName(item),
-                        "Typ: " + item.getType().getKey(),
-                        "Brak obsługiwanego ID customu.", item.getAmount());
-                continue;
+            IssueType type = issueType(decision.reasonCode());
+            String reference = decision.technicalId().isBlank()
+                    ? "Typ: " + item.getType().getKey()
+                    : "ID: " + decision.technicalId();
+            addIssue(issues, type, displayName(item), reference,
+                    RecyclingReasonText.describe(decision), decision.reasonCode(), item.getAmount());
+            if (decision.requiresClassification()) {
+                pending.add(new PendingCandidate(item, decision.technicalId()));
             }
-
-            Optional<String> rejection = recycleValueService.getRejectionReason(id.get());
-            if (rejection.isPresent()) {
-                IssueType type = recycleValueService.isRegistered(id.get())
-                        ? IssueType.BLOCKED
-                        : IssueType.DISCOVERY_PENDING;
-                addIssue(issues, type, displayName(item), "ID: " + id.get(),
-                        polishRejection(rejection.get()), item.getAmount());
-                continue;
-            }
-
-            int value = recycleValueService.getValue(id.get());
-            totalShards += (long) value * item.getAmount();
-            itemAmounts.merge(id.get(), item.getAmount(), Integer::sum);
-            stacks++;
         }
 
-        int safeTotal = totalShards > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) totalShards;
-        List<RecycleIssue> immutableIssues = issues.values().stream()
-                .map(MutableIssue::toIssue)
-                .toList();
+        RecyclingTransactionValidator.TransactionPlan plan = transactionValidator.validate(evaluated);
+        List<RecycleIssue> immutableIssues = issues.values().stream().map(MutableIssue::toIssue).toList();
         List<String> invalidItems = immutableIssues.stream()
-                .map(issue -> issue.type() + "|" + issue.displayName() + "|"
-                        + issue.technicalReference() + "|" + issue.reason() + "|" + issue.amount())
+                .map(issue -> issue.reasonCode() + "|" + issue.technicalReference() + "|" + issue.amount())
                 .toList();
         RecycleResult result = new RecycleResult(
-                safeTotal,
-                stacks,
-                invalidItems,
-                Map.copyOf(itemAmounts)
-        );
-        return new RecycleAnalysis(result, immutableIssues);
+                plan.totalShards(), acceptedStacks, invalidItems, plan.itemAmounts());
+        return new RecycleAnalysis(result, immutableIssues, List.copyOf(pending));
+    }
+
+    private IssueType issueType(RecyclingReasonCode code) {
+        return switch (code) {
+            case BLOCKED_PLUGIN_CURRENCY -> IssueType.PROTECTED_CURRENCY;
+            case BLOCKED_UNRECOGNIZED, BLOCKED_NO_ITEM -> IssueType.UNIDENTIFIED;
+            case BLOCKED_PENDING_CLASSIFICATION -> IssueType.DISCOVERY_PENDING;
+            default -> IssueType.BLOCKED;
+        };
     }
 
     private void addIssue(Map<IssueKey, MutableIssue> issues,
@@ -284,49 +262,37 @@ public final class RecyclerMenu {
                           Component displayName,
                           String technicalReference,
                           String reason,
+                          RecyclingReasonCode reasonCode,
                           int amount) {
-        IssueKey key = new IssueKey(type, displayName, technicalReference, reason);
+        IssueKey key = new IssueKey(type, displayName, technicalReference, reasonCode);
         issues.compute(key, (ignored, current) -> current == null
-                ? new MutableIssue(type, displayName, technicalReference, reason, amount)
+                ? new MutableIssue(type, displayName, technicalReference, reason, reasonCode, amount)
                 : current.withAdditionalAmount(amount));
     }
 
-    private boolean discoverUnregistered(Player player, Inventory inventory) {
+    private boolean recordPending(Player player, RecycleAnalysis analysis) {
         if (!pendingItemService.isEnabled()) {
             return false;
         }
-
-        boolean foundUnregistered = false;
-        for (int slot : INPUT_SLOTS) {
-            ItemStack item = inventory.getItem(slot);
-            if (item == null || item.getType().isAir() || currencyService.isPluginCurrency(item)) {
-                continue;
-            }
-
-            Optional<String> id = itemIdentityService.identify(item);
-            if (id.isPresent() && !recycleValueService.isRegistered(id.get())) {
-                foundUnregistered = true;
-                pendingItemService.record(player, id.get(), item);
-            }
+        boolean found = false;
+        for (PendingCandidate candidate : analysis.pendingCandidates()) {
+            found = true;
+            pendingItemService.record(player, candidate.technicalId(), candidate.item());
         }
-        return foundUnregistered;
+        return found;
     }
 
-    private void sendProblemFeedback(Player player,
-                                     RecycleAnalysis analysis,
-                                     boolean containsUnregisteredItem) {
+    private void sendProblemFeedback(Player player, RecycleAnalysis analysis, boolean discovered) {
         String prefix = plugin.getConfig().getString("messages.prefix", "");
         player.sendMessage(Component.text(stripLegacy(prefix))
                 .append(text("Transakcja wymaga poprawy:", NamedTextColor.RED)));
         for (RecycleIssue issue : analysis.issues()) {
-            Component message = text("• ", NamedTextColor.RED)
+            player.sendMessage(text("• ", NamedTextColor.RED)
                     .append(issue.displayName())
-                    .append(text(" ×" + issue.amount() + " — " + issue.reason(), NamedTextColor.RED));
-            player.sendMessage(withoutItalics(message));
+                    .append(text(" ×" + issue.amount() + " — " + issue.reason(), NamedTextColor.RED)));
         }
-        if (containsUnregisteredItem && pendingItemService.isEnabled()) {
-            player.sendMessage(text(
-                    "Nieznany custom został zachowany i zapisany w Discovery Queue.",
+        if (discovered) {
+            player.sendMessage(text("Nieznany custom został zachowany i zapisany w Discovery Queue.",
                     NamedTextColor.YELLOW));
         }
     }
@@ -335,12 +301,10 @@ public final class RecyclerMenu {
         long now = System.currentTimeMillis();
         UUID playerId = player.getUniqueId();
         InvalidFeedback previous = invalidFeedbackByPlayer.get(playerId);
-        if (previous != null
-                && previous.signature().equals(signature)
+        if (previous != null && previous.signature().equals(signature)
                 && now - previous.timestampMillis() < INVALID_FEEDBACK_COOLDOWN_MILLIS) {
             return false;
         }
-
         invalidFeedbackByPlayer.put(playerId, new InvalidFeedback(signature, now));
         return true;
     }
@@ -360,14 +324,11 @@ public final class RecyclerMenu {
         int accepted = acceptedItemCount(result);
         int problems = problemItemCount(analysis.issues());
         List<Component> lore = new ArrayList<>();
-        lore.add(text("Przyjęte: " + accepted, accepted > 0
-                ? NamedTextColor.GREEN : NamedTextColor.GRAY));
-        lore.add(text("Odłamki Customu: " + result.totalShards(), result.totalShards() > 0
-                ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.GRAY));
-        lore.add(text("Wymagają uwagi: " + problems, problems > 0
-                ? NamedTextColor.RED : NamedTextColor.GRAY));
+        lore.add(text("Przyjęte: " + accepted, accepted > 0 ? NamedTextColor.GREEN : NamedTextColor.GRAY));
+        lore.add(text("Odłamki Customu: " + result.totalShards(),
+                result.totalShards() > 0 ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.GRAY));
+        lore.add(text("Wymagają uwagi: " + problems, problems > 0 ? NamedTextColor.RED : NamedTextColor.GRAY));
         lore.add(Component.empty());
-
         if (isTransactionPossible(result)) {
             lore.add(text("Gotowe do przetopienia.", NamedTextColor.GREEN));
         } else if (!analysis.issues().isEmpty()) {
@@ -375,25 +336,20 @@ public final class RecyclerMenu {
         } else {
             lore.add(text("Umieść przedmioty po lewej.", NamedTextColor.GRAY));
         }
-
-        int visualAmount = Math.max(1, Math.min(64, result.totalShards()));
         ItemStack preview = item(Material.AMETHYST_SHARD, "Podgląd nagrody", NamedTextColor.LIGHT_PURPLE, lore);
-        preview.setAmount(visualAmount);
+        preview.setAmount(Math.max(1, Math.min(64, result.totalShards())));
         return preview;
     }
 
     private ItemStack statusItem(RecycleAnalysis analysis) {
         if (analysis.result().itemAmounts().isEmpty() && analysis.issues().isEmpty()) {
-            return item(Material.HOPPER, "Oczekiwanie na przedmioty", NamedTextColor.AQUA, List.of(
-                    text("Wolne pola znajdują się po lewej.", NamedTextColor.GRAY)
-            ));
+            return item(Material.HOPPER, "Oczekiwanie na przedmioty", NamedTextColor.AQUA,
+                    List.of(text("Wolne pola znajdują się po lewej.", NamedTextColor.GRAY)));
         }
-
         if (analysis.issues().isEmpty()) {
             return item(Material.LIME_DYE, "Wszystko gotowe", NamedTextColor.GREEN, List.of(
                     text("Nie wykryto żadnych problemów.", NamedTextColor.GRAY),
-                    text("Możesz zatwierdzić przetopienie.", NamedTextColor.GREEN)
-            ));
+                    text("Możesz zatwierdzić przetopienie.", NamedTextColor.GREEN)));
         }
 
         List<Component> lore = new ArrayList<>();
@@ -405,8 +361,7 @@ public final class RecyclerMenu {
             if (shown >= MAX_VISIBLE_ISSUES) {
                 break;
             }
-            lore.add(text("• ", NamedTextColor.RED)
-                    .append(issue.displayName())
+            lore.add(text("• ", NamedTextColor.RED).append(issue.displayName())
                     .append(text(" ×" + issue.amount(), NamedTextColor.RED)));
             lore.add(text("  " + issue.reason(), NamedTextColor.GRAY));
             if (!issue.technicalReference().isBlank()) {
@@ -418,10 +373,8 @@ public final class RecyclerMenu {
             shown++;
         }
         if (analysis.issues().size() > shown) {
-            lore.add(text("…oraz " + (analysis.issues().size() - shown) + " kolejne problemy.",
-                    NamedTextColor.RED));
+            lore.add(text("…oraz " + (analysis.issues().size() - shown) + " kolejne problemy.", NamedTextColor.RED));
         }
-
         return item(Material.RED_DYE, "Wymagana uwaga", NamedTextColor.RED, lore);
     }
 
@@ -431,35 +384,25 @@ public final class RecyclerMenu {
             return item(Material.LIME_CONCRETE, "Przetop przedmioty", NamedTextColor.GREEN, List.of(
                     text("Przedmioty: " + acceptedItemCount(result), NamedTextColor.GRAY),
                     text("Odłamki Customu: " + result.totalShards(), NamedTextColor.LIGHT_PURPLE),
-                    Component.empty(),
-                    text("Kliknij, aby zatwierdzić.", NamedTextColor.GREEN)
-            ));
+                    Component.empty(), text("Kliknij, aby zatwierdzić.", NamedTextColor.GREEN)));
         }
-
         if (!analysis.issues().isEmpty()) {
             return item(Material.RED_CONCRETE, "Nie można zatwierdzić", NamedTextColor.RED, List.of(
                     text("Najpierw usuń problematyczne", NamedTextColor.GRAY),
-                    text("przedmioty wskazane po prawej.", NamedTextColor.GRAY)
-            ));
+                    text("przedmioty wskazane po prawej.", NamedTextColor.GRAY)));
         }
-
         return item(Material.GRAY_CONCRETE, "Brak przedmiotów", NamedTextColor.GRAY, List.of(
                 text("Przycisk uaktywni się, gdy", NamedTextColor.DARK_GRAY),
-                text("dodasz poprawne przedmioty.", NamedTextColor.DARK_GRAY)
-        ));
+                text("dodasz poprawne przedmioty.", NamedTextColor.DARK_GRAY)));
     }
 
     private ItemStack cancelItem() {
         return item(Material.BARRIER, "Anuluj", NamedTextColor.RED, List.of(
                 text("Zamknij menu bez przetapiania.", NamedTextColor.GRAY),
-                text("Wszystkie przedmioty zostaną zwrócone.", NamedTextColor.YELLOW)
-        ));
+                text("Wszystkie przedmioty zostaną zwrócone.", NamedTextColor.YELLOW)));
     }
 
-    private ItemStack item(Material material,
-                           String name,
-                           NamedTextColor color,
-                           List<Component> lore) {
+    private ItemStack item(Material material, String name, NamedTextColor color, List<Component> lore) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(text(name, color));
@@ -487,32 +430,6 @@ public final class RecyclerMenu {
         return count > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) count;
     }
 
-    private String polishRejection(String reason) {
-        if (reason == null || reason.isBlank()) {
-            return "Przedmiot nie spełnia zasad recyklingu.";
-        }
-        if (reason.equals("item jest na blackliscie")) {
-            return "Przedmiot znajduje się na liście blokad.";
-        }
-        if (reason.equals("item nie jest jeszcze skonfigurowany")) {
-            return "Custom nie jest jeszcze skonfigurowany.";
-        }
-        if (reason.equals("recycling wylaczony dla tego itemu")) {
-            return "Recykling jest wyłączony dla tego przedmiotu.";
-        }
-        if (reason.equals("brak przypisanej wartosci")) {
-            return "Brak przypisanej wartości recyklingu.";
-        }
-        if (reason.startsWith("zablokowana kategoria: ")) {
-            return "Zablokowana kategoria: " + reason.substring("zablokowana kategoria: ".length()) + ".";
-        }
-        if (reason.startsWith("recycling wylaczony dla kategorii: ")) {
-            return "Recykling jest wyłączony dla kategorii: "
-                    + reason.substring("recycling wylaczony dla kategorii: ".length()) + ".";
-        }
-        return reason;
-    }
-
     private String stripLegacy(String value) {
         return value == null ? "" : value.replaceAll("(?i)&[0-9A-FK-ORX]", "");
     }
@@ -524,36 +441,33 @@ public final class RecyclerMenu {
         BLOCKED
     }
 
-    private record IssueKey(IssueType type,
-                            Component displayName,
-                            String technicalReference,
-                            String reason) {
+    private record IssueKey(IssueType type, Component displayName, String technicalReference,
+                            RecyclingReasonCode reasonCode) {
     }
 
-    private record RecycleIssue(IssueType type,
-                                Component displayName,
-                                String technicalReference,
-                                String reason,
-                                int amount) {
+    private record RecycleIssue(IssueType type, Component displayName, String technicalReference,
+                                String reason, RecyclingReasonCode reasonCode, int amount) {
     }
 
-    private record MutableIssue(IssueType type,
-                                Component displayName,
-                                String technicalReference,
-                                String reason,
-                                int amount) {
+    private record MutableIssue(IssueType type, Component displayName, String technicalReference,
+                                String reason, RecyclingReasonCode reasonCode, int amount) {
         private MutableIssue withAdditionalAmount(int additionalAmount) {
             long sum = (long) amount + additionalAmount;
             int safeAmount = sum > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) sum;
-            return new MutableIssue(type, displayName, technicalReference, reason, safeAmount);
+            return new MutableIssue(type, displayName, technicalReference, reason, reasonCode, safeAmount);
         }
 
         private RecycleIssue toIssue() {
-            return new RecycleIssue(type, displayName, technicalReference, reason, amount);
+            return new RecycleIssue(type, displayName, technicalReference, reason, reasonCode, amount);
         }
     }
 
-    private record RecycleAnalysis(RecycleResult result, List<RecycleIssue> issues) {
+    private record PendingCandidate(ItemStack item, String technicalId) {
+    }
+
+    private record RecycleAnalysis(RecycleResult result,
+                                   List<RecycleIssue> issues,
+                                   List<PendingCandidate> pendingCandidates) {
     }
 
     private record InvalidFeedback(String signature, long timestampMillis) {
