@@ -1,0 +1,317 @@
+Item Catalog Generator Report
+=============================
+Source: items.zip
+
+JSON files analyzed: 74
+Catalog entries: 1757
+Unique CMD values: 1469
+Unique material+CMD keys: 1757
+Models on multiple materials: 275
+Exact duplicate definitions: 0
+Conflicts: 0
+Invalid or missing CMD: 2
+Parse errors: 0
+Schema errors: 0
+
+Conflicts
+---------
+- none
+
+Exact duplicate definitions
+---------------------------
+- none
+
+Invalid CMD entries
+-------------------
+- none
+
+Files without CMD mappings
+--------------------------
+- items/axolotl_bucket.json: no custom_model_data dispatcher
+- items/painting.json: no custom_model_data dispatcher
+
+Parse errors
+------------
+- none
+
+Schema errors
+-------------
+- none
+
+Models on multiple materials
+----------------------------
+- axes/am_axe => diamond_axe, netherite_axe
+- axes/axy_axy => diamond_axe, netherite_axe
+- axes/blue_axe => diamond_axe, netherite_axe
+- axes/ciupaga => diamond_axe, netherite_axe
+- axes/cursed_axe => diamond_axe, netherite_axe
+- axes/druid_axe => diamond_axe, netherite_axe
+- axes/first_axe => diamond_axe, netherite_axe
+- axes/lapis_axe => diamond_axe, netherite_axe
+- axes/lumberjack_axe => diamond_axe, netherite_axe
+- axes/rusty_axe => diamond_axe, netherite_axe
+- axes/sea_axe => diamond_axe, netherite_axe
+- axes/second_axe => diamond_axe, netherite_axe
+- axes/third_axe => diamond_axe, netherite_axe
+- axes/undertaker_axe => diamond_axe, netherite_axe
+- books/poem_book => book, echo_shard
+- emeralds/chip => echo_shard, emerald
+- halloween/bloody_axe => diamond_axe, netherite_axe
+- hoes/am_hoe => diamond_hoe, netherite_hoe
+- hoes/am_scythe => diamond_hoe, netherite_hoe
+- hoes/blue_hoe => diamond_hoe, netherite_hoe
+- hoes/druid_hoe => diamond_hoe, netherite_hoe
+- hoes/druid_scythe => diamond_hoe, netherite_hoe
+- hoes/farmer_hoe => diamond_hoe, netherite_hoe
+- hoes/lapis_hoe => diamond_hoe, netherite_hoe
+- hoes/nether_hoe => diamond_hoe, netherite_hoe
+- menu/dummy_age => echo_shard, knowledge_book
+- menu/dummy_light => echo_shard, knowledge_book
+- menu/dummy_remove => echo_shard, knowledge_book
+- menu/dummy_rotate => echo_shard, knowledge_book
+- menu/dummy_stats => echo_shard, knowledge_book
+- menu/menu_agility => echo_shard, knowledge_book
+- menu/menu_archery => echo_shard, knowledge_book
+- menu/menu_armor => echo_shard, knowledge_book
+- menu/menu_attack => echo_shard, knowledge_book
+- menu/menu_aura => echo_shard, knowledge_book
+- menu/menu_book => echo_shard, knowledge_book
+- menu/menu_chat_off => echo_shard, knowledge_book
+- menu/menu_chat_on => echo_shard, knowledge_book
+- menu/menu_coin => echo_shard, knowledge_book
+- menu/menu_diamond => echo_shard, knowledge_book
+- menu/menu_emoji_off => echo_shard, knowledge_book
+- menu/menu_emoji_on => echo_shard, knowledge_book
+- menu/menu_esoterism => echo_shard, knowledge_book
+- menu/menu_exchange => echo_shard, knowledge_book
+- menu/menu_fishing => echo_shard, knowledge_book
+- menu/menu_giant => echo_shard, knowledge_book
+- menu/menu_gnome => echo_shard, knowledge_book
+- menu/menu_halfling => echo_shard, knowledge_book
+- menu/menu_hp => echo_shard, knowledge_book
+- menu/menu_human => echo_shard, knowledge_book
+- menu/menu_info => echo_shard, knowledge_book
+- menu/menu_kit => echo_shard, knowledge_book
+- menu/menu_magic => echo_shard, knowledge_book
+- menu/menu_mining => echo_shard, knowledge_book
+- menu/menu_no => echo_shard, knowledge_book
+- menu/menu_points => echo_shard, knowledge_book
+- menu/menu_pwarps => echo_shard, knowledge_book
+- menu/menu_quest => echo_shard, knowledge_book
+- menu/menu_rewards => echo_shard, knowledge_book
+- menu/menu_stats => echo_shard, knowledge_book
+- menu/menu_token => echo_shard, knowledge_book
+- menu/menu_tribes => echo_shard, knowledge_book
+- menu/menu_warps => echo_shard, knowledge_book
+- menu/menu_wisdom => echo_shard, knowledge_book
+- menu/menu_yes => echo_shard, knowledge_book
+- misc/amethyst_ring => echo_shard, knowledge_book
+- misc/anchor_gold => echo_shard, knowledge_book
+- misc/anchor_nether => echo_shard, knowledge_book
+- misc/ballon_aqua => echo_shard, knowledge_book
+- misc/ballon_blue => echo_shard, knowledge_book
+- misc/ballon_green => echo_shard, knowledge_book
+- misc/ballon_orange => echo_shard, knowledge_book
+- misc/ballon_purple => echo_shard, knowledge_book
+- misc/ballon_red => echo_shard, knowledge_book
+- misc/ballon_yellow => echo_shard, knowledge_book
+- misc/bark => echo_shard, knowledge_book
+- misc/beetroot_bag => echo_shard, knowledge_book
+- misc/cave_spider => echo_shard, knowledge_book
+- misc/crab_claws => echo_shard, knowledge_book
+- misc/crimson_bag => echo_shard, knowledge_book
+- misc/cursed_ring => echo_shard, knowledge_book
+- misc/diamond_book => echo_shard, knowledge_book
+- misc/dog_treat => echo_shard, knowledge_book
+- misc/drink_me => echo_shard, knowledge_book
+- misc/eat_me => echo_shard, knowledge_book
+- misc/egg_red => husk_spawn_egg, piglin_spawn_egg, pillager_spawn_egg, snow_golem_spawn_egg, villager_spawn_egg
+- misc/emerald_ring => echo_shard, knowledge_book
+- misc/empathy_book => echo_shard, knowledge_book
+- misc/empiria => echo_shard, knowledge_book
+- misc/end_stela => echo_shard, knowledge_book
+- misc/frog_green => echo_shard, knowledge_book
+- misc/frog_orange => echo_shard, knowledge_book
+- misc/frog_white => echo_shard, knowledge_book
+- misc/fruit_adult => echo_shard, knowledge_book
+- misc/fruit_agelock => echo_shard, knowledge_book
+- misc/fruit_follow => echo_shard, knowledge_book
+- misc/fruit_young => echo_shard, knowledge_book
+- misc/genie_lamp => echo_shard, knowledge_book
+- misc/golden_book => echo_shard, knowledge_book
+- misc/golden_feather => echo_shard, knowledge_book
+- misc/grass_bag => echo_shard, knowledge_book
+- misc/hw_eye => echo_shard, knowledge_book
+- misc/infinity_empty_bucket => echo_shard, knowledge_book
+- misc/leech => echo_shard, knowledge_book
+- misc/lifebuoy => echo_shard, knowledge_book
+- misc/magic_powder => echo_shard, knowledge_book
+- misc/magnet => echo_shard, knowledge_book
+- misc/medal_b_c => echo_shard, knowledge_book
+- misc/medal_b_d => echo_shard, knowledge_book
+- misc/medal_b_g => echo_shard, knowledge_book
+- misc/medal_b_i => echo_shard, knowledge_book
+- misc/medal_b_n => echo_shard, knowledge_book
+- misc/medal_g_c => echo_shard, knowledge_book
+- misc/medal_g_d => echo_shard, knowledge_book
+- misc/medal_g_g => echo_shard, knowledge_book
+- misc/medal_g_i => echo_shard, knowledge_book
+- misc/medal_g_n => echo_shard, knowledge_book
+- misc/medal_r_c => echo_shard, knowledge_book
+- misc/medal_r_d => echo_shard, knowledge_book
+- misc/medal_r_g => echo_shard, knowledge_book
+- misc/medal_r_i => echo_shard, knowledge_book
+- misc/medal_r_n => echo_shard, knowledge_book
+- misc/melon_bag => echo_shard, knowledge_book
+- misc/mycelium_bag => echo_shard, knowledge_book
+- misc/parchment_empty => echo_shard, knowledge_book
+- misc/parchment_location => echo_shard, knowledge_book
+- misc/parchment_rain => echo_shard, knowledge_book
+- misc/parchment_thunder => echo_shard, knowledge_book
+- misc/pearl_ring => echo_shard, knowledge_book
+- misc/pocket_crafting => echo_shard, knowledge_book
+- misc/podzol_bag => echo_shard, knowledge_book
+- misc/portal_bucket => echo_shard, knowledge_book
+- misc/pumpkin_bag => echo_shard, knowledge_book
+- misc/pumpkin_egg => bogged_spawn_egg, skeleton_spawn_egg, zombie_spawn_egg
+- misc/recipe_book => echo_shard, knowledge_book
+- misc/ring => echo_shard, knowledge_book
+- misc/ruby_ring => echo_shard, knowledge_book
+- misc/sapphire_ring => echo_shard, knowledge_book
+- misc/school_cert => echo_shard, knowledge_book
+- misc/school_cert_red => echo_shard, knowledge_book
+- misc/spider => echo_shard, knowledge_book
+- misc/syringe => echo_shard, knowledge_book
+- misc/thunder => echo_shard, knowledge_book
+- misc/topaz_ring => echo_shard, knowledge_book
+- misc/void_bag => echo_shard, knowledge_book
+- misc/voodoo_doll => echo_shard, knowledge_book
+- misc/warped_bag => echo_shard, knowledge_book
+- misc/wheat_bag => echo_shard, knowledge_book
+- misc/zaratustra => echo_shard, knowledge_book
+- pickaxes/am_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/bat_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/beginner_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/black_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/blue_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/coal_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/copper_pickaxe_our => diamond_pickaxe, netherite_pickaxe
+- pickaxes/demolition_hammer => diamond_pickaxe, netherite_pickaxe
+- pickaxes/emerald_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/first_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/gen_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/gold_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/guild_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/hell_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/ice_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/lapis_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/lazuli_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/love_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/lucky_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/luckyblock_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/miner_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/mummy_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/orb_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/overworld_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/quartz_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/redstone_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/rubin_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/rusty_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/sculk_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/sea_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/second_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/steel_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/third_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/undertaker_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pickaxes/xmas_pickaxe => diamond_pickaxe, netherite_pickaxe
+- pumpkin/crown_diamond => carved_pumpkin, echo_shard
+- pumpkin/crown_emerald => carved_pumpkin, echo_shard
+- pumpkin/crown_golden => carved_pumpkin, echo_shard
+- pumpkin/crown_netherite => carved_pumpkin, echo_shard
+- pumpkin/pirate_hat => carved_pumpkin, echo_shard
+- shield/turtle_shield => echo_shard, iron_sword, shield
+- shovels/am_shovel => diamond_shovel, netherite_shovel
+- shovels/blue_shovel => diamond_shovel, netherite_shovel
+- shovels/first_shovel => diamond_shovel, netherite_shovel
+- shovels/lapis_shovel => diamond_shovel, netherite_shovel
+- shovels/rusty_shovel => diamond_shovel, netherite_shovel
+- shovels/sea_shovel => diamond_shovel, netherite_shovel
+- shovels/second_shovel => diamond_shovel, netherite_shovel
+- shovels/third_shovel => diamond_shovel, netherite_shovel
+- shovels/undertaker_shovel => diamond_shovel, netherite_shovel
+- swords/am_sword => diamond_sword, netherite_sword
+- swords/antique_sword => diamond_sword, netherite_sword
+- swords/blackstone_sword => diamond_sword, netherite_sword
+- swords/bloody_bat => diamond_sword, netherite_sword
+- swords/bloody_sword => diamond_sword, netherite_sword
+- swords/blue_hammer => diamond_sword, netherite_sword
+- swords/blue_sword => diamond_sword, netherite_sword
+- swords/blueberry_dagger => diamond_sword, netherite_sword
+- swords/bone_sword => diamond_sword, netherite_sword
+- swords/chicken_sword => diamond_sword, netherite_sword
+- swords/creeper_sword => diamond_sword, netherite_sword
+- swords/cursed_sword => diamond_sword, netherite_sword
+- swords/dagger_amethyst => diamond_sword, netherite_sword
+- swords/dagger_diax => diamond_sword, netherite_sword
+- swords/dagger_emerald => diamond_sword, netherite_sword
+- swords/dagger_pearl => diamond_sword, netherite_sword
+- swords/dagger_ruby => diamond_sword, netherite_sword
+- swords/dagger_topaz => diamond_sword, netherite_sword
+- swords/dark_saber => diamond_sword, netherite_sword
+- swords/day_sword => diamond_sword, netherite_sword
+- swords/dripstone_sword => diamond_sword, netherite_sword
+- swords/drowned_sword => diamond_sword, netherite_sword
+- swords/emerald_sword => diamond_sword, netherite_sword
+- swords/enderman_sword => diamond_sword, netherite_sword
+- swords/endermite_sword => diamond_sword, netherite_sword
+- swords/epic_slime_sword => diamond_sword, netherite_sword
+- swords/eros_sword => diamond_sword, netherite_sword
+- swords/flower_sword => diamond_sword, netherite_sword
+- swords/ghast_sword => diamond_sword, netherite_sword
+- swords/golem_sword => diamond_sword, netherite_sword
+- swords/halloween_sword => diamond_sword, netherite_sword
+- swords/hate_flower => diamond_sword, netherite_sword
+- swords/ice_sword => diamond_sword, netherite_sword
+- swords/invisible_sword => diamond_sword, netherite_sword
+- swords/lapis_sword => diamond_sword, netherite_sword
+- swords/lightsaber_blue => diamond_sword, netherite_sword
+- swords/lightsaber_green => diamond_sword, netherite_sword
+- swords/lightsaber_purple => diamond_sword, netherite_sword
+- swords/lightsaber_red => diamond_sword, netherite_sword
+- swords/love_flower => diamond_sword, netherite_sword
+- swords/mixer_sword => diamond_sword, netherite_sword
+- swords/nature_sword => diamond_sword, netherite_sword
+- swords/night_sword => diamond_sword, netherite_sword
+- swords/paladin_sword => diamond_sword, netherite_sword
+- swords/palm => diamond_sword, netherite_sword
+- swords/pink_love_sword => diamond_sword, netherite_sword
+- swords/plastic_sword => diamond_sword, netherite_sword
+- swords/poison_sword => diamond_sword, netherite_sword
+- swords/purple_sword => diamond_sword, netherite_sword
+- swords/red_love_sword => diamond_sword, netherite_sword
+- swords/ritual_sickle => diamond_sword, netherite_sword
+- swords/royal_sword => diamond_sword, netherite_sword
+- swords/rust_sword => diamond_sword, netherite_sword
+- swords/sapphire_sword => diamond_sword, netherite_sword
+- swords/sculk_sword => diamond_sword, netherite_sword
+- swords/sea_sword => diamond_sword, netherite_sword
+- swords/shulker_sword => diamond_sword, netherite_sword
+- swords/sickle => diamond_sword, netherite_sword
+- swords/slime_sword => diamond_sword, netherite_sword
+- swords/spear => diamond_sword, netherite_sword
+- swords/streamer_sword => diamond_sword, netherite_sword
+- swords/thunder_sword => diamond_sword, netherite_sword
+- swords/totem_sword => diamond_sword, netherite_sword
+- swords/trial_sword => diamond_sword, netherite_sword
+- swords/undertaker_knife => diamond_sword, netherite_sword
+- swords/warped_crimson_sword => diamond_sword, netherite_sword
+- swords/water_sword => diamond_sword, netherite_sword
+- swords/wind_sword => diamond_sword, netherite_sword
+- swords/wind_sword2 => diamond_sword, netherite_sword
+- swords/windcharge_sword => diamond_sword, netherite_sword
+- swords/wing_sword => diamond_sword, netherite_sword
+- swords/wither_sword => diamond_sword, netherite_sword
+- swords/yellow_lightsaber => diamond_sword, netherite_sword
+- winter/candy_sword => diamond_sword, netherite_sword
+- winter/snow_sword => diamond_sword, netherite_sword
+- winter/winter_tree => diamond_sword, netherite_sword
