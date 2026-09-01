@@ -1,0 +1,129 @@
+Wiki Catalog Mapping Audit - model_path collision fix
+=====================================================
+
+Branch: feature/item-catalog-wiki
+Base commit: 80ed082328cb2ef95f285600720b26dce10d6cfc
+
+Summary
+-------
+Mapped records checked: 50
+Correct: 50
+Suspicious: 0
+Incorrect: 0
+Manual-review cases checked: 10
+Manual-review correctly rejected: 10
+Detected basename collisions checked: 16
+Detected basename collisions correctly rejected: 16
+
+Deterministic selection
+-----------------------
+Mapped sample: all records for the first lexicographically sorted shared model_path in each
+of the weapon, tool, misc and material groups (swords/am_sword, axes/am_axe,
+misc/amethyst_ring, emeralds/chip), then, excluding already selected keys, the first
+7 records sorted by model/model_path/material/CMD from weapon, bow, armor, tool and misc,
+followed by the first 4 consumables and first 3 materials. Total: 50 records.
+
+Manual-review sample: first 4 BASENAME_COLLISION entries, first 2 missing_image entries,
+first 2 no_item_page entries, first ambiguous_page and first collection_page, each sorted
+lexicographically by basename. Total: 10 cases.
+
+Mapped records checked
+----------------------
+01. CORRECT | material=diamond_sword | CMD=2350213 | model=am_sword | model_path=swords/am_sword | image=Am_sword.png | wiki=Ametystowy_Miecz | name=Ametystowy Miecz | page describes item=yes | unambiguous=yes
+02. CORRECT | material=netherite_sword | CMD=2350213 | model=am_sword | model_path=swords/am_sword | image=Am_sword.png | wiki=Ametystowy_Miecz | name=Ametystowy Miecz | page describes item=yes | unambiguous=yes
+03. CORRECT | material=diamond_axe | CMD=2350215 | model=am_axe | model_path=axes/am_axe | image=Am_axe.png | wiki=Ametystowa_Siekiera | name=Ametystowa Siekiera | page describes item=yes | unambiguous=yes
+04. CORRECT | material=netherite_axe | CMD=2350215 | model=am_axe | model_path=axes/am_axe | image=Am_axe.png | wiki=Ametystowa_Siekiera | name=Ametystowa Siekiera | page describes item=yes | unambiguous=yes
+05. CORRECT | material=echo_shard | CMD=2350490 | model=amethyst_ring | model_path=misc/amethyst_ring | image=Amethyst_ring.png | wiki=Ametystowy_Pierścień | name=Ametystowy Pierścień | page describes item=yes | unambiguous=yes
+06. CORRECT | material=knowledge_book | CMD=2350490 | model=amethyst_ring | model_path=misc/amethyst_ring | image=Amethyst_ring.png | wiki=Ametystowy_Pierścień | name=Ametystowy Pierścień | page describes item=yes | unambiguous=yes
+07. CORRECT | material=echo_shard | CMD=2350447 | model=chip | model_path=emeralds/chip | image=Chip.png | wiki=Wakacyjny_Żeton | name=Wakacyjny Żeton | page describes item=yes | unambiguous=yes
+08. CORRECT | material=emerald | CMD=2350447 | model=chip | model_path=emeralds/chip | image=Chip.png | wiki=Wakacyjny_Żeton | name=Wakacyjny Żeton | page describes item=yes | unambiguous=yes
+09. CORRECT | material=netherite_sword | CMD=2350023 | model=admin_sword | model_path=swords/admin_sword | image=Admin_sword.png | wiki=Miecz_Admina | name=Miecz Admina | page describes item=yes | unambiguous=yes
+10. CORRECT | material=iron_sword | CMD=2350219 | model=am_staff | model_path=swords/am_staff | image=Am_staff.png | wiki=Ametystowa_Laska | name=Ametystowa Laska | page describes item=yes | unambiguous=yes
+11. CORRECT | material=netherite_sword | CMD=2350482 | model=amethyst_claymore | model_path=swords/amethyst_claymore | image=Amethyst_claymore.png | wiki=Ametystowy_Claymore | name=Ametystowy Claymore | page describes item=yes | unambiguous=yes
+12. CORRECT | material=diamond_sword | CMD=2350813 | model=antique_sword | model_path=swords/antique_sword | image=Antique_sword.png | wiki=Antyczny_Miecz | name=Antyczny Miecz | page describes item=yes | unambiguous=yes
+13. CORRECT | material=netherite_sword | CMD=2350813 | model=antique_sword | model_path=swords/antique_sword | image=Antique_sword.png | wiki=Antyczny_Miecz | name=Antyczny Miecz | page describes item=yes | unambiguous=yes
+14. CORRECT | material=netherite_sword | CMD=2350815 | model=arena_tester_sword | model_path=swords/arena_tester_sword | image=Arena_tester_sword.png | wiki=Miecz_Testera_Areny | name=Miecz Testera Areny | page describes item=yes | unambiguous=yes
+15. CORRECT | material=netherite_sword | CMD=2350891 | model=athena_spear | model_path=swords/athena_spear | image=Athena_spear.png | wiki=Włócznia_Ateny | name=Włócznia Ateny | page describes item=yes | unambiguous=yes
+16. CORRECT | material=bow | CMD=2351017 | model=autumn_bow | model_path=bows/autumn_bow | image=Autumn_bow.png | wiki=Jesienny_Łuk | name=Jesienny Łuk | page describes item=yes | unambiguous=yes
+17. CORRECT | material=bow | CMD=2350600 | model=blue_bow | model_path=bows/blue_bow | image=Blue_bow.png | wiki=Szafirowy_Łuk | name=Szafirowy Łuk | page describes item=yes | unambiguous=yes
+18. CORRECT | material=crossbow | CMD=2350021 | model=bluecb_standby | model_path=crossbows/bluecb_standby | image=Bluecb_standby.png | wiki=Kusza_Wyborowa | name=Kusza Wyborowa | page describes item=yes | unambiguous=yes
+19. CORRECT | material=bow | CMD=2350117 | model=ezo_bow | model_path=bows/ezo_bow | image=Ezo_bow.png | wiki=Ezoteryczny_Łuk | name=Ezoteryczny Łuk | page describes item=yes | unambiguous=yes
+20. CORRECT | material=bow | CMD=2350963 | model=gambler_bow | model_path=bows/gambler_bow | image=Gambler_bow.png | wiki=Łuk_Hazardzisty | name=Łuk Hazardzisty | page describes item=yes | unambiguous=yes
+21. CORRECT | material=bow | CMD=2350721 | model=illusioner_bow | model_path=bows/illusioner_bow | image=Illusioner_bow.png | wiki=Łuk_Iluzjonera | name=Łuk Iluzjonera | page describes item=yes | unambiguous=yes
+22. CORRECT | material=bow | CMD=2350895 | model=lapis_bow | model_path=bows/lapis_bow | image=Lapis_bow.png | wiki=Lapisowy_Łuk | name=Lapisowy Łuk | page describes item=yes | unambiguous=yes
+23. CORRECT | material=netherite_boots | CMD=2350649 | model=amethyst_boots | model_path=armor/amethyst_boots | image=Amethyst_boots.png | wiki=Ametystowe_Buty | name=Ametystowe Buty | page describes item=yes | unambiguous=yes
+24. CORRECT | material=netherite_chestplate | CMD=2350647 | model=amethyst_chestplate | model_path=armor/amethyst_chestplate | image=Amethyst_chestplate.png | wiki=Ametystowy_Napierśnik | name=Ametystowy Napierśnik | page describes item=yes | unambiguous=yes
+25. CORRECT | material=netherite_helmet | CMD=2350646 | model=amethyst_helmet | model_path=armor/amethyst_helmet | image=Amethyst_helmet.png | wiki=Ametystowy_Hełm | name=Ametystowy Hełm | page describes item=yes | unambiguous=yes
+26. CORRECT | material=netherite_leggings | CMD=2350648 | model=amethyst_leggings | model_path=armor/amethyst_leggings | image=Amethyst_leggings.png | wiki=Ametystowe_Nogawice | name=Ametystowe Nogawice | page describes item=yes | unambiguous=yes
+27. CORRECT | material=shield | CMD=2351282 | model=athena_shield | model_path=shield/athena_shield | image=Athena_shield.png | wiki=Tarcza_Ateny | name=Tarcza Ateny | page describes item=yes | unambiguous=yes
+28. CORRECT | material=elytra | CMD=2350654 | model=bedrock_elytra | model_path=armor/bedrock_elytra | image=Bedrock_elytra.png | wiki=Bedrockowa_Elytra | name=Bedrockowa Elytra | page describes item=yes | unambiguous=yes
+29. CORRECT | material=elytra | CMD=2350970 | model=bee_elytra | model_path=armor/bee_elytra | image=Bee_elytra.png | wiki=Pszczele_Skrzydła | name=Pszczele Skrzydła | page describes item=yes | unambiguous=yes
+30. CORRECT | material=netherite_axe | CMD=2351256 | model=admin_axe | model_path=axes/admin_axe | image=Admin_axe.png | wiki=Siekiera_Admina | name=Siekiera Admina | page describes item=yes | unambiguous=yes
+31. CORRECT | material=diamond_pickaxe | CMD=2350214 | model=am_pickaxe | model_path=pickaxes/am_pickaxe | image=Am_pickaxe.png | wiki=Ametystowy_Kilof | name=Ametystowy Kilof | page describes item=yes | unambiguous=yes
+32. CORRECT | material=netherite_pickaxe | CMD=2350214 | model=am_pickaxe | model_path=pickaxes/am_pickaxe | image=Am_pickaxe.png | wiki=Ametystowy_Kilof | name=Ametystowy Kilof | page describes item=yes | unambiguous=yes
+33. CORRECT | material=diamond_hoe | CMD=2350218 | model=am_scythe | model_path=hoes/am_scythe | image=Am_scythe.png | wiki=Ametystowa_Kosa | name=Ametystowa Kosa | page describes item=yes | unambiguous=yes
+34. CORRECT | material=netherite_hoe | CMD=2350218 | model=am_scythe | model_path=hoes/am_scythe | image=Am_scythe.png | wiki=Ametystowa_Kosa | name=Ametystowa Kosa | page describes item=yes | unambiguous=yes
+35. CORRECT | material=diamond_shovel | CMD=2350216 | model=am_shovel | model_path=shovels/am_shovel | image=Am_shovel.png | wiki=Ametystowa_Łopata | name=Ametystowa Łopata | page describes item=yes | unambiguous=yes
+36. CORRECT | material=netherite_shovel | CMD=2350216 | model=am_shovel | model_path=shovels/am_shovel | image=Am_shovel.png | wiki=Ametystowa_Łopata | name=Ametystowa Łopata | page describes item=yes | unambiguous=yes
+37. CORRECT | material=echo_shard | CMD=2351234 | model=ai_syringe | model_path=misc/ai_syringe | image=Ai_syringe.png | wiki=Proaina | name=Proaina | page describes item=yes | unambiguous=yes
+38. CORRECT | material=echo_shard | CMD=2350918 | model=ammo | model_path=misc/ammo | image=Ammo.png | wiki=Nabój | name=Nabój | page describes item=yes | unambiguous=yes
+39. CORRECT | material=echo_shard | CMD=2350143 | model=anchor_gold | model_path=misc/anchor_gold | image=Anchor_gold.png | wiki=Złota_Kotwica | name=Złota Kotwica | page describes item=yes | unambiguous=yes
+40. CORRECT | material=knowledge_book | CMD=2350143 | model=anchor_gold | model_path=misc/anchor_gold | image=Anchor_gold.png | wiki=Złota_Kotwica | name=Złota Kotwica | page describes item=yes | unambiguous=yes
+41. CORRECT | material=echo_shard | CMD=2350144 | model=anchor_nether | model_path=misc/anchor_nether | image=Anchor_nether.png | wiki=Netherytowa_Kotwica | name=Netherytowa Kotwica | page describes item=yes | unambiguous=yes
+42. CORRECT | material=knowledge_book | CMD=2350144 | model=anchor_nether | model_path=misc/anchor_nether | image=Anchor_nether.png | wiki=Netherytowa_Kotwica | name=Netherytowa Kotwica | page describes item=yes | unambiguous=yes
+43. CORRECT | material=echo_shard | CMD=2350988 | model=apple_marker | model_path=misc/apple_marker | image=Apple_marker.png | wiki=Jabłkowy_Marker | name=Jabłkowy Marker | page describes item=yes | unambiguous=yes
+44. CORRECT | material=potion | CMD=2350523 | model=acid_potion | model_path=potions/acid_potion | image=Acid_potion.png | wiki=Podejrzana_Mikstura | name=Podejrzana Mikstura | page describes item=yes | unambiguous=yes
+45. CORRECT | material=enchanted_golden_apple | CMD=2350220 | model=am_apple | model_path=food/am_apple | image=Am_apple.png | wiki=Ametystowe_Jabłko | name=Ametystowe Jabłko | page describes item=yes | unambiguous=yes
+46. CORRECT | material=baked_potato | CMD=2350221 | model=am_beetroot | model_path=food/am_beetroot | image=Am_beetroot.png | wiki=Ametystowy_Burak | name=Ametystowy Burak | page describes item=yes | unambiguous=yes
+47. CORRECT | material=golden_carrot | CMD=2350222 | model=am_carrot | model_path=food/am_carrot | image=Am_carrot.png | wiki=Ametystowa_Marchew | name=Ametystowa Marchew | page describes item=yes | unambiguous=yes
+48. CORRECT | material=ender_pearl | CMD=2351008 | model=black_ender_pearl | model_path=pearl/black_ender_pearl | image=Black_ender_pearl.png | wiki=Czarna_enderperła | name=Czarna enderperła | page describes item=yes | unambiguous=yes
+49. CORRECT | material=emerald | CMD=2350310 | model=blaze_star | model_path=emeralds/blaze_star | image=Blaze_star.png | wiki=Płomykowa_Gwiazda | name=Płomykowa Gwiazda | page describes item=yes | unambiguous=yes
+50. CORRECT | material=ender_pearl | CMD=2351014 | model=blue_ender_pearl | model_path=pearl/blue_ender_pearl | image=Blue_ender_pearl.png | wiki=Niebieska_enderperła | name=Niebieska enderperła | page describes item=yes | unambiguous=yes
+
+Basename collisions checked
+---------------------------
+01. PASS | bat | paths=hat/bat, swords/bat | image=Bat.png | pages=Inne bronie, Kij Bejsbolowy | all wiki/name empty=yes | manual details complete=yes
+02. PASS | blueberry | paths=food/blueberry, pumpkin/blueberry | image=Blueberry.png | pages=Borówka, Wakacyjna Wyspa, Żywność | all wiki/name empty=yes | manual details complete=yes
+03. PASS | coin | paths=emeralds/coin, misc/coin | image=Coin.png | pages=none | all wiki/name empty=yes | manual details complete=yes
+04. PASS | frog_green | paths=misc/frog_green, pumpkin/frog_green | image=Frog_green.png | pages=Zielona Żaba, Zwierzęta | all wiki/name empty=yes | manual details complete=yes
+05. PASS | frog_orange | paths=misc/frog_orange, pumpkin/frog_orange | image=Frog_orange.png | pages=Pomarańczowa Żaba, Zwierzęta | all wiki/name empty=yes | manual details complete=yes
+06. PASS | frog_white | paths=misc/frog_white, pumpkin/frog_white | image=Frog_white.png | pages=Biała Żaba, Zużywalne, Zwierzęta | all wiki/name empty=yes | manual details complete=yes
+07. PASS | infinity_lava_bucket | paths=buckets/infinity_lava_bucket, misc/infinity_lava_bucket | image=Infinity_lava_bucket.png | pages=Bezdenne Wiadro Lawy, Inne narzędzia | all wiki/name empty=yes | manual details complete=yes
+08. PASS | infinity_snow_bucket | paths=buckets/infinity_snow_bucket, misc/infinity_snow_bucket | image=none | pages=none | all wiki/name empty=yes | manual details complete=yes
+09. PASS | infinity_water_bucket | paths=buckets/infinity_water_bucket, misc/infinity_water_bucket | image=Infinity_water_bucket.png | pages=Bezdenne Wiadro Wody, Inne narzędzia | all wiki/name empty=yes | manual details complete=yes
+10. PASS | miner_helmet | paths=armor/miner_helmet, hat/miner_helmet | image=Miner_helmet.png | pages=Hełm Kargo, Hełmy | all wiki/name empty=yes | manual details complete=yes
+11. PASS | netherite_coin | paths=emeralds/netherite_coin, misc/netherite_coin | image=Netherite_coin.png | pages=none | all wiki/name empty=yes | manual details complete=yes
+12. PASS | pink_bow | paths=bows/pink_bow, pumpkin/pink_bow | image=Pink_bow.png | pages=Miłosna Wyspa, Różowy Łuk, Łuki | all wiki/name empty=yes | manual details complete=yes
+13. PASS | sea_coin | paths=emeralds/sea_coin, misc/sea_coin | image=Sea_coin.png | pages=none | all wiki/name empty=yes | manual details complete=yes
+14. PASS | silver_coin | paths=emeralds/silver_coin, misc/silver_coin | image=Silver_coin.png | pages=none | all wiki/name empty=yes | manual details complete=yes
+15. PASS | strawberry | paths=food/strawberry, pumpkin/strawberry | image=Strawberry.png | pages=Truskawka, Wakacyjna Wyspa, Żywność | all wiki/name empty=yes | manual details complete=yes
+16. PASS | thor_hammer | paths=mace/thor_hammer, swords/thor_hammer | image=Thor_hammer.png | pages=Inne bronie, Młot Thora, Wakacyjna Wyspa | all wiki/name empty=yes | manual details complete=yes
+
+Manual-review cases checked
+---------------------------
+01. CORRECT_REJECTION | bat | paths=hat/bat, swords/bat | reason=BASENAME_COLLISION | distinct model_path values must not inherit one basename mapping
+02. CORRECT_REJECTION | blueberry | paths=food/blueberry, pumpkin/blueberry | reason=BASENAME_COLLISION | distinct model_path values must not inherit one basename mapping
+03. CORRECT_REJECTION | coin | paths=emeralds/coin, misc/coin | reason=BASENAME_COLLISION | distinct model_path values must not inherit one basename mapping
+04. CORRECT_REJECTION | frog_green | paths=misc/frog_green, pumpkin/frog_green | reason=BASENAME_COLLISION | distinct model_path values must not inherit one basename mapping
+05. CORRECT_REJECTION | 67animated | path=hat/67animated | reason=missing_image | no normalized image exists in cache
+06. CORRECT_REJECTION | allay_elytra | path=armor/allay_elytra | reason=missing_image | no normalized image exists in cache
+07. CORRECT_REJECTION | bandana_sea | path=hat/bandana_sea | reason=no_item_page | Kalendarz Wakacyjny is not a direct item page and uses many catalog images
+08. CORRECT_REJECTION | coupon2 | path=misc/coupon2 | reason=no_item_page | image has no eligible namespace-0 item page in cache
+09. CORRECT_REJECTION | bow1 | path=bows/bow1 | reason=ambiguous_page | Bow1.png is used by two direct item pages: Łuk Wyborowy and Łuk Wyborowy Nowicjusza
+10. CORRECT_REJECTION | axe_axe | path=axes/axe_axe | reason=collection_page | Broń sygnaturowa uses multiple catalog images; Siekierka23 is a player/staff page
+
+Catalog integrity
+-----------------
+Records: 1757
+Records with complete wiki/name: 858
+Records with empty wiki/name: 899
+Records with only one of wiki/name populated: 0
+Records with non-zero shards: 0
+Fields changed against the stage-1 commit other than wiki/name: 0
+Shared complete model_path groups with inconsistent wiki/name: 0
+
+Commit readiness
+----------------
+READY based on this audit. No incorrect or suspicious automatic mapping was found in the
+deterministic sample, every detected basename collision was rejected, and all sampled
+manual-review cases were correctly left unmapped.

@@ -1,0 +1,26 @@
+Wiki Catalog Mapping Report
+===========================
+
+Unique model paths: 1472
+Unique basenames: 1456
+Basename collisions: 16
+Matching image files found: 779
+Unambiguously mapped model paths: 691
+Catalog records updated: 858
+Catalog coverage: 48.83%
+Missing images: 676
+Ambiguous matches: 4
+Manual-review cases: 765
+HTTP/API errors: 0
+
+Manual-review reasons
+---------------------
+- BASENAME_COLLISION: 16
+- ambiguous_page: 4
+- collection_page: 5
+- missing_image: 676
+- no_item_page: 64
+
+HTTP/API errors
+---------------
+- none
