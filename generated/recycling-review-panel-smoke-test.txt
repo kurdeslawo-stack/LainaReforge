@@ -1,0 +1,23 @@
+Recycling Review Panel - Windows smoke test
+===========================================
+
+Branch: feature/recycling-review-panel
+Status: PASS
+
+The local Windows/browser smoke test was confirmed by the user after opening the generated panel.
+
+Confirmed interactions:
+- panel opens from generated/recycling-review-panel/index.html;
+- next / previous navigation works;
+- search works;
+- REJECTED decision flow works;
+- fixed shard approval flow works;
+- custom positive shard approval works;
+- decisions persist after page refresh via localStorage;
+- EXPORT DECISIONS works;
+- RESET LOCAL DECISIONS works;
+- IMPORT DECISIONS restores exported decisions.
+
+Combined with the prior static audit, no blocking issue remains for ETAP 5.
+
+Result: ETAP 5 PASS.
