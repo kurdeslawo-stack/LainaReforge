@@ -1,0 +1,1546 @@
+# Generated manual-review queue for acquisition/economy analysis.
+items:
+  - wiki: "Banhammer"
+    name: "Banhammer"
+    records:
+      - "netherite_sword:2350417 (swords/banhammer)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot zarezerwowany wyłącznie dla administracji."
+  - wiki: "Biały_Pędzel"
+    name: "Biały Pędzel"
+    records:
+      - "iron_sword:2350751 (brush/brush_white)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Brązowy_Pędzel"
+    name: "Brązowy Pędzel"
+    records:
+      - "iron_sword:2350742 (brush/brush_brown)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Buty_Kargo"
+    name: "Buty Kargo"
+    records:
+      - "netherite_boots:2351078 (armor/miner_boots)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Buty_Mikołaja"
+    name: "Buty Mikołaja"
+    records:
+      - "netherite_boots:2350653 (armor/santa_boots)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedynym sposobem na ich zdobycie jest zakupienie pakietu Zbroja Świętego Mikołaja w [http://sklep.laina.pl naszym sklepie internetowym]."
+  - wiki: "Buty_Pszczelarza"
+    name: "Buty Pszczelarza"
+    records:
+      - "netherite_boots:2350886 (armor/beekeeper_boots)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Buty_Zwinności"
+    name: "Buty Zwinności"
+    records:
+      - "netherite_boots:2350870 (armor/feather_boots)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Buty_Zwinności_Golema"
+    name: "Buty Zwinności Golema"
+    records:
+      - "echo_shard:2350871 (misc/feather_golem_boots)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Błękitny_Pędzel"
+    name: "Błękitny Pędzel"
+    records:
+      - "iron_sword:2350743 (brush/brush_cyan)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Czarna_enderperła"
+    name: "Czarna enderperła"
+    records:
+      - "ender_pearl:2351008 (pearl/black_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Czarny_Pędzel"
+    name: "Czarny Pędzel"
+    records:
+      - "iron_sword:2350740 (brush/brush_black)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Czerwona_enderperła"
+    name: "Czerwona enderperła"
+    records:
+      - "ender_pearl:2351011 (pearl/red_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Czerwony_Pędzel"
+    name: "Czerwony Pędzel"
+    records:
+      - "iron_sword:2358002 (brush/brush_red)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Diamentowa_enderperła"
+    name: "Diamentowa enderperła"
+    records:
+      - "ender_pearl:2351009 (pearl/diamond_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Diamentowy_Topór"
+    name: "Diamentowy Topór"
+    records:
+      - "diamond_axe:2350861 (axes/diamond_battleaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Epicki_Szlamowy_Miecz"
+    name: "Epicki Szlamowy Miecz"
+    records:
+      - "diamond_sword:2350777 (swords/epic_slime_sword)"
+      - "netherite_sword:2350777 (swords/epic_slime_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Fioletowa_enderperła"
+    name: "Fioletowa enderperła"
+    records:
+      - "ender_pearl:2351015 (pearl/purple_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Fioletowy_Pędzel"
+    name: "Fioletowy Pędzel"
+    records:
+      - "iron_sword:2350750 (brush/brush_purple)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Gildyjny_Kilof"
+    name: "Gildyjny Kilof"
+    records:
+      - "diamond_pickaxe:2350542 (pickaxes/guild_pickaxe)"
+      - "netherite_pickaxe:2350542 (pickaxes/guild_pickaxe)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jest nagrodą za 23 dzień codziennego wpisywania komendy /rewards, przyznawaną, jeśli gildia gracza posiada co najmniej 5 poziom"
+  - wiki: "Granat_Śnieżny"
+    name: "Granat Śnieżny"
+    records:
+      - "snowball:2350655 (misc/snow_grenade)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jeden z możliwych do zdobycia przedmiotów po użyciu Świątecznej Laski."
+  - wiki: "Hełm_Mikołaja"
+    name: "Hełm Mikołaja"
+    records:
+      - "netherite_helmet:2350650 (armor/santa_helmet)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedynym sposobem na jego zdobycie jest zakupienie pakietu Zbroja Świętego Mikołaja w [http://sklep.laina.pl naszym sklepie internetowym]."
+  - wiki: "Jasnoniebieski_Pędzel"
+    name: "Jasnoniebieski Pędzel"
+    records:
+      - "iron_sword:2358000 (brush/brush_light_blue)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Jasnoszary_Pędzel"
+    name: "Jasnoszary Pędzel"
+    records:
+      - "iron_sword:2350746 (brush/brush_light_gray)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Jasnozielony_Pędzel"
+    name: "Jasnozielony Pędzel"
+    records:
+      - "iron_sword:2350747 (brush/brush_lime)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Jesienny_Kupon"
+    name: "Jesienny Kupon"
+    records:
+      - "echo_shard:2351029 (misc/autumn_coupon)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia w [http://sklep.laina.pl naszym sklepie internetowym] przez całą kalendarzową jesień 2025."
+  - wiki: "Kabel_od_Prodiża"
+    name: "Kabel od Prodiża"
+    records:
+      - "netherite_sword:2350454 (swords/prod_cable)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot zarezerwowany wyłącznie dla administracji."
+  - wiki: "Kamienne_Buty"
+    name: "Kamienne Buty"
+    records:
+      - "netherite_boots:2350690 (armor/cobblestone_boots)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum - około 1% szans."
+  - wiki: "Kamienne_Nogawice"
+    name: "Kamienne Nogawice"
+    records:
+      - "netherite_leggings:2350689 (armor/cobblestone_leggings)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum - około 1% szans."
+  - wiki: "Kamienny_Hełm"
+    name: "Kamienny Hełm"
+    records:
+      - "netherite_helmet:2350687 (armor/cobblestone_helmet)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum - około 1% szans."
+  - wiki: "Kamienny_Napierśnik"
+    name: "Kamienny Napierśnik"
+    records:
+      - "netherite_chestplate:2350688 (armor/cobblestone_chestplate)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum - około 1% szans."
+  - wiki: "Kamień_Kargo"
+    name: "Kamień Kargo"
+    records:
+      - "echo_shard:2351236 (misc/kargo)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni ze skrzynek, beczek, garnców, złóż oraz za zdobywanie osiągnięć z nią związanych."
+  - wiki: "Kapelusz_Pszczelarza"
+    name: "Kapelusz Pszczelarza"
+    records:
+      - "netherite_helmet:2350883 (armor/beekeeper_helmet)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Kaptur_Maga_Ognia"
+    name: "Kaptur Maga Ognia"
+    records:
+      - "netherite_helmet:2350823 (armor/fire_mage_helmet)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Karmazynowy_Pędzel"
+    name: "Karmazynowy Pędzel"
+    records:
+      - "iron_sword:2350748 (brush/brush_magenta)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Kilof_Dominacji"
+    name: "Kilof Dominacji"
+    records:
+      - "diamond_pickaxe:2350856 (pickaxes/orb_pickaxe)"
+      - "netherite_pickaxe:2350856 (pickaxes/orb_pickaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Kilof_Kargo"
+    name: "Kilof Kargo"
+    records:
+      - "netherite_pickaxe:2351237 (pickaxes/kargo_pickaxe)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Kilof_Midasa"
+    name: "Kilof Midasa"
+    records:
+      - "iron_pickaxe:2350336 (pickaxes/midas_pickaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść podczas wykopywania złota z rudy."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+        - "Można go zdobyć z Key Bloka."
+  - wiki: "Kilof_Poszukiwacza_Złota"
+    name: "Kilof Poszukiwacza Złota"
+    records:
+      - "diamond_pickaxe:2350383 (pickaxes/gold_pickaxe)"
+      - "netherite_pickaxe:2350383 (pickaxes/gold_pickaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Władcy Śmierci - około 5% szans."
+        - "Można go zdobyć z Key Bloka."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Klucz_Diamentowy"
+    name: "Klucz Diamentowy"
+    records:
+      - "echo_shard:2350567 (keys/diamond_key)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia w zestawie z innymi kluczami w [http://sklep.laina.pl naszym sklepie internetowym]."
+        - "Dostępny do kupienia na /warp Automaty za diamenty."
+  - wiki: "Klucz_Dominacji"
+    name: "Klucz Dominacji"
+    records:
+      - "echo_shard:2350855 (misc/orb_key)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Klucz_Premium"
+    name: "Klucz Premium"
+    records:
+      - "echo_shard:2350568 (keys/premium_key)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia w zestawie z innymi kluczami w [http://sklep.laina.pl naszym sklepie internetowym]."
+        - "Dostępny do kupienia na /warp Automaty za Netherytowe Coiny."
+  - wiki: "Klucz_Wakacyjny"
+    name: "Klucz Wakacyjny"
+    records:
+      - "echo_shard:2350573 (keys/summer_key)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia w [http://sklep.laina.pl naszym sklepie internetowym] podczas trwania eventu."
+        - "Dostępny do kupienia na /warp Automaty za Wakacyjne Żetony."
+        - "Jedna z nagród za pokonanie Szlama Behemota."
+  - wiki: "Klucz_Zdobiony"
+    name: "Klucz Zdobiony"
+    records:
+      - "echo_shard:2350919 (keys/beauty_key)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota."
+        - "Przedmiot dostępny tylko podczas eventu wakacyjnego."
+  - wiki: "Klucz_Złoty"
+    name: "Klucz Złoty"
+    records:
+      - "echo_shard:2350565 (keys/golden_key)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia w zestawie z innymi kluczami w [http://sklep.laina.pl|naszym sklepie internetowym]."
+        - "Dostępny do kupienia na /warp Automaty za diamenty."
+        - "Jedna z nagród za pokonanie Mistrza Złosadników - około 10% szans."
+        - "Jedna z nagród za pokonanie Iluzjonera - około 15% szans."
+        - "Jedna z nagród za pokonanie Trytona - około 20% szans."
+        - "Jedna z nagród za pokonanie Nadzorcy Dusz - około 25% szans."
+        - "Jedna z nagród za pokonanie Mistrza Wiatru - około 30% szans."
+        - "Jedna z nagród za pokonanie Władcy Śmierci - około 30% szans."
+  - wiki: "Koguci_Pazur"
+    name: "Koguci Pazur"
+    records:
+      - "diamond_sword:2350323 (swords/chicken_sword)"
+      - "netherite_sword:2350323 (swords/chicken_sword)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+  - wiki: "Koktajl_Mołotowa"
+    name: "Koktajl Mołotowa"
+    records:
+      - "echo_shard:2350887 (misc/molotov)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można go zdobyć z Przeklętego Klucza."
+        - "Jedna z nagród za pokonanie Smoka Endu"
+  - wiki: "Kombinezon_Pszczelarza"
+    name: "Kombinezon Pszczelarza"
+    records:
+      - "netherite_chestplate:2350884 (armor/beekeeper_chestplate)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Korona_Zeusa"
+    name: "Korona Zeusa"
+    records:
+      - "netherite_helmet:2351071 (armor/zeus_crown)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można ją zdobyć wydobywając Lucky Blocki na /warp KopalniaSzczęścia"
+        - "Można ją zdobyć z Key Bloka."
+  - wiki: "Kosa_Midasa"
+    name: "Kosa Midasa"
+    records:
+      - "iron_hoe:2350337 (hoes/midas_scythe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść podczas wykopywania złota z rudy."
+        - "Można go zdobyć z Key Bloka."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Kosa_ŚMIERCI"
+    name: "Kosa ŚMIERCI"
+    records:
+      - "iron_sword:2356665 (halloween/death_scythe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Zdobywało się z eventu halloweenowego, ale przedmiot został wycofany i nie będzie już nigdy dostępny."
+        - "Specjalny eventowy przedmiot Halloween ze statystykami żelaznego miecza. Ze względu na zbyt potężne działanie, przedmiot został wycofany i nie będzie możliwy do zdobycia w przyszłych eventach. Wciąż działa, ale znika po zabiciu przeciwnika (i użytkownika). Po jej użyciu traci się 20 punktów reputacji."
+  - wiki: "Kostur_Natury_Nowicjusza"
+    name: "Kostur Natury Nowicjusza"
+    records:
+      - "iron_sword:2350901 (swords/nature)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jeden z przedmiotów startowych dostępnych do wyboru po dołączeniu na serwer oraz ukończeniu samouczka."
+        - "Specjalny kostur. Jest jednym z czterech dostępnych itemów startowych. Przedmiot ten jest Artefaktem Magicznym."
+  - wiki: "Kościany_Miecz"
+    name: "Kościany Miecz"
+    records:
+      - "diamond_sword:2350112 (swords/bone_sword)"
+      - "netherite_sword:2350112 (swords/bone_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść z Elitarnego szkieleta (1% szans)."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Krowie_Kopytko"
+    name: "Krowie Kopytko"
+    records:
+      - "netherite_sword:2350354 (swords/cow_hoof)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+  - wiki: "Księga_Magii_Ognia"
+    name: "Księga Magii Ognia"
+    records:
+      - "echo_shard:2350778 (misc/fire_book)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Kubełczako"
+    name: "Kubełczako"
+    records:
+      - "netherite_sword:2350881 (solid/buck_chuckets)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Kula_Dominacji"
+    name: "Kula Dominacji"
+    records:
+      - "echo_shard:2350854 (misc/orb_of_dominance)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Kula_Kamienia"
+    name: "Kula Kamienia"
+    records:
+      - "snowball:2351279 (misc/stoneball)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Kula_Mchu"
+    name: "Kula Mchu"
+    records:
+      - "snowball:2351280 (misc/mossball)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Kula_Piachu"
+    name: "Kula Piachu"
+    records:
+      - "snowball:2351023 (misc/sandball)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Kula_Trawy"
+    name: "Kula Trawy"
+    records:
+      - "snowball:2351024 (misc/grassball)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Kula_Ziemi"
+    name: "Kula Ziemi"
+    records:
+      - "snowball:2350776 (misc/dirtball)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Kusza_Wyborowa"
+    name: "Kusza Wyborowa"
+    records:
+      - "crossbow:2350021 (crossbows/bluecb_standby)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Mistrza Złosadników - 10% szans."
+        - "Można ją zdobyć z Przeklętego Klucza."
+  - wiki: "Kwarcowy_Kilof"
+    name: "Kwarcowy Kilof"
+    records:
+      - "diamond_pickaxe:2350423 (pickaxes/quartz_pickaxe)"
+      - "netherite_pickaxe:2350423 (pickaxes/quartz_pickaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Władcy Śmierci - około 5% szans."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Lapisowa_Motyka"
+    name: "Lapisowa Motyka"
+    records:
+      - "diamond_hoe:2350315 (hoes/lapis_hoe)"
+      - "netherite_hoe:2350315 (hoes/lapis_hoe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Podobnie jak inne lapisowe narzędzia, wypada podczas wydobywania lapisu Lapisowym Kilofem"
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Lapisowa_Siekiera"
+    name: "Lapisowa Siekiera"
+    records:
+      - "diamond_axe:2350313 (axes/lapis_axe)"
+      - "netherite_axe:2350313 (axes/lapis_axe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Podobnie jak inne lapisowe narzędzia, wypada podczas wydobywania lapisu Lapisowym Kilofem"
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Lapisowa_Łopata"
+    name: "Lapisowa Łopata"
+    records:
+      - "diamond_shovel:2350314 (shovels/lapis_shovel)"
+      - "netherite_shovel:2350314 (shovels/lapis_shovel)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Podobnie jak inne lapisowe narzędzia, wypada podczas wydobywania lapisu Lapisowym Kilofem"
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Lapisowy_Kilof"
+    name: "Lapisowy Kilof"
+    records:
+      - "diamond_pickaxe:2350312 (pickaxes/lapis_pickaxe)"
+      - "netherite_pickaxe:2350312 (pickaxes/lapis_pickaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść ze Smoka Endu (5% szans)."
+        - "Podobnie jak inne lapisowe narzędzia, wypada podczas wydobywania lapisu Lapisowym Kilofem."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Lapisowy_Miecz"
+    name: "Lapisowy Miecz"
+    records:
+      - "diamond_sword:2350301 (swords/lapis_sword)"
+      - "netherite_sword:2350301 (swords/lapis_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść podczas wydobywania lapisu przy pomocy Lapisowego Kilofu."
+        - "Jest ostateczną nagrodą za 23 dzień codziennego wpisywania komendy /rewards."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Laska_Dominacji_Małgosi"
+    name: "Laska Dominacji Małgosi"
+    records:
+      - "netherite_sword:2350866 (swords/malgosha_dominance_staff)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+        - "Po zakończeniu eventu dostępna w Cash Shopie."
+  - wiki: "Laska_Druida"
+    name: "Laska Druida"
+    records:
+      - "iron_sword:2350303 (swords/nature_staff)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Iluzjonera - około 10% szans."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Laska_Małgosi"
+    name: "Laska Małgosi"
+    records:
+      - "echo_shard:2350865 (misc/malgosha_staff)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Laska_Midasa"
+    name: "Laska Midasa"
+    records:
+      - "iron_sword:2350318 (swords/midas_staff)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść podczas wykopywania złota z rudy."
+        - "Jedna z nagród za pokonanie Iluzjonera - około 1% szans."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+        - "Można go zdobyć z Key Bloka."
+  - wiki: "Laska_Pszczelarza"
+    name: "Laska Pszczelarza"
+    records:
+      - "iron_sword:2350377 (swords/bee_staff)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Latająca_Miotła"
+    name: "Latająca Miotła"
+    records:
+      - "iron_sword:2356662 (halloween/broomstick)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępna podczas eventu halloweenowego."
+        - "Jedna z nagród za pokonanie Iluzjonera - około 1% szans."
+  - wiki: "Lawowy_Kurczak"
+    name: "Lawowy Kurczak"
+    records:
+      - "cooked_chicken:2350877 (solid/lava_chicken)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Lisi_Ogonek"
+    name: "Lisi Ogonek"
+    records:
+      - "netherite_sword:2351255 (swords/fox_tail)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+  - wiki: "Lodowe_Ostrze"
+    name: "Lodowe Ostrze"
+    records:
+      - "diamond_sword:2350212 (swords/ice_sword)"
+      - "netherite_sword:2350212 (swords/ice_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Trytona - 10% szans."
+        - "Jedna z nagród za pokonanie Mistrza Wiatru - 50% szans."
+        - "Można go zdobyć z Przeklętego Klucza."
+  - wiki: "Maczuga"
+    name: "Maczuga"
+    records:
+      - "netherite_sword:2350602 (swords/club)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść z Elitarnego zombie (1% szans)."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Magiczny_Wodorost"
+    name: "Magiczny Wodorost"
+    records:
+      - "netherite_sword:2350586 (swords/magic_seaweed)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+  - wiki: "Magmowy_Claymore"
+    name: "Magmowy Claymore"
+    records:
+      - "netherite_sword:2350369 (swords/magma_claymore)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Władcy Śmierci - około 25% szans."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Małe_Szlamowe_Jabłko"
+    name: "Małe Szlamowe Jabłko"
+    records:
+      - "apple:2351022 (food/slime_apple_small)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Po spożyciu Szlamowego Jabłka otrzymujemy zawsze 2 Małe Szlamowe Jabłka."
+  - wiki: "Maź_Kargo"
+    name: "Maź Kargo"
+    records:
+      - "echo_shard:2351278 (misc/black_goo)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Miecz_Admina"
+    name: "Miecz Admina"
+    records:
+      - "netherite_sword:2350023 (swords/admin_sword)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot zarezerwowany wyłącznie dla administracji."
+  - wiki: "Miecz_Moderatora"
+    name: "Miecz Moderatora"
+    records:
+      - "netherite_sword:2350105 (swords/mod_sword)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot zarezerwowany wyłącznie dla administracji."
+  - wiki: "Miecz_Skrytobójcy"
+    name: "Miecz Skrytobójcy"
+    records:
+      - "diamond_sword:2350558 (swords/dark_saber)"
+      - "netherite_sword:2350558 (swords/dark_saber)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny do kupienia podczas eventu halloweenowego."
+        - "Jedna z nagród za pokonanie Nadzorcy Dusz"
+  - wiki: "Miecz_Streamera"
+    name: "Miecz Streamera"
+    records:
+      - "diamond_sword:2350116 (swords/streamer_sword)"
+      - "netherite_sword:2350116 (swords/streamer_sword)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Miecz jest dostępny wyłącznie dla zatwierdzonych streamerów serwera."
+  - wiki: "Miecz_Testera_Areny"
+    name: "Miecz Testera Areny"
+    records:
+      - "netherite_sword:2350815 (swords/arena_tester_sword)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Miecz otrzymały tylko osoby, które brały udział w testach serwera z minigierkami oraz spędziły na serwerze testowym przynajmniej 3 godziny."
+  - wiki: "Miecz_Utopca"
+    name: "Miecz Utopca"
+    records:
+      - "diamond_sword:2350338 (swords/drowned_sword)"
+      - "netherite_sword:2350338 (swords/drowned_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Trytona - 25% szans."
+        - "Można go zdobyć z Przeklętego Klucza."
+  - wiki: "Miecz_z_Blackstone"
+    name: "Miecz z Blackstone"
+    records:
+      - "diamond_sword:2350225 (swords/blackstone_sword)"
+      - "netherite_sword:2350225 (swords/blackstone_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść z Piglina okrutnika (10% szans)."
+        - "Można go zdobyć z Przeklętego Klucza."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Miedziana_tarcza"
+    name: "Miedziana tarcza"
+    records:
+      - "shield:2351268 (shield/copper_shield)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można ją zdobyć z Przeklętego Klucza."
+        - "Jedna z nagród za pokonanie Mistrza Złosadników"
+  - wiki: "Mikstura_Dominacji"
+    name: "Mikstura Dominacji"
+    records:
+      - "echo_shard:2350857 (misc/orb_potion)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Muszelka_Shulkerowa"
+    name: "Muszelka Shulkerowa"
+    records:
+      - "shulker_shell:2350142 (misc/shulk_snail_shell)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można ją złowić przy pomocy Magicznej Wędki lub lepszej."
+        - "Można znaleźć ją w beczce podczas eventu Wakacyjna Wyspa."
+  - wiki: "Nabój"
+    name: "Nabój"
+    records:
+      - "echo_shard:2350918 (misc/ammo)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny podczas eventu Wakacyjna Wyspa."
+        - "Można go wytworzyć."
+  - wiki: "Netherytowa_Kotwica"
+    name: "Netherytowa Kotwica"
+    records:
+      - "echo_shard:2350144 (misc/anchor_nether)"
+      - "knowledge_book:2350144 (misc/anchor_nether)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można ją złowić przy pomocy Magicznej Wędki lub lepszej."
+        - "Można znaleźć ją w beczce podczas eventu Wakacyjna Wyspa."
+  - wiki: "Netherytowy_Kilof_Wojenny"
+    name: "Netherytowy Kilof Wojenny"
+    records:
+      - "netherite_pickaxe:2350973 (pickaxes/netherite_war_pickaxe)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można go zdobyć wydobywając Lucky Blocki na /warp KopalniaSzczęścia"
+  - wiki: "Netherytowy_Topór"
+    name: "Netherytowy Topór"
+    records:
+      - "netherite_axe:2350861 (axes/netherite_battleaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Niebieska_enderperła"
+    name: "Niebieska enderperła"
+    records:
+      - "ender_pearl:2351014 (pearl/blue_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Niebieski_Pędzel"
+    name: "Niebieski Pędzel"
+    records:
+      - "iron_sword:2350741 (brush/brush_blue)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Nietoperze_Skrzydełko"
+    name: "Nietoperze Skrzydełko"
+    records:
+      - "netherite_sword:2351254 (swords/bat_wing)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+  - wiki: "Niewidzialna_Elytra"
+    name: "Niewidzialna Elytra"
+    records:
+      - "elytra:2351482 (armor/invisible_elytra)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum ."
+  - wiki: "Niewidzialne_Buty"
+    name: "Niewidzialne Buty"
+    records:
+      - "iron_boots:2350790 (armor/invisible_boots)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum ."
+  - wiki: "Niewidzialne_Nogawice"
+    name: "Niewidzialne Nogawice"
+    records:
+      - "iron_leggings:2350789 (armor/invisible_leggings)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum ."
+  - wiki: "Niewidzialny_Hełm"
+    name: "Niewidzialny Hełm"
+    records:
+      - "iron_helmet:2350787 (armor/invisible_helmet)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum ."
+  - wiki: "Niewidzialny_Miecz"
+    name: "Niewidzialny Miecz"
+    records:
+      - "diamond_sword:2350791 (swords/invisible_sword)"
+      - "netherite_sword:2350791 (swords/invisible_sword)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum ."
+  - wiki: "Niewidzialny_Napierśnik"
+    name: "Niewidzialny Napierśnik"
+    records:
+      - "iron_chestplate:2350788 (armor/invisible_chestplate)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum ."
+  - wiki: "Nocny_Miecz"
+    name: "Nocny Miecz"
+    records:
+      - "diamond_sword:2350202 (swords/night_sword)"
+      - "netherite_sword:2350202 (swords/night_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Nadzorcy Dusz - 50% szans."
+        - "Jedna z nagród za pokonanie Mistrza Złosadników - 10% szans."
+        - "Można go zdobyć z Przeklętego Klucza."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Nożyce_Mistrza_Strzygaczy"
+    name: "Nożyce Mistrza Strzygaczy"
+    records:
+      - "shears:2350965 (shears/sheep_shears)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępne w Pet Shopie za 32 Coiny."
+        - "Nagroda za ukończenie questa na /warp PetShop ."
+  - wiki: "Obłok_Kinto"
+    name: "Obłok Kinto"
+    records:
+      - "echo_shard:2350686 (misc/kinto)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród ze skrzynki na /warp Koloseum - około 1% szans."
+  - wiki: "Ochrona_Helpera"
+    name: "Ochrona Helpera"
+    records:
+      - "echo_shard:2351368 (hat/helper)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępna tylko dla ekipy serwerowej."
+  - wiki: "Odtwarzacz"
+    name: "Odtwarzacz"
+    records:
+      - "echo_shard:2350882 (misc/sound_player)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas Minecraft Movie."
+  - wiki: "Ogrodniczki_Kargo"
+    name: "Ogrodniczki Kargo"
+    records:
+      - "netherite_chestplate:2351076 (armor/miner_chestplate)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Ostrze_Prób"
+    name: "Ostrze Prób"
+    records:
+      - "diamond_sword:2350367 (swords/trial_sword)"
+      - "netherite_sword:2350367 (swords/trial_sword)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jedna z nagród z Labiryntu Prób - 0,5% szansy."
+  - wiki: "Papuże_Piórko"
+    name: "Papuże Piórko"
+    records:
+      - "netherite_sword:2351484 (swords/rainbow_feather)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+        - "Specjalny przedmiot ze statystykami miecza netherytowego. Jest bronią sygnaturową Alexy_99, dostępną w liczbie 10 sztuk rocznie."
+  - wiki: "Perła"
+    name: "Perła"
+    records:
+      - "emerald:2350140 (emeralds/pearl)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można ją złowić przy pomocy Magicznej Wędki lub lepszej."
+        - "Można znaleźć ją w beczce podczas eventu Wakacyjna Wyspa."
+  - wiki: "Pigliński_Hełm"
+    name: "Pigliński Hełm"
+    records:
+      - "netherite_helmet:2350867 (armor/piglin_helmet)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Pigliński_Napierśnik"
+    name: "Pigliński Napierśnik"
+    records:
+      - "netherite_chestplate:2350868 (armor/piglin_chestplate)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Pigliński_Pas"
+    name: "Pigliński Pas"
+    records:
+      - "netherite_leggings:2350869 (armor/piglin_belt)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Piorun_Zeusa"
+    name: "Piorun Zeusa"
+    records:
+      - "echo_shard:2350122 (misc/thunder)"
+      - "knowledge_book:2350122 (misc/thunder)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+        - "Dostępny do kupienia w Morskiej Osadzie."
+        - "Jedna z nagród za pokonanie Mistrza Wiatru - 50% szans."
+  - wiki: "Plażowy_Marker"
+    name: "Plażowy Marker"
+    records:
+      - "echo_shard:2350819 (misc/summer_marker)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny w Cash Shopie."
+  - wiki: "Pluszowy_Creeper"
+    name: "Pluszowy Creeper"
+    records:
+      - "echo_shard:2350879 (solid/plush_creeper)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Pomarańczowy_Pędzel"
+    name: "Pomarańczowy Pędzel"
+    records:
+      - "iron_sword:2350749 (brush/brush_orange)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Przeklęta_Kosa"
+    name: "Przeklęta Kosa"
+    records:
+      - "iron_hoe:2350027 (hoes/cursed_hoe)"
+    reasons:
+        - "INSUFFICIENT_DATA"
+    evidence: []
+  - wiki: "Pszczele_Skrzydła"
+    name: "Pszczele Skrzydła"
+    records:
+      - "elytra:2350970 (armor/bee_elytra)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Pszczele_Żądełko"
+    name: "Pszczele Żądełko"
+    records:
+      - "netherite_sword:2350814 (swords/bee_sting)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+  - wiki: "Pusta_Kula"
+    name: "Pusta Kula"
+    records:
+      - "echo_shard:2351139 (misc/emptyball)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni ze skrzynek, beczek, garnców, złóż oraz za zdobywanie osiągnięć."
+  - wiki: "Pyromiot"
+    name: "Pyromiot"
+    records:
+      - "echo_shard:2350880 (solid/potato_launcher)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Płaszcz_Maga_Ognia"
+    name: "Płaszcz Maga Ognia"
+    records:
+      - "netherite_chestplate:2350824 (armor/fire_mage_chestplate)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Płaszcz_Mikołaja"
+    name: "Płaszcz Mikołaja"
+    records:
+      - "netherite_chestplate:2350651 (armor/santa_chestplate)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedynym sposobem na jego zdobycie jest zakupienie pakietu Zbroja Świętego Mikołaja w [http://sklep.laina.pl naszym sklepie internetowym]."
+  - wiki: "Redstonowy_Kilof"
+    name: "Redstonowy Kilof"
+    records:
+      - "diamond_pickaxe:2350385 (pickaxes/redstone_pickaxe)"
+      - "netherite_pickaxe:2350385 (pickaxes/redstone_pickaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Mistrza Wiatru - 5% szans."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Rubin"
+    name: "Rubin"
+    records:
+      - "emerald:2350331 (emeralds/rubin)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny w skrzynkach na Arenach PvP."
+  - wiki: "Różowa_enderperła"
+    name: "Różowa enderperła"
+    records:
+      - "ender_pearl:2351012 (pearl/pink_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Różowy_Pędzel"
+    name: "Różowy Pędzel"
+    records:
+      - "iron_sword:2358001 (brush/brush_pink)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Saksofon"
+    name: "Saksofon"
+    records:
+      - "echo_shard:2351253 (solid/saxophone)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można go zdobyć z Klucza Dominacji."
+  - wiki: "Sandały_Zeusa"
+    name: "Sandały Zeusa"
+    records:
+      - "netherite_boots:2351074 (armor/zeus_boots)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można je zdobyć wydobywając Lucky Blocki na /warp KopalniaSzczęścia"
+        - "Można je zdobyć z Key Bloka."
+  - wiki: "Siekiera_Admina"
+    name: "Siekiera Admina"
+    records:
+      - "netherite_axe:2351256 (axes/admin_axe)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot zarezerwowany wyłącznie dla administracji."
+  - wiki: "Siekiera_Kargo"
+    name: "Siekiera Kargo"
+    records:
+      - "netherite_axe:2351259 (axes/kargo_axe)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Sierp"
+    name: "Sierp"
+    records:
+      - "diamond_sword:2350366 (swords/sickle)"
+      - "netherite_sword:2350366 (swords/sickle)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Może wypaść z Obrońcy - 1% szans."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Skamielina"
+    name: "Skamielina"
+    records:
+      - "echo_shard:2350910 (misc/fossil)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można ją zdobyć szczotkując podejrzany piasek pędzlem archeologicznym."
+  - wiki: "Spodnie_Kargo"
+    name: "Spodnie Kargo"
+    records:
+      - "netherite_leggings:2351077 (armor/miner_leggings)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Spodnie_Maga_Ognia"
+    name: "Spodnie Maga Ognia"
+    records:
+      - "netherite_leggings:2350825 (armor/fire_mage_leggings)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Spodnie_Mikołaja"
+    name: "Spodnie Mikołaja"
+    records:
+      - "netherite_leggings:2350652 (armor/santa_leggings)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedynym sposobem na ich zdobycie jest zakupienie pakietu Zbroja Świętego Mikołaja w [http://sklep.laina.pl naszym sklepie internetowym]."
+  - wiki: "Spodnie_Pszczelarza"
+    name: "Spodnie Pszczelarza"
+    records:
+      - "netherite_leggings:2350885 (armor/beekeeper_leggings)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Spódnica_Zeusa"
+    name: "Spódnica Zeusa"
+    records:
+      - "netherite_leggings:2351073 (armor/zeus_skirt)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można ją zdobyć wydobywając Lucky Blocki na /warp KopalniaSzczęścia"
+        - "Można ją zdobyć z Key Bloka."
+  - wiki: "Srebrna_Obrączka"
+    name: "Srebrna Obrączka"
+    records:
+      - "echo_shard:2351218 (misc/ring_silver)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny podczas eventu walentynkowego w lutym."
+        - "Dostępny w Cash Shopie."
+  - wiki: "Stalowy_Kilof_Nowicjusza"
+    name: "Stalowy Kilof Nowicjusza"
+    records:
+      - "diamond_pickaxe:2351281 (pickaxes/beginner_pickaxe)"
+      - "netherite_pickaxe:2351281 (pickaxes/beginner_pickaxe)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Jeden z przedmiotów startowych dostępnych do wyboru po dołączeniu na serwer oraz ukończeniu samouczka."
+        - "Specjalny kilof ze statystykami kilofa diamentowego. Jest jednym z czterech dostępnych itemów startowych."
+  - wiki: "Szary_Pędzel"
+    name: "Szary Pędzel"
+    records:
+      - "iron_sword:2350744 (brush/brush_gray)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Szlamowa_Laska"
+    name: "Szlamowa Laska"
+    records:
+      - "iron_sword:2351161 (swords/slime_staff)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Szlamowe_Buty"
+    name: "Szlamowe Buty"
+    records:
+      - "netherite_boots:2350713 (armor/slime_boots)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Szlamowe_Jabłko"
+    name: "Szlamowe Jabłko"
+    records:
+      - "apple:2351021 (food/slime_apple)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny tylko podczas eventu halloweenowego jako drop z dużych Szlamów na terenie wydarzenia."
+  - wiki: "Szlamowe_Nogawice"
+    name: "Szlamowe Nogawice"
+    records:
+      - "netherite_leggings:2350712 (armor/slime_leggings)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Szlamowy_Hełm"
+    name: "Szlamowy Hełm"
+    records:
+      - "netherite_helmet:2350710 (armor/slime_helmet)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Szlamowy_Miecz"
+    name: "Szlamowy Miecz"
+    records:
+      - "diamond_sword:2350305 (swords/slime_sword)"
+      - "netherite_sword:2350305 (swords/slime_sword)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+        - "Można go zdobyć z Przeklętego Klucza."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Szlamowy_Napierśnik"
+    name: "Szlamowy Napierśnik"
+    records:
+      - "netherite_chestplate:2350711 (armor/slime_chestplate)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Szlamowy_Łuk"
+    name: "Szlamowy Łuk"
+    records:
+      - "bow:2350896 (bows/slime_bow)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Tajemniczy_Odłamek"
+    name: "Tajemniczy Odłamek"
+    records:
+      - "echo_shard:2350853 (misc/orb_piece)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie z wszystkich bossów, Koloseum oraz /warp KopalniaPiachu , można go również zdobyć wykopując diamenty Kilofem Dominacji."
+  - wiki: "Toga_Zeusa"
+    name: "Toga Zeusa"
+    records:
+      - "netherite_chestplate:2351072 (armor/zeus_toga)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można ją zdobyć wydobywając Lucky Blocki na /warp KopalniaSzczęścia"
+        - "Można ją zdobyć z Key Bloka."
+  - wiki: "Token"
+    name: "Token"
+    records:
+      - "emerald:2350001 (emeralds/token)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny w skrzyniach na Arenach PvP."
+        - "Można zdobyć je ze Strefy AFK znajdującej się na Spawnie."
+        - "Można zdobyć je z questów."
+        - "Dostępny w Cash Shopie."
+  - wiki: "Totem_Strażnika"
+    name: "Totem Strażnika"
+    records:
+      - "totem_of_undying:2350330 (totems/totem_guardian)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można go zdobyć z bossa Trytona."
+        - "Wypada z Prastrażnika (100% szans)."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Trzewiki_Maga_Ognia"
+    name: "Trzewiki Maga Ognia"
+    records:
+      - "netherite_boots:2350826 (armor/fire_mage_boots)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Szlama Behemota"
+  - wiki: "Wakacyjny_Żeton"
+    name: "Wakacyjny Żeton"
+    records:
+      - "echo_shard:2350447 (emeralds/chip)"
+      - "emerald:2350447 (emeralds/chip)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można znaleźć go w ukrytych skrzyniach na Wakacyjnej Wyspie."
+        - "Można zdobyć go szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+        - "Podczas eventu jedna z nagród dostępnych w Koloseum ( /warp Koloseum )."
+        - "Pokonując jednego z czterech minibossów pojawiających się co godzinę na wakacyjnej wyspie - i zbierając zawartość jego skrzyni."
+        - "Przechodząc eventowy Labirynt, dostępny co godzinę."
+        - "Przechodząc Parkour Easy oraz Hard, dostępny co godzinę."
+        - "Przechodząc Parkour Duo, dostępny co pół godziny."
+        - "Jedna z nagród za pokonanie bossów (Iluzjoner, Tryton, Nadzorca Dusz, Mistrz Wiatru, Smok Endu, Samael, Władca Śmierci)"
+        - "Wakacyjny Żeton to specjalny przedmiot dostępny tylko podczas eventu Wakacyjna Wyspa, który można wymienić na Klucz Wakacyjny, Plastikowy Miecz, eventowe obrazy lub glówki."
+  - wiki: "Wędka_Baelina"
+    name: "Wędka Baelina"
+    records:
+      - "fishing_rod:2350109 (rods/baelin_rod)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Nagroda za ukończenie zadania Piękniejszy dzień na wędkowanie w Morskiej Osadzie."
+        - "Dostępna do kupienia w Morskiej Osadzie za 16 Morskich Coinów."
+        - "Jedna z nagród za pokonanie Trytona - 10% szans."
+  - wiki: "Węglowy_Kilof"
+    name: "Węglowy Kilof"
+    records:
+      - "diamond_pickaxe:2350386 (pickaxes/black_pickaxe)"
+      - "netherite_pickaxe:2350386 (pickaxes/black_pickaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Jedna z nagród za pokonanie Władcy Śmierci - około 5% szans."
+        - "Można go zdobyć z Klucza Diamentowego w Automatach."
+  - wiki: "Włócznia_Wojownika"
+    name: "Włócznia Wojownika"
+    records:
+      - "netherite_sword:2350451 (swords/war_spear)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można ją zdobyć wydobywając Lucky Blocki na /warp KopalniaSzczęścia"
+  - wiki: "Zaklęta_butelka_II"
+    name: "Zaklęta butelka II"
+    records:
+      - "experience_bottle:2351377 (misc/experience_bottle_2)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępna na /warp MinasGnomith ."
+  - wiki: "Zaklęta_butelka_III"
+    name: "Zaklęta butelka III"
+    records:
+      - "experience_bottle:2351378 (misc/experience_bottle_3)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępna na /warp MinasGnomith ."
+  - wiki: "Zaklęta_butelka_IV"
+    name: "Zaklęta butelka IV"
+    records:
+      - "experience_bottle:2351379 (misc/experience_bottle_4)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępna na /warp MinasGnomith ."
+  - wiki: "Zestaw_Naprawczy"
+    name: "Zestaw Naprawczy"
+    records:
+      - "echo_shard:2351283 (misc/repair_kit)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Zielona_enderperła"
+    name: "Zielona enderperła"
+    records:
+      - "ender_pearl:2351013 (pearl/green_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Zielony_Pędzel"
+    name: "Zielony Pędzel"
+    records:
+      - "iron_sword:2350745 (brush/brush_green)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."
+  - wiki: "Złota_Kotwica"
+    name: "Złota Kotwica"
+    records:
+      - "echo_shard:2350143 (misc/anchor_gold)"
+      - "knowledge_book:2350143 (misc/anchor_gold)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Można ją złowić przy pomocy Magicznej Wędki lub lepszej."
+        - "Można znaleźć ją w beczce podczas eventu Wakacyjna Wyspa"
+  - wiki: "Złota_enderperła"
+    name: "Złota enderperła"
+    records:
+      - "ender_pearl:2351010 (pearl/gold_ender_pearl)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu ."
+  - wiki: "Złoty_Topór"
+    name: "Złoty Topór"
+    records:
+      - "golden_axe:2350859 (axes/golden_battleaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Łopata_Kargo"
+    name: "Łopata Kargo"
+    records:
+      - "netherite_shovel:2351260 (shovels/kargo_shovel)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Świetliki_Kargo"
+    name: "Świetliki Kargo"
+    records:
+      - "echo_shard:2351277 (misc/fireflies)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Przedmiot do zdobycia w Magicznej Kopalni."
+  - wiki: "Świński_Ryjek"
+    name: "Świński Ryjek"
+    records:
+      - "netherite_sword:2351160 (swords/pig_snout)"
+    reasons:
+        - "UNCLEAR_SOURCE"
+    evidence:
+        - "Dostępny tylko dla ekipy serwerowej."
+  - wiki: "Żelazny_Topór"
+    name: "Żelazny Topór"
+    records:
+      - "iron_axe:2350860 (axes/iron_battleaxe)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Przedmiot dostępny tylko podczas eventu Minecraft Movie."
+  - wiki: "Żółty_Pędzel"
+    name: "Żółty Pędzel"
+    records:
+      - "iron_sword:2350752 (brush/brush_yellow)"
+    reasons:
+        - "MIXED_SUPPLY_IMPACT"
+    evidence:
+        - "Dostępny do kupienia na /warp PixelArt u Artysty-Malarza"
+        - "Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym."

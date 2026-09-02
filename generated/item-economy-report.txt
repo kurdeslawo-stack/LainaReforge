@@ -1,0 +1,31 @@
+Item Economy Analysis Report
+============================
+
+Analyzed unique items: 691
+Items with concrete acquisition data: 596
+Items with UNKNOWN acquisition: 95
+Manual-review items: 177
+
+Supply tag distribution
+-----------------------
+- INFINITE_OR_FARMABLE: 72
+- REPEATABLE: 72
+- LIMITED: 232
+- ONE_TIME: 0
+- KEY_REWARD: 74
+- EVENT: 279
+- QUEST: 7
+- SHOP: 155
+- CRAFT: 28
+- DROP: 130
+- UNKNOWN: 69
+
+Proposal distribution
+---------------------
+- YES: 0
+- NO: 68
+- UNKNOWN: 623
+
+HTTP/API errors
+---------------
+- none

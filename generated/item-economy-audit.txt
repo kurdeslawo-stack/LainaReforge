@@ -1,0 +1,773 @@
+Item Economy Analysis Audit - repeatability fix
+================================================
+
+Summary
+-------
+checked: 50
+correct: 50
+suspicious: 0
+incorrect: 0
+NO proposals checked: 68
+NO proposals validated: 68
+NO proposals not validated: 0
+
+Safety conclusion
+-----------------
+Generic daily/codziennie wording is no longer accepted as repeatability evidence.
+Every proposal NO is backed by evidence for fishing, explicit farming, or explicit repeatable acquisition.
+EVENT, KEY_REWARD, SHOP, CRAFT and DROP alone do not produce proposal NO.
+
+Focus cases
+-----------
+- Ametystowe Jabłko: CORRECT
+  sources: farming
+  tags: INFINITE_OR_FARMABLE, REPEATABLE
+  repeatable: true; renewable: true; proposal: NO
+  evidence: Zbierając jabłka z liści przy pomocy Ametystowej Kosy.
+  audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+- Bąbelki: CORRECT
+  sources: shop, fishing
+  tags: INFINITE_OR_FARMABLE, REPEATABLE, SHOP
+  repeatable: true; renewable: true; proposal: NO
+  evidence: Można je złowić przy pomocy Magicznej Wędki lub lepszej. | Dostępne za 1 Morskiego Coina w Morskiej Osadzie.
+  audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+- Gildyjny Kilof: CORRECT
+  sources: none
+  tags: UNKNOWN
+  repeatable: UNKNOWN; renewable: UNKNOWN; proposal: UNKNOWN
+  evidence: Jest nagrodą za 23 dzień codziennego wpisywania komendy /rewards, przyznawaną, jeśli gildia gracza posiada co najmniej 5 poziom
+  audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+- Płomykowa Gwiazda: CORRECT
+  sources: drop
+  tags: DROP
+  repeatable: UNKNOWN; renewable: UNKNOWN; proposal: UNKNOWN
+  evidence: Może wypaść z Płomyka (2% szans).
+  audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+
+Detailed deterministic sample
+-----------------------------
+01. [proposal NO] Ametystowa Marchew - CORRECT
+    wiki: Ametystowa_Marchew
+    catalog records: golden_carrot:2350222
+    acquisition summary: Zbierając posadzone marchewki przy pomocy Ametystowej Kosy.
+    evidence: Zbierając posadzone marchewki przy pomocy Ametystowej Kosy.
+    sources: farming
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+02. [proposal NO] Ametystowa Rybka - CORRECT
+    wiki: Ametystowa_Rybka
+    catalog records: tropical_fish:2350150
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+03. [proposal NO] Ametystowe Jabłko - CORRECT
+    wiki: Ametystowe_Jabłko
+    catalog records: enchanted_golden_apple:2350220
+    acquisition summary: Zbierając jabłka z liści przy pomocy Ametystowej Kosy.
+    evidence: Zbierając jabłka z liści przy pomocy Ametystowej Kosy.
+    sources: farming
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+04. [proposal NO] Ametystowy Burak - CORRECT
+    wiki: Ametystowy_Burak
+    catalog records: baked_potato:2350221
+    acquisition summary: Zbierając posadzone buraki przy pomocy Ametystowej Kosy.
+    evidence: Zbierając posadzone buraki przy pomocy Ametystowej Kosy.
+    sources: farming
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+05. [proposal NO] Ametystowy Ziemniak - CORRECT
+    wiki: Ametystowy_Ziemniak
+    catalog records: baked_potato:2350223
+    acquisition summary: Zbierając posadzone ziemniaki przy pomocy Ametystowej Kosy.
+    evidence: Zbierając posadzone ziemniaki przy pomocy Ametystowej Kosy.
+    sources: farming
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+06. [proposal NO] Amur - CORRECT
+    wiki: Amur
+    catalog records: tropical_fish:2350152
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+07. [proposal NO] Antenarius - CORRECT
+    wiki: Antenarius
+    catalog records: tropical_fish:2350158
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+08. [proposal NO] Biało-czerwona Rybka - CORRECT
+    wiki: Biało-czerwona_Rybka
+    catalog records: tropical_fish:2350176
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+09. [proposal NO] Bodian - CORRECT
+    wiki: Bodian
+    catalog records: tropical_fish:2350175
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+10. [proposal NO] Bystrzyk Czerwony - CORRECT
+    wiki: Bystrzyk_Czerwony
+    catalog records: tropical_fish:2350415
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+11. [proposal NO] Bystrzyk Niebieski - CORRECT
+    wiki: Bystrzyk_Niebieski
+    catalog records: tropical_fish:2350413
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+12. [proposal NO] Bystrzyk Różowy - CORRECT
+    wiki: Bystrzyk_Różowy
+    catalog records: tropical_fish:2350414
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+13. [proposal NO] Bystrzyk Żółty - CORRECT
+    wiki: Bystrzyk_Żółty
+    catalog records: tropical_fish:2350416
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+14. [proposal NO] Bąbelki - CORRECT
+    wiki: Bąbelki
+    catalog records: emerald:2350137
+    acquisition summary: Można je złowić przy pomocy Magicznej Wędki lub lepszej.; Dostępne za 1 Morskiego Coina w Morskiej Osadzie.
+    evidence: Można je złowić przy pomocy Magicznej Wędki lub lepszej. | Dostępne za 1 Morskiego Coina w Morskiej Osadzie.
+    sources: shop, fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE, SHOP
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+15. [proposal NO] Czarny Rekin - CORRECT
+    wiki: Czarny_Rekin
+    catalog records: tropical_fish:2350181
+    acquisition summary: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    evidence: Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    sources: fishing
+    tags: INFINITE_OR_FARMABLE, REPEATABLE
+    repeatable: true; renewable: true
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: NO
+    reason: System wykrył odnawialne lub farmowalne źródło; wymagana jest ostrożność ekonomiczna.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+16. [proposal UNKNOWN with acquisition] Ametystowa Laska - CORRECT
+    wiki: Ametystowa_Laska
+    catalog records: iron_sword:2350219
+    acquisition summary: Jedna z nagród za pokonanie Iluzjonera - około 5% szans.
+    evidence: Jedna z nagród za pokonanie Iluzjonera - około 5% szans.
+    sources: drop
+    tags: DROP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: true
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+17. [proposal UNKNOWN with acquisition] Ametystowe Buty - CORRECT
+    wiki: Ametystowe_Buty
+    catalog records: netherite_boots:2350649
+    acquisition summary: Można stworzyć w stole kowalskim.; Jedna z nagród za pokonanie Iluzjonera - 4% szans.; Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans.; Specjalne buty ze statystykami netherytowych, ale w unikalnym ametystowym kolorze. Można je stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na nie enchanty oraz trimy.
+    evidence: Można stworzyć w stole kowalskim. | Jedna z nagród za pokonanie Iluzjonera - 4% szans. | Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans. | Specjalne buty ze statystykami netherytowych, ale w unikalnym ametystowym kolorze. Można je stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na nie enchanty oraz trimy.
+    sources: craft, drop
+    tags: CRAFT, DROP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: true; from_drop: true
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+18. [proposal UNKNOWN with acquisition] Ametystowe Nogawice - CORRECT
+    wiki: Ametystowe_Nogawice
+    catalog records: netherite_leggings:2350648
+    acquisition summary: Można stworzyć w stole kowalskim.; Jedna z nagród za pokonanie Iluzjonera - 4% szans.; Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans.; Specjalne nogawice ze statystykami netherytowych, ale w unikalnym ametystowym kolorze. Można je stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na nie enchanty oraz trimy.
+    evidence: Można stworzyć w stole kowalskim. | Jedna z nagród za pokonanie Iluzjonera - 4% szans. | Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans. | Specjalne nogawice ze statystykami netherytowych, ale w unikalnym ametystowym kolorze. Można je stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na nie enchanty oraz trimy.
+    sources: craft, drop
+    tags: CRAFT, DROP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: true; from_drop: true
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+19. [proposal UNKNOWN with acquisition] Ametystowy Hełm - CORRECT
+    wiki: Ametystowy_Hełm
+    catalog records: netherite_helmet:2350646
+    acquisition summary: Można stworzyć w stole kowalskim.; Jedna z nagród za pokonanie Iluzjonera - 4% szans.; Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans.; Specjalny hełm ze statystykami netherytowego, ale w unikalnym ametystowym kolorze. Można go stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na niego enchanty oraz trimy.
+    evidence: Można stworzyć w stole kowalskim. | Jedna z nagród za pokonanie Iluzjonera - 4% szans. | Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans. | Specjalny hełm ze statystykami netherytowego, ale w unikalnym ametystowym kolorze. Można go stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na niego enchanty oraz trimy.
+    sources: craft, drop
+    tags: CRAFT, DROP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: true; from_drop: true
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+20. [proposal UNKNOWN with acquisition] Ametystowy Miecz Prezent - CORRECT
+    wiki: Ametystowy_Miecz_Prezent
+    catalog records: netherite_sword:2350633
+    acquisition summary: Przedmiot dostępny tylko podczas eventu zimowego w grudniu.
+    evidence: Przedmiot dostępny tylko podczas eventu zimowego w grudniu.
+    sources: event
+    tags: LIMITED, EVENT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+21. [proposal UNKNOWN with acquisition] Ametystowy Napierśnik - CORRECT
+    wiki: Ametystowy_Napierśnik
+    catalog records: netherite_chestplate:2350647
+    acquisition summary: Można stworzyć w stole kowalskim.; Jedna z nagród za pokonanie Iluzjonera - 4% szans.; Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans.; Specjalny napierśnik ze statystykami netherytowego, ale w unikalnym ametystowym kolorze. Można go stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na niego enchanty oraz trimy.
+    evidence: Można stworzyć w stole kowalskim. | Jedna z nagród za pokonanie Iluzjonera - 4% szans. | Jedna z nagród za pokonanie Mistrza Złosadników - 1% szans. | Specjalny napierśnik ze statystykami netherytowego, ale w unikalnym ametystowym kolorze. Można go stworzyć w stole kowalskim lub zdobyć jako nagrodę po pokonaniu bossów. Można również nakładać na niego enchanty oraz trimy.
+    sources: craft, drop
+    tags: CRAFT, DROP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: true; from_drop: true
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+22. [proposal UNKNOWN with acquisition] Ametystowy Pierścień - CORRECT
+    wiki: Ametystowy_Pierścień
+    catalog records: echo_shard:2350490, knowledge_book:2350490
+    acquisition summary: Przedmiot dostępny tylko podczas eventu Wakacyjna Wyspa.
+    evidence: Przedmiot dostępny tylko podczas eventu Wakacyjna Wyspa.
+    sources: event
+    tags: LIMITED, EVENT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+23. [proposal UNKNOWN with acquisition] Ametystowy Sztylet - CORRECT
+    wiki: Ametystowy_Sztylet
+    catalog records: diamond_sword:2350016, netherite_sword:2350016
+    acquisition summary: Dostępny w Cash Shopie.
+    evidence: Dostępny w Cash Shopie.
+    sources: shop
+    tags: SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+24. [proposal UNKNOWN with acquisition] Ananas - CORRECT
+    wiki: Ananas
+    catalog records: apple:2350928
+    acquisition summary: Przedmiot dostępny tylko podczas eventu wakacyjnego.
+    evidence: Przedmiot dostępny tylko podczas eventu wakacyjnego.
+    sources: event
+    tags: LIMITED, EVENT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+25. [proposal UNKNOWN with acquisition] Antyczny Miecz - CORRECT
+    wiki: Antyczny_Miecz
+    catalog records: diamond_sword:2350813, netherite_sword:2350813
+    acquisition summary: Do kupienia u NPC na /warp KopalniaPiachu za 48 Skamielin.
+    evidence: Do kupienia u NPC na /warp KopalniaPiachu za 48 Skamielin.
+    sources: shop
+    tags: SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+26. [proposal UNKNOWN with acquisition] Bałwankowy Totem - CORRECT
+    wiki: Bałwankowy_Totem
+    catalog records: totem_of_undying:2357007
+    acquisition summary: Przedmiot dostępny tylko podczas eventu zimowego w grudniu.
+    evidence: Przedmiot dostępny tylko podczas eventu zimowego w grudniu.
+    sources: event
+    tags: LIMITED, EVENT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+27. [proposal UNKNOWN with acquisition] Bedrockowa Elytra - CORRECT
+    wiki: Bedrockowa_Elytra
+    catalog records: elytra:2350654
+    acquisition summary: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    evidence: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    sources: key
+    tags: KEY_REWARD
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: true; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+28. [proposal UNKNOWN with acquisition] Bedrockowa Motyka - CORRECT
+    wiki: Bedrockowa_Motyka
+    catalog records: golden_hoe:2351239
+    acquisition summary: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    evidence: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    sources: key
+    tags: KEY_REWARD
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: true; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+29. [proposal UNKNOWN with acquisition] Bedrockowa Siekiera - CORRECT
+    wiki: Bedrockowa_Siekiera
+    catalog records: golden_axe:2350422
+    acquisition summary: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    evidence: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    sources: key
+    tags: KEY_REWARD
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: true; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+30. [proposal UNKNOWN with acquisition] Bedrockowa Łopata - CORRECT
+    wiki: Bedrockowa_Łopata
+    catalog records: golden_shovel:2350421
+    acquisition summary: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    evidence: Można ją zdobyć z Klucza Laina.PL w Automatach.
+    sources: key
+    tags: KEY_REWARD
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: true; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+31. [proposal UNKNOWN with acquisition] Bedrockowe Nożyce - CORRECT
+    wiki: Bedrockowe_Nożyce
+    catalog records: shears:2350773
+    acquisition summary: Można je zdobyć z Klucza Laina.PL w Automatach.
+    evidence: Można je zdobyć z Klucza Laina.PL w Automatach.
+    sources: key
+    tags: KEY_REWARD
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: true; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+32. [proposal UNKNOWN with acquisition] Bedrockowy Kilof - CORRECT
+    wiki: Bedrockowy_Kilof
+    catalog records: golden_pickaxe:2350420
+    acquisition summary: Można go zdobyć z Klucza Laina.PL w Automatach.
+    evidence: Można go zdobyć z Klucza Laina.PL w Automatach.
+    sources: key
+    tags: KEY_REWARD
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: true; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+33. [proposal UNKNOWN with acquisition] Bedrockowy Pędzel - CORRECT
+    wiki: Bedrockowy_Pędzel
+    catalog records: brush:2350772
+    acquisition summary: Dostępny do kupienia u NPC na /warp KopalniaPiachu za 64 Skamieliny.
+    evidence: Dostępny do kupienia u NPC na /warp KopalniaPiachu za 64 Skamieliny.
+    sources: shop
+    tags: SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+34. [proposal UNKNOWN with acquisition] Bezdenne Wiadro - CORRECT
+    wiki: Bezdenne_Wiadro
+    catalog records: echo_shard:2350544, knowledge_book:2350544
+    acquisition summary: Dostępne w Cash Shopie.
+    evidence: Dostępne w Cash Shopie.
+    sources: shop
+    tags: SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+35. [proposal UNKNOWN with acquisition] Biały Balonik - CORRECT
+    wiki: Biały_Balonik
+    catalog records: echo_shard:2350942
+    acquisition summary: Przedmiot dostępny tylko podczas eventu Wakacyjna Wyspa.
+    evidence: Przedmiot dostępny tylko podczas eventu Wakacyjna Wyspa.
+    sources: event
+    tags: LIMITED, EVENT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+36. [manual-review multi-source] Biały Pędzel - CORRECT
+    wiki: Biały_Pędzel
+    catalog records: iron_sword:2350751
+    acquisition summary: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza; Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    evidence: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza | Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    sources: event, shop
+    tags: EVENT, SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+37. [manual-review multi-source] Brązowy Pędzel - CORRECT
+    wiki: Brązowy_Pędzel
+    catalog records: iron_sword:2350742
+    acquisition summary: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza; Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    evidence: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza | Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    sources: event, shop
+    tags: EVENT, SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+38. [manual-review multi-source] Buty Mikołaja - CORRECT
+    wiki: Buty_Mikołaja
+    catalog records: netherite_boots:2350653
+    acquisition summary: Jedynym sposobem na ich zdobycie jest zakupienie pakietu Zbroja Świętego Mikołaja w [http://sklep.laina.pl naszym sklepie internetowym].
+    evidence: Jedynym sposobem na ich zdobycie jest zakupienie pakietu Zbroja Świętego Mikołaja w [http://sklep.laina.pl naszym sklepie internetowym].
+    sources: event, shop
+    tags: EVENT, SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+39. [manual-review multi-source] Buty Pszczelarza - CORRECT
+    wiki: Buty_Pszczelarza
+    catalog records: netherite_boots:2350886
+    acquisition summary: Jedna z nagród za pokonanie Szlama Behemota
+    evidence: Jedna z nagród za pokonanie Szlama Behemota
+    sources: event, drop
+    tags: EVENT, DROP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: true
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+40. [manual-review multi-source] Buty Zwinności - CORRECT
+    wiki: Buty_Zwinności
+    catalog records: netherite_boots:2350870
+    acquisition summary: Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+    evidence: Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+    sources: event, craft
+    tags: LIMITED, EVENT, CRAFT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: true; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+41. [manual-review multi-source] Buty Zwinności Golema - CORRECT
+    wiki: Buty_Zwinności_Golema
+    catalog records: echo_shard:2350871
+    acquisition summary: Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+    evidence: Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+    sources: event, craft
+    tags: LIMITED, EVENT, CRAFT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: true; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+42. [manual-review multi-source] Błękitny Pędzel - CORRECT
+    wiki: Błękitny_Pędzel
+    catalog records: iron_sword:2350743
+    acquisition summary: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza; Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    evidence: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza | Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    sources: event, shop
+    tags: EVENT, SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+43. [manual-review multi-source] Czarny Pędzel - CORRECT
+    wiki: Czarny_Pędzel
+    catalog records: iron_sword:2350740
+    acquisition summary: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza; Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    evidence: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza | Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    sources: event, shop
+    tags: EVENT, SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+44. [manual-review multi-source] Czerwony Pędzel - CORRECT
+    wiki: Czerwony_Pędzel
+    catalog records: iron_sword:2358002
+    acquisition summary: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza; Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    evidence: Dostępny do kupienia na /warp PixelArt u Artysty-Malarza | Przedmiot dostępny w niższej cenie podczas eventu walentynkowego w lutym.
+    sources: event, shop
+    tags: EVENT, SHOP
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: true; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+45. [manual-review multi-source] Diamentowy Topór - CORRECT
+    wiki: Diamentowy_Topór
+    catalog records: diamond_axe:2350861
+    acquisition summary: Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+    evidence: Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+    sources: event, craft
+    tags: LIMITED, EVENT, CRAFT
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: true; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: true; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+46. [unclear/UNKNOWN source] Banhammer - CORRECT
+    wiki: Banhammer
+    catalog records: netherite_sword:2350417
+    acquisition summary: Przedmiot zarezerwowany wyłącznie dla administracji.
+    evidence: Przedmiot zarezerwowany wyłącznie dla administracji.
+    sources: none
+    tags: UNKNOWN
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+47. [unclear/UNKNOWN source] Buty Kargo - CORRECT
+    wiki: Buty_Kargo
+    catalog records: netherite_boots:2351078
+    acquisition summary: Przedmiot do zdobycia w Magicznej Kopalni.
+    evidence: Przedmiot do zdobycia w Magicznej Kopalni.
+    sources: none
+    tags: UNKNOWN
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+48. [unclear/UNKNOWN source] Czarna enderperła - CORRECT
+    wiki: Czarna_enderperła
+    catalog records: ender_pearl:2351008
+    acquisition summary: Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu .
+    evidence: Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu .
+    sources: none
+    tags: UNKNOWN
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+49. [unclear/UNKNOWN source] Czerwona enderperła - CORRECT
+    wiki: Czerwona_enderperła
+    catalog records: ender_pearl:2351011
+    acquisition summary: Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu .
+    evidence: Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu .
+    sources: none
+    tags: UNKNOWN
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+50. [unclear/UNKNOWN source] Diamentowa enderperła - CORRECT
+    wiki: Diamentowa_enderperła
+    catalog records: ender_pearl:2351009
+    acquisition summary: Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu .
+    evidence: Można zdobyć szczotkując podejrzany piasek pędzlem archeologicznym na /warp KopalniaPiachu .
+    sources: none
+    tags: UNKNOWN
+    repeatable: UNKNOWN; renewable: UNKNOWN
+    from_key: UNKNOWN; from_event: UNKNOWN; from_quest: UNKNOWN
+    from_shop: UNKNOWN; craftable: UNKNOWN; from_drop: UNKNOWN
+    proposal: UNKNOWN
+    reason: Dane o zdobyciu nie wystarczają do bezpiecznej decyzji o recyclingu.
+    audit: Tagi i proposal są wspierane przez zachowane evidence Wiki.
+
+All proposal NO validation
+--------------------------
+- Ametystowa Marchew: CORRECT - Zbierając posadzone marchewki przy pomocy Ametystowej Kosy.
+- Ametystowa Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Ametystowe Jabłko: CORRECT - Zbierając jabłka z liści przy pomocy Ametystowej Kosy.
+- Ametystowy Burak: CORRECT - Zbierając posadzone buraki przy pomocy Ametystowej Kosy.
+- Ametystowy Ziemniak: CORRECT - Zbierając posadzone ziemniaki przy pomocy Ametystowej Kosy.
+- Amur: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Antenarius: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Biało-czerwona Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Bodian: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Bystrzyk Czerwony: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Bystrzyk Niebieski: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Bystrzyk Różowy: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Bystrzyk Żółty: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Bąbelki: CORRECT - Można je złowić przy pomocy Magicznej Wędki lub lepszej. | Dostępne za 1 Morskiego Coina w Morskiej Osadzie.
+- Czarny Rekin: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Czerwona Krewetka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Diamentowa Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Fioletowy Rekin: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Głowacz: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Jakieś Coś: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Kałamarnica Brązowa: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Kałamarnica Czarna: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Kałamarnica Czerwona: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Kałamarnica Niebieska: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Krab Czerwony: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Krab Niebieski: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Latimeria: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Latimeria Zielona: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Magikarp: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Meduza: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Mumiorybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Muszelka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Niebieski Konik Morski: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Niebieski Rekin: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Ości: CORRECT - Można je wyłowić przy pomocy Magicznej Wędki lub lepszej.
+- Ośmiorniczka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Ośmiorniczka Flapjack: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Pergamin ᚦ: CORRECT - Dostępny do kupienia w Morskiej Osadzie za 8 Morskich Coinów oraz Piorun Zeusa. | Można go złowić przy pomocy Magicznej Wędki lub lepszej. | Pergamin ᚦ jest zużywalnym przedmiotem dostępnym w Morskiej Osadzie. Po jego użyciu pogoda w Overworld zmienia się na burzę. Zdobyć go można łowiąc na każdym biomie.
+- Pergamin ᛚ: CORRECT - Dostępny do kupienia w Morskiej Osadzie za 4 Morskie Coiny oraz butelkę z wodą. | Można go złowić przy pomocy Magicznej Wędki lub lepszej. | Pergamin ᛚ jest zużywalnym przedmiotem dostępnym w Morskiej Osadzie. Po jego użyciu pogoda w Overworld zmienia się na deszcz. Zdobyć go można łowiąc na każdym biomie.
+- Piotrosz: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Przeklęta Marchew: CORRECT - Zbierając posadzone marchewki przy pomocy Przeklętej Kosy.
+- Przeklęty Ziemniak: CORRECT - Zbierając posadzone ziemniaki przy pomocy Przeklętej Kosy.
+- Płaszczka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Redstonowa Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Rozgwiazda Pospolita: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Rozgwiazda Różowa: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Różowo-Niebieski Bojownik Wspaniały: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Różowy Konik Morski: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Shiny Magikarp: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Shrooma: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Skubacz: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Sum: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Szlamowa Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Szmaragdowa Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Szprotka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Tuńczyk: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Tęczowa Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Urocza Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Wieloryb Miniaturowy: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Węgorz: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Węgorz Elektryczny: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Węgorz Zielony: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Zebrasoma Niebieska: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Zebrasoma Purpurowa: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Zebrasoma Zielona: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Złota Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Żelazna Rybka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+- Żółta Krewetka: CORRECT - Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+
+Problems
+--------
+- none
