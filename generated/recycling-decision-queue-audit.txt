@@ -1,0 +1,342 @@
+Recycling Decision Queue Audit
+==============================
+
+Scope and deterministic selection
+---------------------------------
+- Branch: feature/recycling-decision-queue
+- Input: generated/recycling-decision-queue.yml
+- Selection: within each already stable priority group, choose evenly spaced indexes
+  floor(i * (group_size - 1) / (sample_size - 1)).
+- Sample: 15 HIGH, 15 MEDIUM, 10 LOW.
+- Compared with: generated/item-economy-analysis.yml,
+  generated/item-economy-manual-review.yml and src/main/resources/items.yml.
+
+Summary
+-------
+- checked: 40
+- correct: 40
+- suspicious: 0
+- incorrect: 0
+- multi-identity checked: 10
+- identity conflicts: 0
+- lost identities: 0
+- priority errors: 0
+- decision-state errors: 0
+
+Integrity
+---------
+- logical items: 691
+- identities: 858
+- HIGH: 176
+- MEDIUM: 420
+- LOW: 95
+- proposal YES: 0
+- proposal NO: 68
+- proposal UNKNOWN: 623
+- PENDING: 691
+- APPROVED: 0
+- REJECTED: 0
+- duplicate identity assignments: 0
+
+All queue records retain the ETAP 3 name, Wiki identifier, acquisition summary,
+tags, evidence and system proposal. Every decision is PENDING with recyclable,
+shards, reviewed_by and reviewed_at set to null. Proposal and review reasons in
+the cases below match their ETAP 3 data and the ETAP 4 priority rule.
+
+Checked HIGH items (15)
+-----------------------
+1. CORRECT | Ametystowa Marchew | wiki=Ametystowa_Marchew
+   identities=golden_carrot:2350222:food/am_carrot
+   acquisition=Zbierając posadzone marchewki przy pomocy Ametystowej Kosy.
+   tags=INFINITE_OR_FARMABLE, REPEATABLE | proposal=NO | priority=HIGH
+   review_reason=Powtarzalne źródło może umożliwiać farmienie odłamków.
+   decision=PENDING; recyclable=null; shards=null
+2. CORRECT | Buty Mikołaja | wiki=Buty_Mikołaja
+   identities=netherite_boots:2350653:armor/santa_boots
+   acquisition=Zakup pakietu Zbroja Świętego Mikołaja w sklepie internetowym.
+   tags=EVENT, SHOP | proposal=UNKNOWN | priority=HIGH
+   review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+   decision=PENDING; recyclable=null; shards=null
+3. CORRECT | Diamentowa Rybka | wiki=Diamentowa_Rybka
+   identities=tropical_fish:2350159:fish/diamond_fish
+   acquisition=Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+   tags=INFINITE_OR_FARMABLE, REPEATABLE | proposal=NO | priority=HIGH
+   review_reason=Powtarzalne źródło może umożliwiać farmienie odłamków.
+   decision=PENDING; recyclable=null; shards=null
+4. CORRECT | Kapelusz Pszczelarza | wiki=Kapelusz_Pszczelarza
+   identities=netherite_helmet:2350883:armor/beekeeper_helmet
+   acquisition=Jedna z nagród za pokonanie Szlama Behemota.
+   tags=DROP, EVENT | proposal=UNKNOWN | priority=HIGH
+   review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+   decision=PENDING; recyclable=null; shards=null
+5. CORRECT | Klucz Wakacyjny | wiki=Klucz_Wakacyjny
+   identities=echo_shard:2350573:keys/summer_key
+   acquisition=Sklep podczas eventu; automaty za Wakacyjne Żetony; nagroda za Szlama Behemota.
+   tags=DROP, EVENT, SHOP | proposal=UNKNOWN | priority=HIGH
+   review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+   decision=PENDING; recyclable=null; shards=null
+6. CORRECT | Kula Dominacji | wiki=Kula_Dominacji
+   identities=echo_shard:2350854:misc/orb_of_dominance
+   acquisition=Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+   tags=CRAFT, EVENT, LIMITED | proposal=UNKNOWN | priority=HIGH
+   review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+   decision=PENDING; recyclable=null; shards=null
+7. CORRECT | Latająca Miotła | wiki=Latająca_Miotła
+   identities=iron_sword:2356662:halloween/broomstick
+   acquisition=Event halloweenowy; nagroda za Iluzjonera z około 1% szans.
+   tags=DROP, EVENT | proposal=UNKNOWN | priority=HIGH
+   review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+   decision=PENDING; recyclable=null; shards=null
+8. CORRECT | Miedziana tarcza | wiki=Miedziana_tarcza
+   identities=shield:2351268:shield/copper_shield
+   acquisition=Przeklęty Klucz; nagroda za pokonanie Mistrza Złosadników.
+   tags=DROP, KEY_REWARD | proposal=UNKNOWN | priority=HIGH
+   review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+   decision=PENDING; recyclable=null; shards=null
+9. CORRECT | Odtwarzacz | wiki=Odtwarzacz
+   identities=echo_shard:2350882:misc/sound_player
+   acquisition=Przedmiot dostępny tylko podczas Minecraft Movie.
+   tags=CRAFT, EVENT, LIMITED | proposal=UNKNOWN | priority=HIGH
+   review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+   decision=PENDING; recyclable=null; shards=null
+10. CORRECT | Plażowy Marker | wiki=Plażowy_Marker
+    identities=echo_shard:2350819:misc/summer_marker
+    acquisition=Dostępny w Cash Shopie.
+    tags=EVENT, SHOP | proposal=UNKNOWN | priority=HIGH
+    review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+    decision=PENDING; recyclable=null; shards=null
+11. CORRECT | Rozgwiazda Różowa | wiki=Rozgwiazda_Różowa
+    identities=tropical_fish:2350194:fish/starfish
+    acquisition=Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    tags=INFINITE_OR_FARMABLE, REPEATABLE | proposal=NO | priority=HIGH
+    review_reason=Powtarzalne źródło może umożliwiać farmienie odłamków.
+    decision=PENDING; recyclable=null; shards=null
+12. CORRECT | Srebrna Obrączka | wiki=Srebrna_Obrączka
+    identities=echo_shard:2351218:misc/ring_silver
+    acquisition=Event walentynkowy; Cash Shop.
+    tags=EVENT, SHOP | proposal=UNKNOWN | priority=HIGH
+    review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+    decision=PENDING; recyclable=null; shards=null
+13. CORRECT | Szprotka | wiki=Szprotka
+    identities=tropical_fish:2350189:fish/sprat
+    acquisition=Można ją złowić przy pomocy Magicznej Wędki lub lepszej.
+    tags=INFINITE_OR_FARMABLE, REPEATABLE | proposal=NO | priority=HIGH
+    review_reason=Powtarzalne źródło może umożliwiać farmienie odłamków.
+    decision=PENDING; recyclable=null; shards=null
+14. CORRECT | Węgorz Elektryczny | wiki=Węgorz_Elektryczny
+    identities=tropical_fish:2350161:fish/eel_electric
+    acquisition=Można go złowić przy pomocy Magicznej Wędki lub lepszej.
+    tags=INFINITE_OR_FARMABLE, REPEATABLE | proposal=NO | priority=HIGH
+    review_reason=Powtarzalne źródło może umożliwiać farmienie odłamków.
+    decision=PENDING; recyclable=null; shards=null
+15. CORRECT | Złoty Topór | wiki=Złoty_Topór
+    identities=golden_axe:2350859:axes/golden_battleaxe
+    acquisition=Przedmiot dostępny tylko podczas eventu Minecraft Movie.
+    tags=CRAFT, EVENT, LIMITED | proposal=UNKNOWN | priority=HIGH
+    review_reason=Kilka źródeł o różnym wpływie wymaga ręcznej oceny.
+    decision=PENDING; recyclable=null; shards=null
+
+Checked MEDIUM items (15)
+-------------------------
+1. CORRECT | Ametystowa Laska | wiki=Ametystowa_Laska
+   identities=iron_sword:2350219:swords/am_staff
+   acquisition=Nagroda za Iluzjonera z około 5% szans.
+   tags=DROP | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+   decision=PENDING; recyclable=null; shards=null
+2. CORRECT | Cesarski Miecz | wiki=Cesarski_Miecz
+   identities=netherite_sword:2350123:swords/emperor_sword
+   acquisition=Klucz Diamentowy w Automatach.
+   tags=KEY_REWARD | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+   decision=PENDING; recyclable=null; shards=null
+3. CORRECT | Duża Czekoladka | wiki=Duża_Czekoladka
+   identities=baked_potato:2350727:food/chocolate_big
+   acquisition=Dostępna tylko podczas eventu walentynkowego.
+   tags=EVENT, LIMITED | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Źródło jest ograniczone, ale Wiki nie daje podstaw do automatycznej decyzji.
+   decision=PENDING; recyclable=null; shards=null
+4. CORRECT | Katana | wiki=Katana
+   identities=netherite_sword:2350465:swords/katana
+   acquisition=Dostępna tylko podczas eventu Wakacyjna Wyspa.
+   tags=EVENT, LIMITED | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Źródło jest ograniczone, ale Wiki nie daje podstaw do automatycznej decyzji.
+   decision=PENDING; recyclable=null; shards=null
+5. CORRECT | Krwawa Siekiera | wiki=Krwawa_Siekiera
+   identities=diamond_axe:2356663:halloween/bloody_axe; netherite_axe:2356663:halloween/bloody_axe
+   acquisition=Dostępna podczas eventu Wioska Halloween.
+   tags=EVENT | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+   decision=PENDING; recyclable=null; shards=null
+6. CORRECT | Lazurowy Kilof | wiki=Lazurowy_Kilof
+   identities=diamond_pickaxe:2350384:pickaxes/lazuli_pickaxe; netherite_pickaxe:2350384:pickaxes/lazuli_pickaxe
+   acquisition=Klucz Diamentowy w Automatach.
+   tags=KEY_REWARD | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+   decision=PENDING; recyclable=null; shards=null
+7. CORRECT | Morska Siekiera | wiki=Morska_Siekiera
+   identities=diamond_axe:2350475:axes/sea_axe; netherite_axe:2350475:axes/sea_axe
+   acquisition=Dostępna tylko podczas eventu Wakacyjna Wyspa.
+   tags=EVENT, LIMITED | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Źródło jest ograniczone, ale Wiki nie daje podstaw do automatycznej decyzji.
+   decision=PENDING; recyclable=null; shards=null
+8. CORRECT | Oko | wiki=Oko
+   identities=echo_shard:2350537:misc/hw_eye; knowledge_book:2350537:misc/hw_eye
+   acquisition=Dostępne tylko podczas eventu halloweenowego.
+   tags=EVENT, LIMITED | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Źródło jest ograniczone, ale Wiki nie daje podstaw do automatycznej decyzji.
+   decision=PENDING; recyclable=null; shards=null
+9. CORRECT | Piracki Pistolet | wiki=Piracki_Pistolet
+   identities=echo_shard:2350911:solid/pirate_gun
+   acquisition=Dostępny tylko podczas eventu wakacyjnego.
+   tags=EVENT, LIMITED | proposal=UNKNOWN | priority=MEDIUM
+   review_reason=Źródło jest ograniczone, ale Wiki nie daje podstaw do automatycznej decyzji.
+   decision=PENDING; recyclable=null; shards=null
+10. CORRECT | Płomykowa Łopata | wiki=Płomykowa_Łopata
+    identities=iron_shovel:2350308:shovels/blaze_shovel
+    acquisition=Zakup u NPC za Płomykowe Gwiazdy wypadające z Płomyków.
+    tags=DROP, SHOP | proposal=UNKNOWN | priority=MEDIUM
+    review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+    decision=PENDING; recyclable=null; shards=null
+11. CORRECT | Śnieżne Ostrze | wiki=Śnieżne_Ostrze
+    identities=diamond_sword:2357002:winter/snow_sword; netherite_sword:2357002:winter/snow_sword
+    acquisition=Dostępne tylko podczas eventu zimowego.
+    tags=EVENT, LIMITED | proposal=UNKNOWN | priority=MEDIUM
+    review_reason=Źródło jest ograniczone, ale Wiki nie daje podstaw do automatycznej decyzji.
+    decision=PENDING; recyclable=null; shards=null
+12. CORRECT | Szmaragdowy Marker | wiki=Szmaragdowy_Marker
+    identities=echo_shard:2350993:misc/emerald_marker
+    acquisition=Dostępny w Cash Shopie.
+    tags=SHOP | proposal=UNKNOWN | priority=MEDIUM
+    review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+    decision=PENDING; recyclable=null; shards=null
+13. CORRECT | Wiązałka rózg | wiki=Wiązałka_rózg
+    identities=echo_shard:2351104:misc/rods_bundle
+    acquisition=Dostępna tylko podczas eventu zimowego.
+    tags=EVENT, LIMITED | proposal=UNKNOWN | priority=MEDIUM
+    review_reason=Źródło jest ograniczone, ale Wiki nie daje podstaw do automatycznej decyzji.
+    decision=PENDING; recyclable=null; shards=null
+14. CORRECT | Żelazny Oskard | wiki=Żelazny_Oskard
+    identities=diamond_pickaxe:2350381:pickaxes/steel_pickaxe; netherite_pickaxe:2350381:pickaxes/steel_pickaxe
+    acquisition=Klucz Diamentowy w Automatach.
+    tags=KEY_REWARD | proposal=UNKNOWN | priority=MEDIUM
+    review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+    decision=PENDING; recyclable=null; shards=null
+15. CORRECT | Łupkowy Napierśnik | wiki=Łupkowy_Napierśnik
+    identities=netherite_chestplate:2350692:armor/deepslate_chestplate
+    acquisition=Nagroda za Władcę Śmierci z około 2% szans.
+    tags=DROP | proposal=UNKNOWN | priority=MEDIUM
+    review_reason=Wiki opisuje źródło, ale decyzja recyclingowa wymaga zatwierdzenia.
+    decision=PENDING; recyclable=null; shards=null
+
+Checked LOW items (10)
+----------------------
+1. CORRECT | Ametystowa Kosa | wiki=Ametystowa_Kosa
+   identities=diamond_hoe:2350218:hoes/am_scythe; netherite_hoe:2350218:hoes/am_scythe
+   acquisition=Aktualnie niedostępna.
+   tags=LIMITED | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+2. CORRECT | Czerwona enderperła | wiki=Czerwona_enderperła
+   identities=ender_pearl:2351011:pearl/red_ender_pearl
+   acquisition=Szczotkowanie podejrzanego piasku na /warp KopalniaPiachu.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+3. CORRECT | Kamienne Buty | wiki=Kamienne_Buty
+   identities=netherite_boots:2350690:armor/cobblestone_boots
+   acquisition=Nagroda ze skrzynki na /warp Koloseum z około 1% szans.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+4. CORRECT | Kula Mchu | wiki=Kula_Mchu
+   identities=snowball:2351280:misc/mossball
+   acquisition=Przedmiot do zdobycia w Magicznej Kopalni.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+5. CORRECT | Miecz Admina | wiki=Miecz_Admina
+   identities=netherite_sword:2350023:swords/admin_sword
+   acquisition=Przedmiot zarezerwowany wyłącznie dla administracji.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+6. CORRECT | Nietoperze Skrzydełko | wiki=Nietoperze_Skrzydełko
+   identities=netherite_sword:2351254:swords/bat_wing
+   acquisition=Dostępne tylko dla ekipy serwerowej.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+7. CORRECT | Ogrodniczki Kargo | wiki=Ogrodniczki_Kargo
+   identities=netherite_chestplate:2351076:armor/miner_chestplate
+   acquisition=Przedmiot do zdobycia w Magicznej Kopalni.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+8. CORRECT | Siekiera Kargo | wiki=Siekiera_Kargo
+   identities=netherite_axe:2351259:axes/kargo_axe
+   acquisition=Przedmiot do zdobycia w Magicznej Kopalni.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+9. CORRECT | Toga Zeusa | wiki=Toga_Zeusa
+   identities=netherite_chestplate:2351072:armor/zeus_toga
+   acquisition=Lucky Blocki na /warp KopalniaSzczęścia lub Key Blok.
+   tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+   review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+   decision=PENDING; recyclable=null; shards=null
+10. CORRECT | Łopata Kargo | wiki=Łopata_Kargo
+    identities=netherite_shovel:2351260:shovels/kargo_shovel
+    acquisition=Przedmiot do zdobycia w Magicznej Kopalni.
+    tags=UNKNOWN | proposal=UNKNOWN | priority=LOW
+    review_reason=Brak wystarczających danych o źródle; wymagana jest ręczna decyzja.
+    decision=PENDING; recyclable=null; shards=null
+
+Multi-identity audit (10)
+-------------------------
+Each entry below was compared against every catalog record carrying the same Wiki
+identifier. All identities use one shared logical model, none is missing, and no
+material+CMD belongs to another logical queue item.
+
+1. Epicki_Szlamowy_Miecz: diamond_sword:2350777:swords/epic_slime_sword;
+   netherite_sword:2350777:swords/epic_slime_sword — CORRECT
+2. Piorun_Zeusa: echo_shard:2350122:misc/thunder;
+   knowledge_book:2350122:misc/thunder — CORRECT
+3. Czerwony_Miecz_Świetlny: diamond_sword:2350907:swords/lightsaber_red;
+   netherite_sword:2350907:swords/lightsaber_red — CORRECT
+4. Kwiatek_Miłości: diamond_sword:2351143:swords/love_flower;
+   netherite_sword:2351143:swords/love_flower — CORRECT
+5. Młot_Budowlany: diamond_pickaxe:2350816:pickaxes/demolition_hammer;
+   netherite_pickaxe:2350816:pickaxes/demolition_hammer — CORRECT
+6. Perłowy_Sztylet: diamond_sword:2350018:swords/dagger_pearl;
+   netherite_sword:2350018:swords/dagger_pearl — CORRECT
+7. Siekiera_Drwala: diamond_axe:2350402:axes/lumberjack_axe;
+   netherite_axe:2350402:axes/lumberjack_axe — CORRECT
+8. Sztylet_Rytualny: diamond_sword:2350352:swords/blueberry_dagger;
+   netherite_sword:2350352:swords/blueberry_dagger — CORRECT
+9. Zjedz_Mnie!: echo_shard:2350408:misc/eat_me;
+   knowledge_book:2350408:misc/eat_me — CORRECT
+10. Stalowy_Kilof_Nowicjusza: diamond_pickaxe:2351281:pickaxes/beginner_pickaxe;
+    netherite_pickaxe:2351281:pickaxes/beginner_pickaxe — CORRECT
+
+Reference cases
+---------------
+- Epicki Szlamowy Miecz: HIGH; DROP, EVENT; UNKNOWN; multi-source manual review;
+  two consistent sword identities — CORRECT.
+- Płomykowa Gwiazda: MEDIUM; DROP; UNKNOWN; source is concrete but ETAP 3 did not
+  infer repeatability — CORRECT.
+- Tasak: MEDIUM; KEY_REWARD, QUEST; UNKNOWN; key/quest facts do not force an
+  economic decision — CORRECT.
+- Gildyjny Kilof: LOW; UNKNOWN; UNKNOWN; the daily /rewards wording did not leak
+  into REPEATABLE or INFINITE_OR_FARMABLE — CORRECT.
+- Bąbelki: HIGH; INFINITE_OR_FARMABLE, REPEATABLE, SHOP; NO; fishing evidence
+  justifies elevated review priority — CORRECT.
+- Ametystowe Jabłko: HIGH; INFINITE_OR_FARMABLE, REPEATABLE; NO; repeated leaf
+  collection evidence justifies elevated review priority — CORRECT.
+
+Conclusion
+----------
+No INCORRECT or SUSPICIOUS queue entries were found. ETAP 4 preserves ETAP 3
+facts and proposals, groups catalog identities without loss or cross-item
+collisions, applies the highest matching priority, and leaves every economic
+decision for human review.

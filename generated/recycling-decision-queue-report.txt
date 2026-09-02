@@ -1,0 +1,28 @@
+Recycling Decision Queue Report
+================================
+
+Logical items: 691
+Identity material+CMD: 858
+
+Priority distribution
+---------------------
+- HIGH: 176
+- MEDIUM: 420
+- LOW: 95
+
+System proposal distribution
+----------------------------
+- YES: 0
+- NO: 68
+- UNKNOWN: 623
+
+Decision status distribution
+----------------------------
+- PENDING: 691
+- APPROVED: 0
+- REJECTED: 0
+
+Validation
+----------
+- errors: 0
+- duplicate identity assignments: 0
