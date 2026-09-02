@@ -1,0 +1,13 @@
+Recycling Review Panel Report
+=============================
+
+Logical items: 691
+Identities: 858
+HIGH: 176
+MEDIUM: 420
+LOW: 95
+Generated HTML: generated/recycling-review-panel/index.html
+HTML size (UTF-8 bytes): 476730
+Validation errors: 0
+Duplicate identities: 0
+Generator self-tests: PASS
