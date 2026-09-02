@@ -1,0 +1,42 @@
+Recycling Review Panel - static audit
+=====================================
+
+Branch: feature/recycling-review-panel
+WIP commit reviewed: 0be2e8895176fc6c6f6a6f8a66e34c417f31b437
+
+Result: PASS for static/code-level review. No blocking defect found in the reviewed implementation.
+
+Verified from the committed implementation:
+- queue/report counts remain 691 logical items and 858 identities;
+- panel is self-contained HTML with embedded queue data;
+- no backend, REST API, database or plugin runtime integration is introduced;
+- decisions are stored under stable localStorage key laina-reforge.recycling-decisions.v1;
+- APPROVED requires recyclable=true and positive integer shards;
+- REJECTED requires recyclable=false and shards=0;
+- PENDING decisions are not imported/exported as completed decisions;
+- reviewed_at created by the panel uses Date.toISOString();
+- import rejects unknown logical items, duplicate items, missing/extra fields and invalid decision semantics;
+- overlapping imports require explicit confirmation before replacing local decisions;
+- reset of local decisions requires explicit confirmation;
+- export contains only locally completed decisions;
+- filters cover status, priority, proposal and acquisition tag;
+- search covers name, wiki, material, CMD and model_path;
+- navigation includes previous, next, next PENDING, next HIGH and direct item jump;
+- fixed shard buttons, custom positive shards, reject and skip actions are present;
+- item Wiki links use encoded titles and open with noopener/noreferrer;
+- rendered user/item data is inserted with textContent rather than innerHTML;
+- embedded JSON escapes control characters and closing HTML tags defensively;
+- generator validates the ETAP 4 queue before emitting the panel;
+- generated report states 0 validation errors and 0 duplicate identities.
+
+Non-blocking operational note:
+A real interactive smoke test of the generated local file in the user's own browser still needs to be run on the Windows machine, because this GitHub-side review cannot click a local file:// page. The code path for that smoke test was reviewed statically and no blocking issue was found.
+
+Recommended smoke sequence:
+1. Open generated/recycling-review-panel/index.html.
+2. Verify next/previous, filters, search and direct jump.
+3. Set one APPROVED, one REJECTED, one custom-shards decision and one SKIP.
+4. Refresh the page and confirm completed decisions persist.
+5. Export recycling-decisions.yml.
+6. Reset local decisions, import the export and confirm the decisions return.
+7. Try importing an unknown item / invalid state and confirm the whole import is rejected.
