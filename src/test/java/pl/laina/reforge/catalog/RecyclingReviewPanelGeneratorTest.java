@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionStatus.APPROVED;
@@ -246,6 +247,153 @@ class RecyclingReviewPanelGeneratorTest {
     }
 
     @Test
+    void pendingToApprovedCreatesApprovedHistoryEntry() {
+        var item = queue.items().get(0);
+        var entry = RecyclingReviewPanelGenerator.createHistoryEntry(
+                item, null, approved(3, "2026-09-03T10:00:00Z"), false);
+
+        assertEquals(RecyclingReviewPanelGenerator.HistoryAction.APPROVED, entry.action());
+        assertNull(entry.previousStatus());
+        assertEquals(APPROVED, entry.newStatus());
+        assertEquals(item.logicalId(), entry.logicalItemId());
+        assertEquals(item.identities().size(), entry.identities().size());
+    }
+
+    @Test
+    void pendingToRejectedCreatesRejectedHistoryEntry() {
+        var entry = RecyclingReviewPanelGenerator.createHistoryEntry(queue.items().get(0), null,
+                rejected("", "2026-09-03T10:01:00Z"), false);
+
+        assertEquals(RecyclingReviewPanelGenerator.HistoryAction.REJECTED, entry.action());
+        assertNull(entry.previousShards());
+        assertEquals(0, entry.newShards());
+    }
+
+    @Test
+    void approvedShardChangeCreatesEditedHistoryWithOldAndNewValues() {
+        var entry = RecyclingReviewPanelGenerator.createHistoryEntry(queue.items().get(0),
+                approved(2, "2026-09-03T10:00:00Z"),
+                approved(4, "2026-09-03T10:02:00Z"), false);
+
+        assertEquals(RecyclingReviewPanelGenerator.HistoryAction.EDITED, entry.action());
+        assertEquals(2, entry.previousShards());
+        assertEquals(4, entry.newShards());
+    }
+
+    @Test
+    void approvedToRejectedCreatesEditedHistory() {
+        var entry = RecyclingReviewPanelGenerator.createHistoryEntry(queue.items().get(0),
+                approved(2, "2026-09-03T10:00:00Z"),
+                rejected("nie", "2026-09-03T10:03:00Z"), false);
+
+        assertEquals(RecyclingReviewPanelGenerator.HistoryAction.EDITED, entry.action());
+        assertEquals(APPROVED, entry.previousStatus());
+        assertEquals(REJECTED, entry.newStatus());
+    }
+
+    @Test
+    void noteChangeCreatesEditedHistoryWithOldAndNewNotes() {
+        var before = RecyclingReviewPanelGenerator.validateReviewDecision(
+                "APPROVED", true, 2, "reviewer", "2026-09-03T10:00:00Z", "stara");
+        var after = RecyclingReviewPanelGenerator.validateReviewDecision(
+                "APPROVED", true, 2, "reviewer", "2026-09-03T10:04:00Z", "nowa");
+        var entry = RecyclingReviewPanelGenerator.createHistoryEntry(queue.items().get(0), before, after, false);
+
+        assertEquals(RecyclingReviewPanelGenerator.HistoryAction.EDITED, entry.action());
+        assertEquals("stara", entry.previousNote());
+        assertEquals("nowa", entry.newNote());
+    }
+
+    @Test
+    void importedDecisionCreatesImportedHistoryEntry() {
+        var entry = RecyclingReviewPanelGenerator.createHistoryEntry(queue.items().get(0),
+                approved(2, "2026-09-03T10:00:00Z"),
+                approved(4, "2026-09-03T10:05:00Z"), true);
+
+        assertEquals(RecyclingReviewPanelGenerator.HistoryAction.IMPORTED, entry.action());
+        assertEquals(2, entry.previousShards());
+        assertEquals(4, entry.newShards());
+    }
+
+    @Test
+    void importedNewDecisionDoesNotInventPreviousState() {
+        var entry = RecyclingReviewPanelGenerator.createHistoryEntry(queue.items().get(0), null,
+                approved(3, "2026-09-03T10:05:00Z"), true);
+
+        assertEquals(RecyclingReviewPanelGenerator.HistoryAction.IMPORTED, entry.action());
+        assertNull(entry.previousStatus());
+        assertNull(entry.previousShards());
+        assertNull(entry.previousNote());
+    }
+
+    @Test
+    void historyAppendKeepsExistingEntries() {
+        String body = functionBody(RecyclingReviewPanelGenerator.renderPanel(queue), "appendHistory(entries)");
+
+        assertTrue(body.contains("const updated=[...history,...entries]"));
+        assertTrue(body.contains("localStorage.setItem(HISTORY_STORAGE_KEY"));
+    }
+
+    @Test
+    void navigationDoesNotCreateHistory() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertFalse(functionBody(html, "move(delta)").contains("appendHistory"));
+        assertFalse(functionBody(html, "jump()").contains("appendHistory"));
+        assertFalse(functionBody(html, "applyFilters()").contains("appendHistory"));
+    }
+
+    @Test
+    void decisionsExportDoesNotCreateHistory() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertFalse(functionBody(html, "decisionYaml()").contains("appendHistory"));
+        assertFalse(functionBody(html, "downloadDecisions(filename)").contains("appendHistory"));
+        assertFalse(functionBody(html, "openExportSummary()").contains("appendHistory"));
+    }
+
+    @Test
+    void backupDoesNotCreateHistory() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertTrue(html.contains("$('backupButton').addEventListener('click',()=>downloadDecisions("));
+        assertFalse(functionBody(html, "downloadDecisions(filename)").contains("appendHistory"));
+    }
+
+    @Test
+    void resettingDecisionsDoesNotRemoveHistory() {
+        String body = functionBody(RecyclingReviewPanelGenerator.renderPanel(queue), "resetLocal()");
+
+        assertTrue(body.contains("localStorage.removeItem(STORAGE_KEY)"));
+        assertFalse(body.contains("localStorage.removeItem(HISTORY_STORAGE_KEY)"));
+    }
+
+    @Test
+    void historyHasSeparateStorageAndDoubleConfirmedReset() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+        String body = functionBody(html, "resetHistory()");
+
+        assertEquals("laina-reforge.recycling-decisions.v1.history",
+                RecyclingReviewPanelGenerator.HISTORY_STORAGE_KEY);
+        assertTrue(html.contains("const HISTORY_STORAGE_KEY = STORAGE_KEY + '.history'"));
+        assertTrue(body.contains("Reset historii usunie ${count} wpisów"));
+        assertTrue(body.contains("Potwierdź ponownie: trwale usunąć historię decyzji?"));
+        assertTrue(body.contains("localStorage.removeItem(HISTORY_STORAGE_KEY)"));
+        assertFalse(body.contains("localStorage.removeItem(STORAGE_KEY)"));
+    }
+
+    @Test
+    void historyExportIsSeparateFromRuntimeDecisionInput() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+        String historyDocument = "history:\n  - action: APPROVED\n";
+
+        assertTrue(html.contains("recycling-decision-history.yml"));
+        assertTrue(html.contains("EXPORT HISTORY"));
+        assertThrows(IllegalArgumentException.class, () ->
+                RecyclingReviewPanelGenerator.parseDecisionImport(historyDocument, logicalIds()));
+    }
+
+    @Test
     void panelIsSelfContainedAndOffersRequiredActions() {
         String html = RecyclingReviewPanelGenerator.renderPanel(queue);
 
@@ -304,6 +452,20 @@ class RecyclingReviewPanelGeneratorTest {
     private static RecyclingReviewPanelGenerator.ReviewDecision approved(int shards, String reviewedAt) {
         return RecyclingReviewPanelGenerator.validateReviewDecision(
                 "APPROVED", true, shards, "reviewer", reviewedAt, "");
+    }
+
+    private static RecyclingReviewPanelGenerator.ReviewDecision rejected(String note, String reviewedAt) {
+        return RecyclingReviewPanelGenerator.validateReviewDecision(
+                "REJECTED", false, 0, "reviewer", reviewedAt, note);
+    }
+
+    private static String functionBody(String html, String signature) {
+        int start = html.indexOf("function " + signature);
+        if (start < 0) {
+            throw new AssertionError("Missing JavaScript function: " + signature);
+        }
+        int next = html.indexOf("\nfunction ", start + 1);
+        return next < 0 ? html.substring(start) : html.substring(start, next);
     }
 
     private static String validImport(String logicalId) {

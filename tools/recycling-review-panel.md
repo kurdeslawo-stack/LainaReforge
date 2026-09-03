@@ -30,6 +30,12 @@ Decyzje są przechowywane w `localStorage` bieżącej przeglądarki pod stabilny
 kluczem `laina-reforge.recycling-decisions.v1`. Nazwa reviewera jest ustawiana raz
 na sesję przeglądarki. Sam plik kolejki pozostaje tylko do odczytu.
 
+Zakładka **Historia** przechowuje append-only audit log pod osobnym kluczem
+`laina-reforge.recycling-decisions.v1.history`. Rejestruje utworzenie, edycję i import
+decyzji wraz ze stanem poprzednim i nowym. Nawigacja, wyszukiwanie oraz eksporty nie
+tworzą wpisów. **EXPORT HISTORY** zapisuje osobny `recycling-decision-history.yml`,
+który nie jest wejściem kompilatora runtime.
+
 Regularnie używaj **EXPORT DECISIONS**, aby pobrać `recycling-decisions.yml`.
 Eksport zawiera wyłącznie podjęte decyzje `APPROVED` i `REJECTED`; pominięte oraz
 nieprzejrzane wpisy nie są eksportowane. Przed pobraniem panel pokazuje podsumowanie
@@ -53,7 +59,8 @@ duplikaty albo niepoprawną semantykę decyzji. Panel prosi o potwierdzenie, kie
 import nadpisze istniejące lokalne decyzje.
 
 **RESET LOCAL DECISIONS** pokazuje liczbę usuwanych decyzji i, jeśli są zapisane,
-wymaga dwóch potwierdzeń. Przed resetem warto wykonać backup.
+wymaga dwóch potwierdzeń. Nie usuwa historii. Osobny **RESET HISTORY** wymaga dwóch
+potwierdzeń i nie zmienia aktualnego snapshotu decyzji. Przed resetem warto wykonać backup.
 
 ## Ograniczenia
 

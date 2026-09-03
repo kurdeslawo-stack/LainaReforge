@@ -10,7 +10,8 @@ HIGH: 176
 MEDIUM: 420
 LOW: 994
 Generated HTML: generated/recycling-review-panel/index.html
-HTML size (UTF-8 bytes): 903927
+HTML size (UTF-8 bytes): 912127
+Decision history storage: laina-reforge.recycling-decisions.v1.history
 Validation errors: 0
 Duplicate identities: 0
 Generator self-tests: PASS
