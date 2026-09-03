@@ -1,8 +1,9 @@
 # Recycling Decision Queue
 
-`RecyclingDecisionQueueGenerator` is a standalone maintenance tool for ETAP 4. It combines the
-item catalog identities with ETAP 3 acquisition facts and prepares a deterministic queue for human
-review. It is not registered in the Paper plugin and never changes `items.yml` or shard values.
+`RecyclingDecisionQueueGenerator` is a standalone maintenance tool. It combines mapped item
+catalog identities with ETAP 3 acquisition facts and adds every remaining catalog identity as an
+individual conservative `UNMAPPED` entry for human review. It is not registered in the Paper
+plugin and never changes `items.yml` or shard values.
 
 Run from the repository root:
 
@@ -12,7 +13,8 @@ Run from the repository root:
 
 Generated files:
 
-- `generated/recycling-decision-queue.yml` — one record per logical Wiki item;
+- `generated/recycling-decision-queue.yml` — grouped MAPPED items plus one record per UNMAPPED
+  `material+CMD`;
 - `generated/recycling-decision-queue-report.txt` — counts and validation summary.
 
 Every generated decision starts as:
@@ -35,7 +37,10 @@ Valid human decisions are:
 
 Priority only determines review order. It is not an economic decision and does not change the
 ETAP 3 system proposal. Generation fails validation on invalid decision semantics, missing
-identities, duplicate logical items, cross-item `material+CMD` conflicts, or lost Wiki mappings.
+identities, duplicate logical items, cross-item `material+CMD` conflicts, lost Wiki mappings, or
+any catalog identity that is missing from the queue. An `UNMAPPED` entry has blank `wiki`, one
+identity, LOW priority and UNKNOWN acquisition/proposal; it can still receive a normal human
+APPROVED or REJECTED decision in the review panel.
 
 Optional CLI paths are available when invoking the Java class directly:
 

@@ -12,6 +12,7 @@ import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Decision;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionQueue;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionStatus;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Identity;
+import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.MappingStatus;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.QueueItem;
 
 /** Validates generated and subsequently human-edited recycling decision queues. */
@@ -24,6 +25,14 @@ public final class RecyclingDecisionQueueValidator {
     }
 
     static ValidationResult validate(DecisionQueue queue, Map<String, AnalysisItem> expectedItems) {
+        return validate(queue, expectedItems, List.of());
+    }
+
+    static ValidationResult validate(
+            DecisionQueue queue,
+            Map<String, AnalysisItem> expectedItems,
+            List<ItemEconomyAnalyzer.CatalogRecord> catalogRecords
+    ) {
         List<ValidationError> errors = new ArrayList<>();
         Map<String, String> logicalOwners = new TreeMap<>();
         Map<String, String> identityOwners = new TreeMap<>();
@@ -35,9 +44,12 @@ public final class RecyclingDecisionQueueValidator {
                 errors.add(error("DUPLICATE_LOGICAL_ITEM", item.logicalId(),
                         "Logical item occurs more than once."));
             }
-            if (item.wiki().isBlank() || item.name().isBlank()) {
+            if (item.name().isBlank() || item.mappingStatus() == MappingStatus.MAPPED && item.wiki().isBlank()) {
                 errors.add(error("MISSING_WIKI_OR_NAME", item.logicalId(),
-                        "Queue item must contain wiki and name."));
+                        "MAPPED item requires wiki and every item requires name."));
+            }
+            if (item.mappingStatus() == MappingStatus.UNMAPPED) {
+                validateUnmapped(item, errors);
             }
             if (item.identities().isEmpty()) {
                 errors.add(error("MISSING_IDENTITIES", item.logicalId(),
@@ -47,7 +59,7 @@ public final class RecyclingDecisionQueueValidator {
 
             for (Identity identity : item.identities()) {
                 String previousOwner = identityOwners.putIfAbsent(identity.key(), item.logicalId());
-                if (previousOwner != null && !previousOwner.equals(item.logicalId())) {
+                if (previousOwner != null) {
                     duplicateIdentities.add(identity.key());
                     errors.add(error("DUPLICATE_IDENTITY", item.logicalId(),
                             identity.key() + " is also assigned to " + previousOwner + "."));
@@ -55,6 +67,9 @@ public final class RecyclingDecisionQueueValidator {
             }
 
             if (!expectedItems.isEmpty()) {
+                if (item.mappingStatus() == MappingStatus.UNMAPPED) {
+                    continue;
+                }
                 AnalysisItem expected = expectedItems.get(item.logicalId());
                 if (expected == null) {
                     errors.add(error("UNEXPECTED_LOGICAL_ITEM", item.logicalId(),
@@ -65,6 +80,8 @@ public final class RecyclingDecisionQueueValidator {
                 }
             }
         }
+
+        validateCatalogCoverage(catalogRecords, identityOwners, errors);
 
         if (!expectedItems.isEmpty()) {
             for (String expected : expectedItems.keySet()) {
@@ -79,6 +96,56 @@ public final class RecyclingDecisionQueueValidator {
                 .thenComparing(ValidationError::logicalId)
                 .thenComparing(ValidationError::message));
         return new ValidationResult(errors, duplicateIdentities.size());
+    }
+
+    private static void validateUnmapped(QueueItem item, List<ValidationError> errors) {
+        if (!item.wiki().isBlank()) {
+            errors.add(error("UNMAPPED_HAS_WIKI", item.logicalId(), "UNMAPPED item must have blank wiki."));
+        }
+        if (item.identities().size() != 1) {
+            errors.add(error("UNMAPPED_IDENTITY_COUNT", item.logicalId(),
+                    "UNMAPPED item must contain exactly one identity."));
+        } else if (!item.logicalId().equals("unmapped::" + item.identities().getFirst().key())) {
+            errors.add(error("UNMAPPED_LOGICAL_ID", item.logicalId(),
+                    "UNMAPPED logical id must be derived from material+CMD."));
+        }
+        if (item.priority() != RecyclingDecisionQueueGenerator.Priority.LOW
+                || !item.acquisition().tags().equals(java.util.Set.of("UNKNOWN"))
+                || !item.acquisition().summary().equals("UNKNOWN")
+                || item.systemProposal().recyclable()
+                != RecyclingDecisionQueueGenerator.SystemProposalValue.UNKNOWN) {
+            errors.add(error("UNMAPPED_UNSAFE_DEFAULTS", item.logicalId(),
+                    "UNMAPPED item must retain LOW/UNKNOWN conservative defaults."));
+        }
+    }
+
+    private static void validateCatalogCoverage(
+            List<ItemEconomyAnalyzer.CatalogRecord> catalogRecords,
+            Map<String, String> identityOwners,
+            List<ValidationError> errors
+    ) {
+        if (catalogRecords.isEmpty()) {
+            return;
+        }
+        Map<String, ItemEconomyAnalyzer.CatalogRecord> catalogByIdentity = new TreeMap<>();
+        for (ItemEconomyAnalyzer.CatalogRecord record : catalogRecords) {
+            if (catalogByIdentity.putIfAbsent(record.key(), record) != null) {
+                errors.add(error("DUPLICATE_CATALOG_IDENTITY", record.key(),
+                        "Catalog contains duplicate material+CMD."));
+            }
+        }
+        for (String key : catalogByIdentity.keySet()) {
+            if (!identityOwners.containsKey(key)) {
+                errors.add(error("MISSING_CATALOG_IDENTITY", key,
+                        "Catalog identity is missing from the review queue."));
+            }
+        }
+        for (String key : identityOwners.keySet()) {
+            if (!catalogByIdentity.containsKey(key)) {
+                errors.add(error("UNKNOWN_QUEUE_IDENTITY", identityOwners.get(key),
+                        key + " does not exist in items.yml."));
+            }
+        }
     }
 
     private static void validateDecision(

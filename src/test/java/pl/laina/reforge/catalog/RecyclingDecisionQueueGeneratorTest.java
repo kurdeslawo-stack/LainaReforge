@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Decision;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionQueue;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionStatus;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Identity;
+import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.MappingStatus;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Priority;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.QueueItem;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.SystemProposal;
@@ -74,6 +76,26 @@ class RecyclingDecisionQueueGeneratorTest {
                         new Identity("diamond_pickaxe", 7, "pickaxes/test"),
                         new Identity("netherite_pickaxe", 7, "pickaxes/test")),
                 queue.items().getFirst().identities());
+    }
+
+    @Test
+    void createsOneConservativeManualEntryPerUnmappedIdentity() {
+        ItemEconomyAnalyzer.Catalog catalog = catalog(
+                record("apple:2350429", "apple", 2350429, "food/mystery_apple", "", ""),
+                record("stick:2350429", "stick", 2350429, "tools/mystery_apple", "", ""));
+
+        DecisionQueue queue = RecyclingDecisionQueueGenerator.generate(
+                catalog, new AnalysisData(Map.of()), Set.of());
+
+        assertEquals(2, queue.items().size());
+        assertTrue(queue.items().stream().allMatch(item -> item.mappingStatus() == MappingStatus.UNMAPPED));
+        assertTrue(queue.items().stream().allMatch(item -> item.identities().size() == 1));
+        assertTrue(queue.items().stream().allMatch(item -> item.priority() == Priority.LOW));
+        assertTrue(queue.items().stream().allMatch(item -> item.wiki().isBlank()));
+        assertTrue(queue.items().stream().allMatch(item -> item.acquisition().tags().equals(Set.of("UNKNOWN"))));
+        assertTrue(queue.items().stream().allMatch(item -> item.decision().status() == DecisionStatus.PENDING));
+        assertEquals(Set.of("unmapped::apple:2350429", "unmapped::stick:2350429"),
+                queue.items().stream().map(QueueItem::logicalId).collect(java.util.stream.Collectors.toSet()));
     }
 
     @Test
@@ -184,6 +206,54 @@ class RecyclingDecisionQueueGeneratorTest {
     }
 
     @Test
+    void blankWikiIsAllowedOnlyForUnmappedEntries() {
+        Identity identity = new Identity("apple", 10, "food/apple");
+        QueueItem mapped = new QueueItem("Mapped", "Mapped", "", MappingStatus.MAPPED,
+                Priority.LOW, "Review", List.of(identity), new Acquisition("Summary", Set.of("UNKNOWN")),
+                List.of(), new SystemProposal(SystemProposalValue.UNKNOWN, "Reason"), Decision.pending());
+        QueueItem unmapped = new QueueItem("unmapped::apple:10", "apple", "", MappingStatus.UNMAPPED,
+                Priority.LOW, "Brak pewnego mapowania do Wiki. Wymagana ręczna decyzja.", List.of(identity),
+                new Acquisition("UNKNOWN", Set.of("UNKNOWN")), List.of(),
+                new SystemProposal(SystemProposalValue.UNKNOWN, "Brak pewnych danych z Wiki."), Decision.pending());
+
+        assertFalse(RecyclingDecisionQueueValidator.validate(new DecisionQueue(List.of(mapped))).valid());
+        assertTrue(RecyclingDecisionQueueValidator.validate(new DecisionQueue(List.of(unmapped))).valid());
+    }
+
+    @Test
+    void generatedQueueCoversEntireCatalogExactlyOnceWithoutChangingMappedMeaning() throws Exception {
+        ItemEconomyAnalyzer.Catalog catalog = ItemEconomyAnalyzer.Catalog.parse(
+                Files.readString(RecyclingDecisionQueueGenerator.DEFAULT_CATALOG, StandardCharsets.UTF_8));
+        AnalysisData analysis = AnalysisData.parse(Files.readString(
+                RecyclingDecisionQueueGenerator.DEFAULT_ANALYSIS, StandardCharsets.UTF_8));
+        DecisionQueue queue = RecyclingReviewPanelGenerator.parseQueue(Files.readString(
+                RecyclingDecisionQueueGenerator.DEFAULT_OUTPUT, StandardCharsets.UTF_8));
+
+        assertEquals(1590, queue.items().size());
+        assertEquals(1757, queue.identityCount());
+        assertEquals(691, queue.mappingCounts().get(MappingStatus.MAPPED));
+        assertEquals(899, queue.mappingCounts().get(MappingStatus.UNMAPPED));
+        assertEquals(858, queue.mappedIdentityCount());
+        assertEquals(899, queue.unmappedIdentityCount());
+        assertTrue(queue.items().stream().allMatch(item -> item.decision().status() == DecisionStatus.PENDING));
+
+        Map<String, Integer> occurrences = new HashMap<>();
+        queue.items().stream().flatMap(item -> item.identities().stream())
+                .forEach(identity -> occurrences.merge(identity.key(), 1, Integer::sum));
+        assertEquals(1757, occurrences.size());
+        catalog.records().forEach(record -> assertEquals(1, occurrences.get(record.key()), record.key()));
+
+        Map<String, List<ItemEconomyAnalyzer.CatalogRecord>> recordsByWiki = catalog.recordsByWiki();
+        queue.items().stream().filter(item -> item.mappingStatus() == MappingStatus.MAPPED).forEach(item -> {
+            assertEquals(item.logicalId(), item.wiki());
+            assertEquals(analysis.items().get(item.logicalId()).name(), item.name());
+            assertEquals(recordsByWiki.get(item.wiki()).size(), item.identities().size());
+        });
+        assertTrue(RecyclingDecisionQueueValidator.validate(
+                queue, analysis.items(), catalog.records()).valid());
+    }
+
+    @Test
     void sortsDeterministicallyByPriorityThenName() {
         AnalysisItem low = item("Low", "Ącki", Set.of("UNKNOWN"), List.of(), SystemProposalValue.UNKNOWN);
         AnalysisItem highZ = item("High_Z", "Żaba", Set.of("REPEATABLE"), List.of(), SystemProposalValue.UNKNOWN);
@@ -283,7 +353,8 @@ class RecyclingDecisionQueueGeneratorTest {
     }
 
     private static QueueItem queueItem(String logicalId, Decision decision, List<Identity> identities) {
-        return new QueueItem(logicalId, logicalId, logicalId, Priority.LOW, "Review", identities,
+        return new QueueItem(logicalId, logicalId, logicalId, MappingStatus.MAPPED,
+                Priority.LOW, "Review", identities,
                 new Acquisition("Summary", Set.of("UNKNOWN")), List.of(),
                 new SystemProposal(SystemProposalValue.UNKNOWN, "Reason"), decision);
     }

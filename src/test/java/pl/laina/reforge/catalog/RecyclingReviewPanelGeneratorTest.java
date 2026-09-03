@@ -35,11 +35,11 @@ class RecyclingReviewPanelGeneratorTest {
     }
 
     @Test
-    void panelContainsAll691LogicalItems() {
+    void panelContainsAll1590LogicalReviewEntries() {
         String html = RecyclingReviewPanelGenerator.renderPanel(queue);
 
-        assertEquals(691, queue.items().size());
-        assertEquals(691, occurrences(html, "\"id\":"));
+        assertEquals(1590, queue.items().size());
+        assertEquals(1590, occurrences(html, "\"id\":"));
         for (var item : queue.items()) {
             assertTrue(html.contains("\"id\":\"" + jsonEscape(item.logicalId()) + "\""), item.logicalId());
         }
@@ -47,8 +47,10 @@ class RecyclingReviewPanelGeneratorTest {
 
     @Test
     void preservesEveryIdentity() {
-        assertEquals(858, queue.identityCount());
-        assertEquals(858, queue.items().stream().mapToInt(item -> item.identities().size()).sum());
+        assertEquals(1757, queue.identityCount());
+        assertEquals(858, queue.mappedIdentityCount());
+        assertEquals(899, queue.unmappedIdentityCount());
+        assertEquals(1757, queue.items().stream().mapToInt(item -> item.identities().size()).sum());
         String html = RecyclingReviewPanelGenerator.renderPanel(queue);
         for (var item : queue.items()) {
             for (var identity : item.identities()) {
@@ -97,6 +99,21 @@ class RecyclingReviewPanelGeneratorTest {
         assertEquals(APPROVED, imported.get("Epicki_Szlamowy_Miecz").status());
         assertEquals(3, imported.get("Epicki_Szlamowy_Miecz").shards());
         assertEquals("e2ot3rror", imported.get("Epicki_Szlamowy_Miecz").reviewedBy());
+    }
+
+    @Test
+    void importsDecisionForUnmappedIdentity() {
+        String logicalId = queue.items().stream()
+                .filter(item -> item.mappingStatus()
+                        == RecyclingDecisionQueueGenerator.MappingStatus.UNMAPPED)
+                .findFirst().orElseThrow().logicalId();
+
+        Map<String, RecyclingReviewPanelGenerator.ReviewDecision> imported =
+                RecyclingReviewPanelGenerator.parseDecisionImport(validImport(logicalId), logicalIds());
+
+        assertEquals(1, imported.size());
+        assertEquals(APPROVED, imported.get(logicalId).status());
+        assertEquals(3, imported.get(logicalId).shards());
     }
 
     @Test
@@ -154,6 +171,13 @@ class RecyclingReviewPanelGeneratorTest {
         assertTrue(html.contains("5 SHARDS"));
         assertTrue(html.contains("POMIŃ"));
         assertTrue(html.contains("https://wiki.laina.pl/index.php?title="));
+        assertTrue(html.contains("Mapping <select id=\"mappingFilter\""));
+        assertTrue(html.contains("Catalog identities</span><b>1757</b>"));
+        assertTrue(html.contains("Mapped identities</span><b>858</b>"));
+        assertTrue(html.contains("Unmapped identities</span><b>899</b>"));
+        assertTrue(html.contains("Coverage</span><b>1757 / 1757</b>"));
+        assertTrue(html.contains("BRAK WIKI"));
+        assertTrue(html.contains("if(item.mappingStatus==='MAPPED')"));
         assertFalse(html.contains("fetch("));
         assertFalse(html.contains("<script src="));
         assertFalse(html.contains("<link rel=\"stylesheet\""));

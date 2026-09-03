@@ -3,6 +3,11 @@
 Panel jest lokalnym, samodzielnym narzędziem do ręcznego przeglądu kolejki ETAPU 4.
 Nie jest częścią runtime pluginu i nie zapisuje do `items.yml`.
 
+Panel obejmuje cały katalog: wpisy `MAPPED` zachowują dane Wiki i ekonomii, natomiast każdy
+`UNMAPPED` reprezentuje dokładnie jedną identity `material+CMD`. Filtr **Mapping** pozwala
+ograniczyć widok do jednej z tych grup. Dla `UNMAPPED` panel pokazuje badge **BRAK WIKI** i dane
+techniczne bez tworzenia pustego linku Wiki.
+
 ## Generowanie
 
 Z katalogu głównego repozytorium uruchom:

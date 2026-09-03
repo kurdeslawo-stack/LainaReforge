@@ -25,6 +25,7 @@ import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Decision;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionQueue;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionStatus;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Identity;
+import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.MappingStatus;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Priority;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.QueueItem;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.SystemProposal;
@@ -110,6 +111,8 @@ public final class RecyclingReviewPanelGenerator {
 
             String name = requiredQuoted(block, "^    name: \\\"(.*)\\\"\\r?$", "name", current.key());
             String wiki = requiredQuoted(block, "^    wiki: \\\"(.*)\\\"\\r?$", "wiki", current.key());
+            MappingStatus mappingStatus = MappingStatus.valueOf(requiredPlain(block,
+                    "^    mapping_status: (MAPPED|UNMAPPED)\\r?$", "mapping_status", current.key()));
             Priority priority = Priority.valueOf(requiredPlain(block,
                     "^    priority: (HIGH|MEDIUM|LOW)\\r?$", "priority", current.key()));
             String reviewReason = requiredQuoted(block,
@@ -128,7 +131,7 @@ public final class RecyclingReviewPanelGenerator {
                             "^    system_proposal:\\r?$", "^    decision:"),
                     "^      reason: \\\"(.*)\\\"\\r?$", "proposal reason", current.key());
             Decision decision = parseDecision(block, current.key());
-            items.add(new QueueItem(current.key(), name, wiki, priority, reviewReason, identities,
+            items.add(new QueueItem(current.key(), name, wiki, mappingStatus, priority, reviewReason, identities,
                     new Acquisition(summary, tags), evidence,
                     new SystemProposal(proposal, proposalReason), decision));
         }
@@ -297,7 +300,10 @@ public final class RecyclingReviewPanelGenerator {
         String data = toJson(queue).replace("</", "<\\/");
         return HTML_TEMPLATE
                 .replace("__QUEUE_DATA__", data)
-                .replace("__STORAGE_KEY__", jsonString(LOCAL_STORAGE_KEY));
+                .replace("__STORAGE_KEY__", jsonString(LOCAL_STORAGE_KEY))
+                .replace("__CATALOG_IDENTITIES__", Integer.toString(queue.identityCount()))
+                .replace("__MAPPED_IDENTITIES__", Integer.toString(queue.mappedIdentityCount()))
+                .replace("__UNMAPPED_IDENTITIES__", Integer.toString(queue.unmappedIdentityCount()));
     }
 
     private static String toJson(DecisionQueue queue) {
@@ -311,6 +317,7 @@ public final class RecyclingReviewPanelGenerator {
                     .append("\"id\":").append(jsonString(item.logicalId())).append(',')
                     .append("\"name\":").append(jsonString(item.name())).append(',')
                     .append("\"wiki\":").append(jsonString(item.wiki())).append(',')
+                    .append("\"mappingStatus\":").append(jsonString(item.mappingStatus().name())).append(',')
                     .append("\"priority\":").append(jsonString(item.priority().name())).append(',')
                     .append("\"reviewReason\":").append(jsonString(item.reviewReason())).append(',')
                     .append("\"identities\":[");
@@ -403,6 +410,9 @@ public final class RecyclingReviewPanelGenerator {
                 + "=============================\n\n"
                 + "Logical items: " + queue.items().size() + "\n"
                 + "Identities: " + queue.identityCount() + "\n"
+                + "Mapped identities: " + queue.mappedIdentityCount() + "\n"
+                + "Unmapped identities: " + queue.unmappedIdentityCount() + "\n"
+                + "Coverage: " + queue.identityCount() + " / " + queue.identityCount() + "\n"
                 + "HIGH: " + priorities.get(Priority.HIGH) + "\n"
                 + "MEDIUM: " + priorities.get(Priority.MEDIUM) + "\n"
                 + "LOW: " + priorities.get(Priority.LOW) + "\n"
@@ -562,7 +572,7 @@ public final class RecyclingReviewPanelGenerator {
                 .app{max-width:1450px;margin:auto;padding:16px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px}.top h1{font-size:20px;margin:0}.muted{color:var(--muted)}
                 .progress{display:grid;grid-template-columns:repeat(4,minmax(120px,1fr));gap:8px;margin:12px 0}.metric,.toolbar,.card{background:var(--panel);border:1px solid var(--line);border-radius:10px}.metric{padding:10px 12px}.metric b{display:block;font-size:19px}
                 .toolbar{padding:10px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}.toolbar label{display:flex;align-items:center;gap:6px}.toolbar input,.toolbar select{padding:7px 9px;min-width:130px}.toolbar .search{flex:1;min-width:240px}
-                .layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px}.card{padding:16px}.item-head{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:12px}.item-head h2{margin:0 0 4px;font-size:24px}.badges{display:flex;flex-wrap:wrap;gap:6px}.badge{border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:12px}.HIGH{color:#ff7b72;border-color:#7d3535}.MEDIUM{color:#e3b341;border-color:#705c22}.LOW{color:#8b949e}.APPROVED{color:var(--green)}.REJECTED{color:var(--red)}
+                .layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:12px}.card{padding:16px}.item-head{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:12px}.item-head h2{margin:0 0 4px;font-size:24px}.badges{display:flex;flex-wrap:wrap;gap:6px}.badge{border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:12px}.HIGH{color:#ff7b72;border-color:#7d3535}.MEDIUM{color:#e3b341;border-color:#705c22}.LOW{color:#8b949e}.APPROVED{color:var(--green)}.REJECTED{color:var(--red)}.UNMAPPED{color:#ffb86c;border-color:#855d2b}
                 h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:18px 0 7px}.identity{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--panel2);padding:7px 9px;border-radius:6px;margin:5px 0;overflow-wrap:anywhere}.evidence{margin:0;padding-left:20px}.proposal{border-left:3px solid var(--gold);padding:8px 12px;background:var(--panel2)}
                 .decision label{display:block;margin:10px 0 5px}.decision input,.decision textarea{width:100%;padding:8px}.decision textarea{min-height:86px;resize:vertical}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.actions .reject{border-color:#7d3535}.actions .approve{border-color:#2f6f3e}.actions .skip{grid-column:span 3}.custom{display:flex;gap:7px;margin-top:8px}.custom input{min-width:0}.custom button{white-space:nowrap}
                 .nav{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.nav button:nth-child(3),.nav button:nth-child(4){grid-column:span 2}.jump{display:flex;gap:7px;margin-top:8px}.jump input{width:100%;padding:8px}.io{display:flex;flex-wrap:wrap;gap:7px}.danger{border-color:#7d3535;color:#ff7b72}.message{min-height:21px;margin-top:8px;color:var(--muted)}a{color:var(--blue)}.empty{text-align:center;padding:60px 20px;color:var(--muted)}
@@ -573,8 +583,10 @@ public final class RecyclingReviewPanelGenerator {
             <main class="app">
               <div class="top"><div><h1>LainaReforge — przegląd decyzji</h1><div class="muted">Lokalny panel. Dane pozostają w tej przeglądarce do czasu eksportu.</div></div><div id="position" class="muted"></div></div>
               <section class="progress"><div class="metric"><span>Reviewed</span><b id="reviewedCount">0 / 0</b></div><div class="metric"><span>Pending</span><b id="pendingCount">0</b></div><div class="metric"><span>Approved</span><b id="approvedCount">0</b></div><div class="metric"><span>Rejected</span><b id="rejectedCount">0</b></div></section>
+              <section class="progress"><div class="metric"><span>Catalog identities</span><b>__CATALOG_IDENTITIES__</b></div><div class="metric"><span>Mapped identities</span><b>__MAPPED_IDENTITIES__</b></div><div class="metric"><span>Unmapped identities</span><b>__UNMAPPED_IDENTITIES__</b></div><div class="metric"><span>Coverage</span><b>__CATALOG_IDENTITIES__ / __CATALOG_IDENTITIES__</b></div></section>
               <section class="toolbar" aria-label="Filtry">
                 <label>Status <select id="statusFilter"><option>ALL</option><option>PENDING</option><option>APPROVED</option><option>REJECTED</option></select></label>
+                <label>Mapping <select id="mappingFilter"><option>ALL</option><option>MAPPED</option><option>UNMAPPED</option></select></label>
                 <label>Priority <select id="priorityFilter"><option>ALL</option><option>HIGH</option><option>MEDIUM</option><option>LOW</option></select></label>
                 <label>Proposal <select id="proposalFilter"><option>ALL</option><option>NO</option><option>UNKNOWN</option></select></label>
                 <label>Tag <select id="tagFilter"><option>ALL</option><option>INFINITE_OR_FARMABLE</option><option>REPEATABLE</option><option>LIMITED</option><option>KEY_REWARD</option><option>EVENT</option><option>QUEST</option><option>SHOP</option><option>CRAFT</option><option>DROP</option><option>UNKNOWN</option></select></label>
@@ -597,7 +609,7 @@ public final class RecyclingReviewPanelGenerator {
             const STORAGE_KEY = __STORAGE_KEY__;
             const REVIEWER_KEY = STORAGE_KEY + '.reviewer';
             const ITEM_BY_ID = new Map(QUEUE.map(item => [item.id, item]));
-            const filters = {status:'ALL',priority:'ALL',proposal:'ALL',tag:'ALL',search:''};
+            const filters = {status:'ALL',mapping:'ALL',priority:'ALL',proposal:'ALL',tag:'ALL',search:''};
             let decisions = loadDecisions();
             let visibleItems = QUEUE.slice();
             let currentId = visibleItems[0]?.id || null;
@@ -609,10 +621,10 @@ public final class RecyclingReviewPanelGenerator {
             function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(decisions));updateProgress()}
             function effectiveStatus(item){return decisions[item.id]?.status||item.initialStatus}
             function searchable(item){return [item.name,item.wiki,...item.identities.flatMap(id=>[id.material,String(id.cmd),id.modelPath])].join(' ').toLocaleLowerCase('pl')}
-            function applyFilters(){const query=filters.search.trim().toLocaleLowerCase('pl');visibleItems=QUEUE.filter(item=>(filters.status==='ALL'||effectiveStatus(item)===filters.status)&&(filters.priority==='ALL'||item.priority===filters.priority)&&(filters.proposal==='ALL'||item.proposal.value===filters.proposal)&&(filters.tag==='ALL'||item.acquisition.tags.includes(filters.tag))&&(!query||searchable(item).includes(query)));if(!visibleItems.some(item=>item.id===currentId))currentId=visibleItems[0]?.id||null;render()}
+            function applyFilters(){const query=filters.search.trim().toLocaleLowerCase('pl');visibleItems=QUEUE.filter(item=>(filters.status==='ALL'||effectiveStatus(item)===filters.status)&&(filters.mapping==='ALL'||item.mappingStatus===filters.mapping)&&(filters.priority==='ALL'||item.priority===filters.priority)&&(filters.proposal==='ALL'||item.proposal.value===filters.proposal)&&(filters.tag==='ALL'||item.acquisition.tags.includes(filters.tag))&&(!query||searchable(item).includes(query)));if(!visibleItems.some(item=>item.id===currentId))currentId=visibleItems[0]?.id||null;render()}
             function current(){return ITEM_BY_ID.get(currentId)}
             function text(tag,value,className=''){const node=document.createElement(tag);node.textContent=value;if(className)node.className=className;return node}
-            function render(){const card=$('itemCard');card.replaceChildren();const item=current();if(!item){card.append(text('div','Brak itemów dla wybranych filtrów.','empty'));$('position').textContent='0 / 0';$('note').value='';updateProgress();return}const head=text('div','', 'item-head');const title=document.createElement('div');title.append(text('h2',item.name),text('div',item.wiki,'muted'));const badges=text('div','', 'badges');badges.append(text('span',item.priority,'badge '+item.priority),text('span',effectiveStatus(item),'badge '+effectiveStatus(item)));head.append(title,badges);card.append(head);const wiki=document.createElement('a');wiki.href='https://wiki.laina.pl/index.php?title='+encodeURIComponent(item.wiki);wiki.target='_blank';wiki.rel='noopener noreferrer';wiki.textContent='Otwórz stronę Wiki ↗';card.append(text('h3','Wiki'),wiki,text('h3','Identities'));for(const identity of item.identities)card.append(text('div',`${identity.material} · CMD ${identity.cmd} · ${identity.modelPath}`,'identity'));card.append(text('h3','Zdobycie'),text('p',item.acquisition.summary));const tags=text('div','','badges');for(const tag of item.acquisition.tags)tags.append(text('span',tag,'badge'));card.append(tags,text('h3','Evidence'));const evidence=text('ul','','evidence');for(const entry of item.evidence)evidence.append(text('li',entry));card.append(evidence,text('h3','System proposal'));const proposal=text('div','', 'proposal');proposal.append(text('strong',item.proposal.value),text('div',item.proposal.reason));card.append(proposal,text('h3','Powód przeglądu'),text('p',item.reviewReason));const existing=decisions[item.id];$('note').value=existing?.note||'';$('position').textContent=`${visibleItems.findIndex(x=>x.id===item.id)+1} / ${visibleItems.length}`;updateProgress()}
+            function render(){const card=$('itemCard');card.replaceChildren();const item=current();if(!item){card.append(text('div','Brak itemów dla wybranych filtrów.','empty'));$('position').textContent='0 / 0';$('note').value='';updateProgress();return}const head=text('div','', 'item-head');const title=document.createElement('div');title.append(text('h2',item.name),text('div',item.wiki||item.id,'muted'));const badges=text('div','', 'badges');badges.append(text('span',item.priority,'badge '+item.priority),text('span',effectiveStatus(item),'badge '+effectiveStatus(item)),text('span',item.mappingStatus==='UNMAPPED'?'BRAK WIKI':'MAPPED','badge '+item.mappingStatus));head.append(title,badges);card.append(head);card.append(text('h3','Wiki'));if(item.mappingStatus==='MAPPED'){const wiki=document.createElement('a');wiki.href='https://wiki.laina.pl/index.php?title='+encodeURIComponent(item.wiki);wiki.target='_blank';wiki.rel='noopener noreferrer';wiki.textContent='Otwórz stronę Wiki ↗';card.append(wiki)}else{card.append(text('div','Brak pewnego mapowania do Wiki.','muted'))}card.append(text('h3','Identities'));for(const identity of item.identities)card.append(text('div',`${identity.material} · CMD ${identity.cmd} · ${identity.modelPath}`,'identity'));card.append(text('h3','Zdobycie'),text('p',item.acquisition.summary));const tags=text('div','','badges');for(const tag of item.acquisition.tags)tags.append(text('span',tag,'badge'));card.append(tags,text('h3','Evidence'));const evidence=text('ul','','evidence');for(const entry of item.evidence)evidence.append(text('li',entry));card.append(evidence,text('h3','System proposal'));const proposal=text('div','', 'proposal');proposal.append(text('strong',item.proposal.value),text('div',item.proposal.reason));card.append(proposal,text('h3','Powód przeglądu'),text('p',item.reviewReason));const existing=decisions[item.id];$('note').value=existing?.note||'';$('position').textContent=`${visibleItems.findIndex(x=>x.id===item.id)+1} / ${visibleItems.length}`;updateProgress()}
             function decide(status,shards){const item=current();if(!item)return;const approved=status==='APPROVED';const decidedId=item.id;decisions[item.id]=validateDecision({status,recyclable:approved,shards,reviewed_by:$('reviewer').value.trim(),reviewed_at:new Date().toISOString(),note:$('note').value});save();applyFilters();if(currentId===decidedId)moveNext()}
             function customDecision(){const raw=$('customShards').value.trim();const shards=Number(raw);if(!/^\\d+$/.test(raw)||!Number.isInteger(shards)||shards<=0){showMessage('Custom shards musi być dodatnią liczbą całkowitą.',true);return}decide('APPROVED',shards);$('customShards').value=''}
             function move(delta){if(!visibleItems.length)return;const index=visibleItems.findIndex(item=>item.id===currentId);currentId=visibleItems[(index+delta+visibleItems.length)%visibleItems.length].id;render()}
@@ -628,7 +640,7 @@ public final class RecyclingReviewPanelGenerator {
             function resetLocal(){if(!confirm('Usunąć wszystkie lokalne decyzje? Tej operacji nie można cofnąć bez wcześniejszego eksportu.'))return;decisions={};localStorage.removeItem(STORAGE_KEY);applyFilters();showMessage('Lokalne decyzje zostały usunięte.')}
             function jump(){const query=$('jumpInput').value.trim().toLocaleLowerCase('pl');const item=QUEUE.find(x=>x.id.toLocaleLowerCase('pl')===query||x.wiki.toLocaleLowerCase('pl')===query||x.name.toLocaleLowerCase('pl')===query);if(!item){showMessage('Nie znaleziono itemu.',true);return}currentId=item.id;render()}
             function showMessage(value,error=false){$('message').textContent=value;$('message').style.color=error?'var(--red)':'var(--muted)'}
-            for(const [id,key] of [['statusFilter','status'],['priorityFilter','priority'],['proposalFilter','proposal'],['tagFilter','tag']])$(id).addEventListener('change',event=>{filters[key]=event.target.value;applyFilters()});$('search').addEventListener('input',event=>{filters.search=event.target.value;applyFilters()});document.querySelectorAll('[data-shards]').forEach(button=>button.addEventListener('click',()=>decide('APPROVED',Number(button.dataset.shards))));document.querySelector('[data-action="reject"]').addEventListener('click',()=>decide('REJECTED',0));document.querySelector('[data-action="skip"]').addEventListener('click',moveNext);$('customApprove').addEventListener('click',customDecision);$('previous').addEventListener('click',()=>move(-1));$('next').addEventListener('click',moveNext);$('nextPending').addEventListener('click',()=>nextMatching(item=>effectiveStatus(item)==='PENDING'));$('nextHigh').addEventListener('click',()=>nextMatching(item=>item.priority==='HIGH'));$('jumpButton').addEventListener('click',jump);$('jumpInput').addEventListener('keydown',event=>{if(event.key==='Enter')jump()});$('exportButton').addEventListener('click',exportDecisions);$('importButton').addEventListener('click',()=>$('importFile').click());$('importFile').addEventListener('change',event=>event.target.files[0]&&importFile(event.target.files[0]));$('resetButton').addEventListener('click',resetLocal);$('reviewer').value=sessionStorage.getItem(REVIEWER_KEY)||'';$('reviewer').addEventListener('input',event=>sessionStorage.setItem(REVIEWER_KEY,event.target.value));for(const item of QUEUE){const option=document.createElement('option');option.value=item.wiki;option.label=item.name;$('itemList').append(option)}
+            for(const [id,key] of [['statusFilter','status'],['mappingFilter','mapping'],['priorityFilter','priority'],['proposalFilter','proposal'],['tagFilter','tag']])$(id).addEventListener('change',event=>{filters[key]=event.target.value;applyFilters()});$('search').addEventListener('input',event=>{filters.search=event.target.value;applyFilters()});document.querySelectorAll('[data-shards]').forEach(button=>button.addEventListener('click',()=>decide('APPROVED',Number(button.dataset.shards))));document.querySelector('[data-action="reject"]').addEventListener('click',()=>decide('REJECTED',0));document.querySelector('[data-action="skip"]').addEventListener('click',moveNext);$('customApprove').addEventListener('click',customDecision);$('previous').addEventListener('click',()=>move(-1));$('next').addEventListener('click',moveNext);$('nextPending').addEventListener('click',()=>nextMatching(item=>effectiveStatus(item)==='PENDING'));$('nextHigh').addEventListener('click',()=>nextMatching(item=>item.priority==='HIGH'));$('jumpButton').addEventListener('click',jump);$('jumpInput').addEventListener('keydown',event=>{if(event.key==='Enter')jump()});$('exportButton').addEventListener('click',exportDecisions);$('importButton').addEventListener('click',()=>$('importFile').click());$('importFile').addEventListener('change',event=>event.target.files[0]&&importFile(event.target.files[0]));$('resetButton').addEventListener('click',resetLocal);$('reviewer').value=sessionStorage.getItem(REVIEWER_KEY)||'';$('reviewer').addEventListener('input',event=>sessionStorage.setItem(REVIEWER_KEY,event.target.value));for(const item of QUEUE){const option=document.createElement('option');option.value=item.wiki||item.id;option.label=item.name;$('itemList').append(option)}
             render();
             </script>
             </body>

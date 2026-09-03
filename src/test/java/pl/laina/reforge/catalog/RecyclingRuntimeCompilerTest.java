@@ -29,6 +29,7 @@ class RecyclingRuntimeCompilerTest {
     private static RecyclingDecisionQueueGenerator.DecisionQueue queue;
     private static RecyclingDecisionQueueGenerator.QueueItem singleIdentity;
     private static RecyclingDecisionQueueGenerator.QueueItem multipleIdentities;
+    private static RecyclingDecisionQueueGenerator.QueueItem unmappedIdentity;
 
     @TempDir
     Path temporaryDirectory;
@@ -39,6 +40,8 @@ class RecyclingRuntimeCompilerTest {
                 Path.of("generated/recycling-decision-queue.yml"), StandardCharsets.UTF_8));
         singleIdentity = queue.items().stream().filter(item -> item.identities().size() == 1).findFirst().orElseThrow();
         multipleIdentities = queue.items().stream().filter(item -> item.identities().size() > 1).findFirst().orElseThrow();
+        unmappedIdentity = queue.items().stream().filter(item -> item.mappingStatus()
+                == RecyclingDecisionQueueGenerator.MappingStatus.UNMAPPED).findFirst().orElseThrow();
     }
 
     @Test
@@ -69,6 +72,18 @@ class RecyclingRuntimeCompilerTest {
     }
 
     @Test
+    void compilesHumanDecisionForUnmappedIdentity() {
+        var compilation = RecyclingRuntimeCompiler.compile(queue,
+                Map.of(unmappedIdentity.logicalId(), approved(2)));
+        var identity = unmappedIdentity.identities().getFirst();
+        var result = compilation.registry().lookup(new RuntimeItemIdentity(identity.material(), identity.cmd()));
+
+        assertEquals(RecyclingLookupResult.Status.APPROVED, result.status());
+        assertEquals(2, result.shards());
+        assertEquals(unmappedIdentity.logicalId(), result.sourceItem());
+    }
+
+    @Test
     void pendingUnknownAndInvalidSemanticsRejectWholeCompilation() {
         assertThrows(IllegalArgumentException.class, () -> RecyclingRuntimeCompiler.compile(queue,
                 Map.of(singleIdentity.logicalId(), decision(PENDING, null, null))));
@@ -96,7 +111,8 @@ class RecyclingRuntimeCompilerTest {
         var first = queue.items().get(0);
         var secondOriginal = queue.items().get(1);
         var second = new RecyclingDecisionQueueGenerator.QueueItem(
-                secondOriginal.logicalId(), secondOriginal.name(), secondOriginal.wiki(), secondOriginal.priority(),
+                secondOriginal.logicalId(), secondOriginal.name(), secondOriginal.wiki(),
+                secondOriginal.mappingStatus(), secondOriginal.priority(),
                 secondOriginal.reviewReason(), first.identities(), secondOriginal.acquisition(),
                 secondOriginal.evidence(), secondOriginal.systemProposal(), secondOriginal.decision());
         var invalidQueue = new RecyclingDecisionQueueGenerator.DecisionQueue(java.util.List.of(first, second));

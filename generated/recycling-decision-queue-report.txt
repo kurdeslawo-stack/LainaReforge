@@ -1,24 +1,28 @@
 Recycling Decision Queue Report
 ================================
 
-Logical items: 691
-Identity material+CMD: 858
+Logical items: 1590
+Identity material+CMD: 1757
+MAPPED logical items: 691
+UNMAPPED logical items: 899
+Mapped identities: 858
+Unmapped identities: 899
 
 Priority distribution
 ---------------------
 - HIGH: 176
 - MEDIUM: 420
-- LOW: 95
+- LOW: 994
 
 System proposal distribution
 ----------------------------
 - YES: 0
 - NO: 68
-- UNKNOWN: 623
+- UNKNOWN: 1522
 
 Decision status distribution
 ----------------------------
-- PENDING: 691
+- PENDING: 1590
 - APPROVED: 0
 - REJECTED: 0
 

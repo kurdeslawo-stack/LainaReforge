@@ -64,7 +64,7 @@ public final class RecyclingDecisionQueueGenerator {
 
             DecisionQueue queue = generate(catalog, analysis, manualReview);
             RecyclingDecisionQueueValidator.ValidationResult validation =
-                    RecyclingDecisionQueueValidator.validate(queue, analysis.items());
+                    RecyclingDecisionQueueValidator.validate(queue, analysis.items(), catalog.records());
 
             writeUtf8Atomic(options.output(), renderQueue(queue));
             writeUtf8Atomic(options.report(), renderReport(queue, validation));
@@ -123,6 +123,7 @@ public final class RecyclingDecisionQueueGenerator {
                     source.logicalId(),
                     source.name(),
                     source.wiki(),
+                    MappingStatus.MAPPED,
                     priority,
                     reviewReason(source, priority, manualMultiSource),
                     identities,
@@ -132,8 +133,35 @@ public final class RecyclingDecisionQueueGenerator {
                     Decision.pending()));
         }
 
+        for (ItemEconomyAnalyzer.CatalogRecord record : catalog.records()) {
+            if (record.mapped()) {
+                continue;
+            }
+            Identity identity = new Identity(record.material(), record.cmd(), record.modelPath());
+            queueItems.add(new QueueItem(
+                    "unmapped::" + identity.key(),
+                    fallbackName(record),
+                    "",
+                    MappingStatus.UNMAPPED,
+                    Priority.LOW,
+                    "Brak pewnego mapowania do Wiki. Wymagana ręczna decyzja.",
+                    List.of(identity),
+                    new Acquisition("UNKNOWN", Set.of("UNKNOWN")),
+                    List.of(),
+                    new SystemProposal(SystemProposalValue.UNKNOWN, "Brak pewnych danych z Wiki."),
+                    Decision.pending()));
+        }
+
         queueItems.sort(QueueItem.COMPARATOR);
         return new DecisionQueue(queueItems);
+    }
+
+    private static String fallbackName(ItemEconomyAnalyzer.CatalogRecord record) {
+        String path = record.modelPath();
+        int separator = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+        String basename = separator >= 0 ? path.substring(separator + 1) : path;
+        String fallback = basename.replace('_', ' ').replace('-', ' ').replaceAll("\\s+", " ").trim();
+        return fallback.isBlank() ? record.material() + " " + record.cmd() : fallback;
     }
 
     private static Priority priority(AnalysisItem item, boolean manualMultiSource) {
@@ -174,6 +202,7 @@ public final class RecyclingDecisionQueueGenerator {
             yaml.append("  ").append(yamlQuote(item.logicalId())).append(":\n");
             yaml.append("    name: ").append(yamlQuote(item.name())).append('\n');
             yaml.append("    wiki: ").append(yamlQuote(item.wiki())).append('\n');
+            yaml.append("    mapping_status: ").append(item.mappingStatus()).append('\n');
             yaml.append("    priority: ").append(item.priority()).append('\n');
             yaml.append("    review_reason: ").append(yamlQuote(item.reviewReason())).append('\n');
             yaml.append("    identities:\n");
@@ -209,7 +238,11 @@ public final class RecyclingDecisionQueueGenerator {
         StringBuilder report = new StringBuilder();
         report.append("Recycling Decision Queue Report\n================================\n\n");
         report.append("Logical items: ").append(queue.items().size()).append('\n');
-        report.append("Identity material+CMD: ").append(queue.identityCount()).append("\n\n");
+        report.append("Identity material+CMD: ").append(queue.identityCount()).append('\n');
+        report.append("MAPPED logical items: ").append(queue.mappingCounts().get(MappingStatus.MAPPED)).append('\n');
+        report.append("UNMAPPED logical items: ").append(queue.mappingCounts().get(MappingStatus.UNMAPPED)).append('\n');
+        report.append("Mapped identities: ").append(queue.mappedIdentityCount()).append('\n');
+        report.append("Unmapped identities: ").append(queue.unmappedIdentityCount()).append("\n\n");
         report.append("Priority distribution\n---------------------\n");
         for (Priority priority : Priority.values()) {
             report.append("- ").append(priority).append(": ").append(queue.priorityCounts().get(priority)).append('\n');
@@ -490,6 +523,7 @@ public final class RecyclingDecisionQueueGenerator {
             String logicalId,
             String name,
             String wiki,
+            MappingStatus mappingStatus,
             Priority priority,
             String reviewReason,
             List<Identity> identities,
@@ -504,6 +538,7 @@ public final class RecyclingDecisionQueueGenerator {
                 .thenComparing(QueueItem::logicalId);
 
         public QueueItem {
+            mappingStatus = java.util.Objects.requireNonNull(mappingStatus, "mappingStatus");
             identities = identities.stream().sorted(Identity.COMPARATOR).toList();
             evidence = List.copyOf(evidence);
         }
@@ -516,6 +551,25 @@ public final class RecyclingDecisionQueueGenerator {
 
         int identityCount() {
             return items.stream().mapToInt(item -> item.identities().size()).sum();
+        }
+
+        int mappedIdentityCount() {
+            return identityCount(MappingStatus.MAPPED);
+        }
+
+        int unmappedIdentityCount() {
+            return identityCount(MappingStatus.UNMAPPED);
+        }
+
+        private int identityCount(MappingStatus status) {
+            return items.stream().filter(item -> item.mappingStatus() == status)
+                    .mapToInt(item -> item.identities().size()).sum();
+        }
+
+        Map<MappingStatus, Integer> mappingCounts() {
+            Map<MappingStatus, Integer> counts = initializedCounts(MappingStatus.values());
+            items.forEach(item -> counts.put(item.mappingStatus(), counts.get(item.mappingStatus()) + 1));
+            return counts;
         }
 
         Map<Priority, Integer> priorityCounts() {
@@ -547,6 +601,8 @@ public final class RecyclingDecisionQueueGenerator {
     }
 
     public enum Priority { HIGH, MEDIUM, LOW }
+
+    public enum MappingStatus { MAPPED, UNMAPPED }
 
     public enum SystemProposalValue { YES, NO, UNKNOWN }
 

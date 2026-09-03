@@ -1,13 +1,16 @@
 Recycling Review Panel Report
 =============================
 
-Logical items: 691
-Identities: 858
+Logical items: 1590
+Identities: 1757
+Mapped identities: 858
+Unmapped identities: 899
+Coverage: 1757 / 1757
 HIGH: 176
 MEDIUM: 420
-LOW: 95
+LOW: 994
 Generated HTML: generated/recycling-review-panel/index.html
-HTML size (UTF-8 bytes): 476730
+HTML size (UTF-8 bytes): 895946
 Validation errors: 0
 Duplicate identities: 0
 Generator self-tests: PASS
