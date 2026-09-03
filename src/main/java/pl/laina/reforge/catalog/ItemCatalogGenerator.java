@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -209,6 +211,7 @@ public final class ItemCatalogGenerator {
                                 new CatalogKey(material, cmd),
                                 primaryPath,
                                 List.copyOf(allModelPaths),
+                                fingerprint(modelEntry),
                                 location));
                     }
                 }
@@ -234,7 +237,8 @@ public final class ItemCatalogGenerator {
                 continue;
             }
 
-            if (previous.modelPaths().equals(definition.modelPaths())) {
+            if (previous.modelPaths().equals(definition.modelPaths())
+                    && previous.fingerprint().equals(definition.fingerprint())) {
                 duplicates.add(formatKey(definition.key()) + " -> " + definition.primaryModelPath()
                         + " (" + previous.source() + ", " + definition.source() + ")");
             } else {
@@ -253,7 +257,8 @@ public final class ItemCatalogGenerator {
                         inferType(definition.key().material(), definition.primaryModelPath()),
                         "",
                         "",
-                        0))
+                        0,
+                        definition.fingerprint()))
                 .sorted(ITEM_ORDER)
                 .toList();
 
@@ -527,6 +532,42 @@ public final class ItemCatalogGenerator {
                 .replace("\t", "\\t") + '"';
     }
 
+    private static String fingerprint(Object definition) {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256")
+                    .digest(canonicalJson(definition).getBytes(StandardCharsets.UTF_8));
+            return java.util.HexFormat.of().formatHex(digest);
+        } catch (NoSuchAlgorithmException exception) {
+            throw new IllegalStateException("SHA-256 is unavailable", exception);
+        }
+    }
+
+    private static String canonicalJson(Object value) {
+        if (value == null) {
+            return "null";
+        }
+        if (value instanceof String text) {
+            return '"' + text.replace("\\", "\\\\").replace("\"", "\\\"") + '"';
+        }
+        if (value instanceof BigDecimal number) {
+            return number.stripTrailingZeros().toPlainString();
+        }
+        if (value instanceof Boolean bool) {
+            return bool.toString();
+        }
+        if (value instanceof List<?> list) {
+            return list.stream().map(ItemCatalogGenerator::canonicalJson)
+                    .collect(java.util.stream.Collectors.joining(",", "[", "]"));
+        }
+        if (value instanceof Map<?, ?> map) {
+            return map.entrySet().stream()
+                    .sorted(Comparator.comparing(entry -> entry.getKey().toString()))
+                    .map(entry -> canonicalJson(entry.getKey().toString()) + ":" + canonicalJson(entry.getValue()))
+                    .collect(java.util.stream.Collectors.joining(",", "{", "}"));
+        }
+        throw new IllegalArgumentException("Unsupported fingerprint value: " + value.getClass().getName());
+    }
+
     private static void appendSection(StringBuilder report, String title, List<String> values) {
         report.append(title).append('\n');
         report.append("-".repeat(title.length())).append('\n');
@@ -562,8 +603,13 @@ public final class ItemCatalogGenerator {
             String type,
             String wiki,
             String name,
-            int shards
+            int shards,
+            String fingerprint
     ) {
+        public CatalogItem(String material, int cmd, String model, String modelPath, String type,
+                           String wiki, String name, int shards) {
+            this(material, cmd, model, modelPath, type, wiki, name, shards, "");
+        }
     }
 
     public record GenerationResult(
@@ -611,6 +657,7 @@ public final class ItemCatalogGenerator {
             CatalogKey key,
             String primaryModelPath,
             List<String> modelPaths,
+            String fingerprint,
             String source
     ) {
     }

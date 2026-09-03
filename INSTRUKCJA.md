@@ -518,6 +518,24 @@ i sprawdzić poprawny oraz zablokowany item.
 
 ---
 
+## 17. Aktualizacja katalogu po zmianie items.zip
+
+Przed zastosowaniem nowego ZIP-a wykonaj bezpieczny podgląd zmian:
+
+```powershell
+.\tools\update-item-catalog.ps1 -ItemsZip .\items.zip -DryRun
+```
+
+Raport klasyfikuje identity jako `UNCHANGED`, `NEW`, `CHANGED` albo `REMOVED`. Po
+sprawdzeniu wyniku uruchom tę samą komendę bez `-DryRun`. Aktualizacja katalogu,
+snapshotu, kolejki i panelu jest atomowa.
+
+`NEW` oraz `CHANGED` zawsze wymagają ręcznej decyzji. Zmieniony `material+CMD` nie
+dziedziczy poprzedniego zatwierdzenia ani liczby shardów. Szczegóły workflow opisuje
+`tools/catalog-evolution.md`.
+
+---
+
 # TL;DR
 
 Jeżeli interesuje Cię tylko normalna obsługa systemu:

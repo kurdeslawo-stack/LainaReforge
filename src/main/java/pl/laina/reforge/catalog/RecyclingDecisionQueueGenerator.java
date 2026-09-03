@@ -203,6 +203,11 @@ public final class RecyclingDecisionQueueGenerator {
             yaml.append("    name: ").append(yamlQuote(item.name())).append('\n');
             yaml.append("    wiki: ").append(yamlQuote(item.wiki())).append('\n');
             yaml.append("    mapping_status: ").append(item.mappingStatus()).append('\n');
+            yaml.append("    catalog_status: ").append(item.catalogEvolution().status()).append('\n');
+            yaml.append("    before_model_path: ")
+                    .append(nullableQuoted(item.catalogEvolution().beforeModelPath())).append('\n');
+            yaml.append("    previous_logical_id: ")
+                    .append(nullableQuoted(item.catalogEvolution().previousLogicalId())).append('\n');
             yaml.append("    priority: ").append(item.priority()).append('\n');
             yaml.append("    review_reason: ").append(yamlQuote(item.reviewReason())).append('\n');
             yaml.append("    identities:\n");
@@ -530,6 +535,7 @@ public final class RecyclingDecisionQueueGenerator {
             Acquisition acquisition,
             List<String> evidence,
             SystemProposal systemProposal,
+            CatalogEvolution catalogEvolution,
             Decision decision
     ) {
         static final Comparator<QueueItem> COMPARATOR = Comparator.comparing(QueueItem::priority)
@@ -539,8 +545,17 @@ public final class RecyclingDecisionQueueGenerator {
 
         public QueueItem {
             mappingStatus = java.util.Objects.requireNonNull(mappingStatus, "mappingStatus");
+            catalogEvolution = java.util.Objects.requireNonNull(catalogEvolution, "catalogEvolution");
             identities = identities.stream().sorted(Identity.COMPARATOR).toList();
             evidence = List.copyOf(evidence);
+        }
+
+        public QueueItem(String logicalId, String name, String wiki, MappingStatus mappingStatus,
+                         Priority priority, String reviewReason, List<Identity> identities,
+                         Acquisition acquisition, List<String> evidence, SystemProposal systemProposal,
+                         Decision decision) {
+            this(logicalId, name, wiki, mappingStatus, priority, reviewReason, identities, acquisition,
+                    evidence, systemProposal, CatalogEvolution.unchanged(), decision);
         }
     }
 
@@ -603,6 +618,14 @@ public final class RecyclingDecisionQueueGenerator {
     public enum Priority { HIGH, MEDIUM, LOW }
 
     public enum MappingStatus { MAPPED, UNMAPPED }
+
+    public enum CatalogStatus { UNCHANGED, NEW, CHANGED }
+
+    public record CatalogEvolution(CatalogStatus status, String beforeModelPath, String previousLogicalId) {
+        static CatalogEvolution unchanged() {
+            return new CatalogEvolution(CatalogStatus.UNCHANGED, null, null);
+        }
+    }
 
     public enum SystemProposalValue { YES, NO, UNKNOWN }
 

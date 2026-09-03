@@ -394,6 +394,58 @@ class RecyclingReviewPanelGeneratorTest {
     }
 
     @Test
+    void panelExposesNewAndChangedReviewWorkflow() {
+        var source = queue.items().getFirst();
+        var changed = new RecyclingDecisionQueueGenerator.QueueItem(
+                "changed::" + source.identities().getFirst().key(), source.name(), "",
+                RecyclingDecisionQueueGenerator.MappingStatus.UNMAPPED,
+                RecyclingDecisionQueueGenerator.Priority.LOW,
+                "Definicja techniczna itemu uległa zmianie. Wymagany ponowny review.",
+                java.util.List.of(source.identities().getFirst()),
+                new RecyclingDecisionQueueGenerator.Acquisition("UNKNOWN", Set.of("UNKNOWN")),
+                java.util.List.of(),
+                new RecyclingDecisionQueueGenerator.SystemProposal(
+                        RecyclingDecisionQueueGenerator.SystemProposalValue.UNKNOWN, "Brak danych."),
+                new RecyclingDecisionQueueGenerator.CatalogEvolution(
+                        RecyclingDecisionQueueGenerator.CatalogStatus.CHANGED,
+                        "before/model", source.logicalId()),
+                RecyclingDecisionQueueGenerator.Decision.pending());
+        String html = RecyclingReviewPanelGenerator.renderPanel(
+                new RecyclingDecisionQueueGenerator.DecisionQueue(java.util.List.of(changed)));
+
+        assertTrue(html.contains("Nowe i zmienione"));
+        assertTrue(html.contains("NOWY ITEM"));
+        assertTrue(html.contains("ZMIENIONY ITEM"));
+        assertTrue(html.contains("\"catalogStatus\":\"CHANGED\""));
+        assertTrue(html.contains("\"beforeModelPath\":\"before/model\""));
+        assertTrue(html.contains("reconcileCatalogChanges()"));
+        assertTrue(html.contains("action:'CATALOG_CHANGED'"));
+        assertTrue(html.contains("reviewed_by:''"));
+        assertTrue(html.contains("alreadyRecorded=history.some"));
+        assertFalse(html.contains("ITEM_BY_ID.has(previousId)||!decisions[previousId]"));
+    }
+
+    @Test
+    void queueEvolutionMetadataRoundTripsThroughYamlParser() {
+        var source = queue.items().getFirst();
+        var evolved = new RecyclingDecisionQueueGenerator.QueueItem(
+                source.logicalId(), source.name(), source.wiki(), source.mappingStatus(), source.priority(),
+                source.reviewReason(), source.identities(), source.acquisition(), source.evidence(),
+                source.systemProposal(), new RecyclingDecisionQueueGenerator.CatalogEvolution(
+                RecyclingDecisionQueueGenerator.CatalogStatus.CHANGED, "old/model", "old-id"),
+                source.decision());
+
+        var parsed = RecyclingReviewPanelGenerator.parseQueue(
+                RecyclingDecisionQueueGenerator.renderQueue(
+                        new RecyclingDecisionQueueGenerator.DecisionQueue(java.util.List.of(evolved))));
+
+        assertEquals(RecyclingDecisionQueueGenerator.CatalogStatus.CHANGED,
+                parsed.items().getFirst().catalogEvolution().status());
+        assertEquals("old/model", parsed.items().getFirst().catalogEvolution().beforeModelPath());
+        assertEquals("old-id", parsed.items().getFirst().catalogEvolution().previousLogicalId());
+    }
+
+    @Test
     void panelIsSelfContainedAndOffersRequiredActions() {
         String html = RecyclingReviewPanelGenerator.renderPanel(queue);
 

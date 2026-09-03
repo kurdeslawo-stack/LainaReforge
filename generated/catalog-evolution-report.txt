@@ -1,0 +1,19 @@
+Catalog Evolution Report
+========================
+
+UNCHANGED: 1757
+NEW: 0
+CHANGED: 0
+REMOVED: 0
+
+NEW
+---
+- none
+
+CHANGED
+-------
+- none
+
+REMOVED
+-------
+- none

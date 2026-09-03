@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.AnalysisItem;
+import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.CatalogStatus;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.Decision;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionQueue;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionStatus;
@@ -51,6 +52,7 @@ public final class RecyclingDecisionQueueValidator {
             if (item.mappingStatus() == MappingStatus.UNMAPPED) {
                 validateUnmapped(item, errors);
             }
+            validateCatalogEvolution(item, errors);
             if (item.identities().isEmpty()) {
                 errors.add(error("MISSING_IDENTITIES", item.logicalId(),
                         "Queue item must contain at least one identity."));
@@ -105,7 +107,7 @@ public final class RecyclingDecisionQueueValidator {
         if (item.identities().size() != 1) {
             errors.add(error("UNMAPPED_IDENTITY_COUNT", item.logicalId(),
                     "UNMAPPED item must contain exactly one identity."));
-        } else if (!item.logicalId().equals("unmapped::" + item.identities().getFirst().key())) {
+        } else if (!validUnmappedLogicalId(item)) {
             errors.add(error("UNMAPPED_LOGICAL_ID", item.logicalId(),
                     "UNMAPPED logical id must be derived from material+CMD."));
         }
@@ -116,6 +118,38 @@ public final class RecyclingDecisionQueueValidator {
                 != RecyclingDecisionQueueGenerator.SystemProposalValue.UNKNOWN) {
             errors.add(error("UNMAPPED_UNSAFE_DEFAULTS", item.logicalId(),
                     "UNMAPPED item must retain LOW/UNKNOWN conservative defaults."));
+        }
+    }
+
+    private static boolean validUnmappedLogicalId(QueueItem item) {
+        String identityKey = item.identities().getFirst().key();
+        if (item.logicalId().equals("unmapped::" + identityKey)) {
+            return true;
+        }
+        String changedPrefix = "changed::" + identityKey + "::";
+        return item.catalogEvolution().status() == CatalogStatus.CHANGED
+                && item.logicalId().startsWith(changedPrefix)
+                && item.logicalId().length() > changedPrefix.length();
+    }
+
+    private static void validateCatalogEvolution(QueueItem item, List<ValidationError> errors) {
+        CatalogStatus status = item.catalogEvolution().status();
+        if (status == CatalogStatus.UNCHANGED) {
+            return;
+        }
+        if (item.mappingStatus() != MappingStatus.UNMAPPED || item.identities().size() != 1
+                || item.decision().status() != DecisionStatus.PENDING) {
+            errors.add(error("CATALOG_CHANGE_UNSAFE_DEFAULTS", item.logicalId(),
+                    "NEW/CHANGED item must be a single UNMAPPED identity with PENDING decision."));
+        }
+        if (status == CatalogStatus.NEW && item.catalogEvolution().beforeModelPath() != null) {
+            errors.add(error("NEW_HAS_BEFORE_MODEL", item.logicalId(), "NEW item cannot have before_model_path."));
+        }
+        if (status == CatalogStatus.CHANGED
+                && (item.catalogEvolution().beforeModelPath() == null
+                || item.catalogEvolution().beforeModelPath().isBlank())) {
+            errors.add(error("CHANGED_MISSING_BEFORE_MODEL", item.logicalId(),
+                    "CHANGED item requires before_model_path."));
         }
     }
 
