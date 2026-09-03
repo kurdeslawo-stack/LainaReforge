@@ -62,6 +62,24 @@ import nadpisze istniejące lokalne decyzje.
 wymaga dwóch potwierdzeń. Nie usuwa historii. Osobny **RESET HISTORY** wymaga dwóch
 potwierdzeń i nie zmienia aktualnego snapshotu decyzji. Przed resetem warto wykonać backup.
 
+## Economy Review Assistant
+
+Sekcja **Podobne itemy** dobiera maksymalnie osiem pozycji według jawnego,
+deterministycznego podobieństwa typu technicznego, grupy `model_path`, tagów zdobycia,
+statusu mappingu i system proposal. Statystyki porównawcze są pokazywane dopiero dla
+co najmniej trzech zatwierdzonych podobnych itemów.
+
+Kliknięcie wartości 1–5 albo wpisanie custom shards tylko przygotowuje analizę. Decyzja
+`APPROVED` powstaje dopiero po osobnym kliknięciu **ZAPISZ APPROVED**. Ostrzeżenia
+`OUTLIER HIGH`, `OUTLIER LOW` oraz `HIGH ECONOMY RISK` są informacyjne i nigdy nie
+zmieniają decyzji ani wyceny.
+
+Kolejka **Podejrzane wyceny** zbiera zapisane decyzje odstające od podobnych pozycji.
+Zakładka **Ekonomia** pokazuje rozkład zatwierdzonych wycen, medianę, średnią, skrajne
+wartości, outliery i liczbę pozycji wysokiego ryzyka. Kalkulator sprawdza symulowaną
+sumę względem wspólnych limitów runtime: 256 shards na item oraz 4096 na transakcję.
+Oglądanie analiz, zmiana filtrów i używanie kalkulatora nie tworzą historii decyzji.
+
 ## Ograniczenia
 
 - brak backendu, REST API i bazy danych;
