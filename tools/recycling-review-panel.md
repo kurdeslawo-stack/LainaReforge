@@ -1,6 +1,6 @@
 # Recycling Review Panel
 
-Panel jest lokalnym, samodzielnym narzędziem do ręcznego przeglądu kolejki ETAPU 4.
+Panel jest lokalnym, samodzielnym narzędziem do ręcznego przeglądu pełnej kolejki katalogu.
 Nie jest częścią runtime pluginu i nie zapisuje do `items.yml`.
 
 Panel obejmuje cały katalog: wpisy `MAPPED` zachowują dane Wiki i ekonomii, natomiast każdy
@@ -32,15 +32,28 @@ na sesję przeglądarki. Sam plik kolejki pozostaje tylko do odczytu.
 
 Regularnie używaj **EXPORT DECISIONS**, aby pobrać `recycling-decisions.yml`.
 Eksport zawiera wyłącznie podjęte decyzje `APPROVED` i `REJECTED`; pominięte oraz
-nieprzejrzane wpisy nie są eksportowane.
+nieprzejrzane wpisy nie są eksportowane. Przed pobraniem panel pokazuje podsumowanie
+i ostrzega, że brakujące decyzje pozostaną `NOT_CONFIGURED`. **BACKUP DECISIONS**
+zapisuje ten sam walidowany format bez zmiany lokalnych danych.
+
+Szybkie kolejki pozwalają przejść do pozycji `PENDING`, `HIGH`, `MAPPED`, `UNMAPPED`,
+`APPROVED` lub `REJECTED`. Skróty klawiaturowe poza polami formularza:
+
+- `A` — przenosi fokus do wyboru shards (nie zatwierdza automatycznie);
+- `R` — odrzuca bieżący item;
+- `S` — pomija bieżący item;
+- `←` / `→` — poprzedni / następny item.
+
+Wartość custom shards musi być liczbą całkowitą od 1 do 256. Zmiana istniejącej
+decyzji jest jawna i zapisuje nowy czas `reviewed_at`.
 
 **IMPORT DECISIONS** przyjmuje plik wygenerowany przez panel. Import jest
 odrzucany w całości, jeśli zawiera nieznany item, brakujące lub nadmiarowe pola,
 duplikaty albo niepoprawną semantykę decyzji. Panel prosi o potwierdzenie, kiedy
 import nadpisze istniejące lokalne decyzje.
 
-**RESET LOCAL DECISIONS** usuwa wszystkie decyzje zapisane pod kluczem panelu po
-wyraźnym potwierdzeniu. Przed resetem warto wykonać eksport.
+**RESET LOCAL DECISIONS** pokazuje liczbę usuwanych decyzji i, jeśli są zapisane,
+wymaga dwóch potwierdzeń. Przed resetem warto wykonać backup.
 
 ## Ograniczenia
 

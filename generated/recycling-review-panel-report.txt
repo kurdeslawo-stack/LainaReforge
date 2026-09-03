@@ -10,7 +10,7 @@ HIGH: 176
 MEDIUM: 420
 LOW: 994
 Generated HTML: generated/recycling-review-panel/index.html
-HTML size (UTF-8 bytes): 895946
+HTML size (UTF-8 bytes): 903927
 Validation errors: 0
 Duplicate identities: 0
 Generator self-tests: PASS

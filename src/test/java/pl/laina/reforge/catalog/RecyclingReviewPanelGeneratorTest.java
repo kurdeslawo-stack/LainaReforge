@@ -80,13 +80,25 @@ class RecyclingReviewPanelGeneratorTest {
     }
 
     @Test
+    void customShardSafetyAcceptsBoundaryValues() {
+        assertEquals(1, approved(1, "2026-09-02T18:00:00Z").shards());
+        assertEquals(256, approved(256, "2026-09-02T18:00:00Z").shards());
+    }
+
+    @Test
+    void customShardSafetyRejectsValuesOutsideBoundary() {
+        assertThrows(IllegalArgumentException.class, () -> approved(0, "2026-09-02T18:00:00Z"));
+        assertThrows(IllegalArgumentException.class, () -> approved(257, "2026-09-02T18:00:00Z"));
+    }
+
+    @Test
     void invalidCustomShardsAreRejected() {
         assertThrows(IllegalArgumentException.class, () -> RecyclingReviewPanelGenerator.validateReviewDecision(
                 "APPROVED", true, 0, "", "2026-09-02T18:00:00Z", ""));
         assertThrows(IllegalArgumentException.class, () -> RecyclingReviewPanelGenerator.validateReviewDecision(
                 "APPROVED", true, -2, "", "2026-09-02T18:00:00Z", ""));
         assertTrue(RecyclingReviewPanelGenerator.renderPanel(queue)
-                .contains("Custom shards musi być dodatnią liczbą całkowitą."));
+                .contains("Podaj liczbę całkowitą od 1 do ${MAX_SHARDS_PER_ITEM}."));
     }
 
     @Test
@@ -161,6 +173,79 @@ class RecyclingReviewPanelGeneratorTest {
     }
 
     @Test
+    void progressSeparatesMappedAndUnmappedItemsAndPendingPriorities() {
+        var mapped = queue.items().stream().filter(item -> item.mappingStatus()
+                == RecyclingDecisionQueueGenerator.MappingStatus.MAPPED).findFirst().orElseThrow();
+        var unmapped = queue.items().stream().filter(item -> item.mappingStatus()
+                == RecyclingDecisionQueueGenerator.MappingStatus.UNMAPPED).findFirst().orElseThrow();
+        var progress = RecyclingReviewPanelGenerator.calculateProgress(queue, Map.of(
+                mapped.logicalId(), approved(1, "2026-09-02T18:00:00Z"),
+                unmapped.logicalId(), RecyclingReviewPanelGenerator.validateReviewDecision(
+                        "REJECTED", false, 0, "", "2026-09-02T18:01:00Z", "")));
+
+        assertEquals(2, progress.reviewed());
+        assertEquals(1588, progress.pending());
+        assertEquals(1, progress.mappedReviewed());
+        assertEquals(691, progress.mappedTotal());
+        assertEquals(1, progress.unmappedReviewed());
+        assertEquals(899, progress.unmappedTotal());
+        assertEquals(progress.pending(), progress.highPending() + progress.mediumPending() + progress.lowPending());
+        assertTrue(progress.partialExport());
+    }
+
+    @Test
+    void completedProgressDoesNotNeedPartialExportWarning() {
+        Map<String, RecyclingReviewPanelGenerator.ReviewDecision> decisions = queue.items().stream()
+                .collect(Collectors.toMap(RecyclingDecisionQueueGenerator.QueueItem::logicalId,
+                        item -> approved(1, "2026-09-02T18:00:00Z")));
+
+        assertFalse(RecyclingReviewPanelGenerator.calculateProgress(queue, decisions).partialExport());
+    }
+
+    @Test
+    void searchFindsLogicalIdAndMaterialCmdIdentity() {
+        var item = queue.items().get(0);
+        var identity = item.identities().get(0);
+
+        assertTrue(RecyclingReviewPanelGenerator.matchesSearch(item, item.logicalId()));
+        assertTrue(RecyclingReviewPanelGenerator.matchesSearch(item,
+                identity.material() + ":" + identity.cmd()));
+        assertFalse(RecyclingReviewPanelGenerator.matchesSearch(item, "definitely-not-an-item"));
+    }
+
+    @Test
+    void editingDecisionCreatesFreshReviewTimestamp() {
+        var before = approved(2, "2026-09-02T18:00:00Z");
+        var after = approved(4, "2026-09-02T18:05:00Z");
+
+        assertEquals(2, before.shards());
+        assertEquals(4, after.shards());
+        assertFalse(before.reviewedAt().equals(after.reviewedAt()));
+    }
+
+    @Test
+    void panelIncludesResetAndExportSafetyWorkflow() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertTrue(html.contains("Reset usunie ${count} lokalnych decyzji"));
+        assertTrue(html.contains("Potwierdź ponownie: usunąć wszystkie lokalne decyzje?"));
+        assertTrue(html.contains("Ten eksport nie obejmuje wszystkich itemów."));
+        assertTrue(html.contains("BACKUP DECISIONS"));
+        assertTrue(html.contains("LAST_CHANGE_KEY"));
+    }
+
+    @Test
+    void importExportFormatRemainsRoundTripCompatible() {
+        String yaml = validImport("Epicki_Szlamowy_Miecz");
+        var first = RecyclingReviewPanelGenerator.parseDecisionImport(yaml, logicalIds());
+        var decision = first.get("Epicki_Szlamowy_Miecz");
+        String exported = validImport("Epicki_Szlamowy_Miecz")
+                .replace("shards: 3", "shards: " + decision.shards());
+
+        assertEquals(first, RecyclingReviewPanelGenerator.parseDecisionImport(exported, logicalIds()));
+    }
+
+    @Test
     void panelIsSelfContainedAndOffersRequiredActions() {
         String html = RecyclingReviewPanelGenerator.renderPanel(queue);
 
@@ -178,6 +263,11 @@ class RecyclingReviewPanelGeneratorTest {
         assertTrue(html.contains("Coverage</span><b>1757 / 1757</b>"));
         assertTrue(html.contains("BRAK WIKI"));
         assertTrue(html.contains("if(item.mappingStatus==='MAPPED')"));
+        assertTrue(html.contains("min=\"1\" max=\"256\""));
+        assertTrue(html.contains("Następny wymagający decyzji"));
+        assertTrue(html.contains("data-queue=\"UNMAPPED\""));
+        assertTrue(html.contains("Globalnie ${GLOBAL_INDEX.get(item.id)}"));
+        assertTrue(html.contains("event.key==='a'||event.key==='A'"));
         assertFalse(html.contains("fetch("));
         assertFalse(html.contains("<script src="));
         assertFalse(html.contains("<link rel=\"stylesheet\""));
@@ -209,6 +299,11 @@ class RecyclingReviewPanelGeneratorTest {
     private static Set<String> logicalIds() {
         return queue.items().stream().map(RecyclingDecisionQueueGenerator.QueueItem::logicalId)
                 .collect(Collectors.toUnmodifiableSet());
+    }
+
+    private static RecyclingReviewPanelGenerator.ReviewDecision approved(int shards, String reviewedAt) {
+        return RecyclingReviewPanelGenerator.validateReviewDecision(
+                "APPROVED", true, shards, "reviewer", reviewedAt, "");
     }
 
     private static String validImport(String logicalId) {
