@@ -1,0 +1,3 @@
+# Replace this file with an export from the ETAP 5 review panel, then run the compiler.
+# An empty decision set intentionally produces a fail-closed runtime registry.
+items:

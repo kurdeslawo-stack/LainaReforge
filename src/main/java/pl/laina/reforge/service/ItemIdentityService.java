@@ -6,6 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import pl.laina.reforge.LainaReforgePlugin;
+import pl.laina.reforge.runtime.RuntimeItemIdentity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,23 @@ public final class ItemIdentityService {
         }
 
         return Optional.empty();
+    }
+
+    /** Uses the same identity boundary for the approved material+CMD runtime registry. */
+    public Optional<RuntimeItemIdentity> identifyRuntime(ItemStack item) {
+        if (item == null || item.getType().isAir()) {
+            return Optional.empty();
+        }
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null || !meta.hasCustomModelData()) {
+            return Optional.empty();
+        }
+        try {
+            return Optional.of(new RuntimeItemIdentity(
+                    item.getType().getKey().getKey(), meta.getCustomModelData()));
+        } catch (IllegalArgumentException exception) {
+            return Optional.empty();
+        }
     }
 
     public boolean applyDevId(ItemStack item, String itemId) {
@@ -138,6 +156,10 @@ public final class ItemIdentityService {
         identify(item).ifPresentOrElse(
                 id -> lines.add("LainaReforge ID: " + id),
                 () -> lines.add("LainaReforge ID: nierozpoznany")
+        );
+        identifyRuntime(item).ifPresentOrElse(
+                id -> lines.add("Runtime material+CMD: " + id.key()),
+                () -> lines.add("Runtime material+CMD: niepoprawne lub brak CMD")
         );
         return lines;
     }

@@ -3,6 +3,8 @@ package pl.laina.reforge.rules;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.Test;
+import pl.laina.reforge.runtime.ApprovedRecyclingRegistryLoader;
+import pl.laina.reforge.runtime.RuntimeItemIdentity;
 
 import java.util.Map;
 import java.util.Set;
@@ -148,12 +150,89 @@ class RecyclingRulesEngineTest {
                 RecyclingReasonCode.valueOf("BLOCKED_EXPLICIT_ITEM"));
     }
 
+    @Test
+    void approvedRegistryIsEconomicSourceOfTruthWithExactPayout() throws Exception {
+        ApprovedRecyclingRegistryLoader registry = registry("""
+                items:
+                  "diamond_sword:123":
+                    recyclable: true
+                    shards: 5
+                    source_item: "Approved_Item"
+                    model_path: "swords/approved"
+                """);
+        RecyclingDecision decision = new RecyclingRulesEngine(configuration(validYaml()), registry)
+                .evaluate(RuleEvaluationInput.runtimeIdentified(
+                        "explicit_deny", new RuntimeItemIdentity("diamond_sword", 123)));
+
+        assertTrue(decision.recyclable());
+        assertEquals(5, decision.shardValue());
+        assertEquals("diamond_sword:123", decision.technicalId());
+        assertEquals(RecyclingReasonCode.ALLOWED_APPROVED_DECISION, decision.reasonCode());
+        assertEquals(RecyclingRuleSource.APPROVED_DECISIONS_REGISTRY, decision.ruleSource());
+    }
+
+    @Test
+    void rejectedAndMissingRuntimeIdentitiesFailClosed() throws Exception {
+        ApprovedRecyclingRegistryLoader registry = registry("""
+                items:
+                  "bow:456":
+                    recyclable: false
+                    shards: 0
+                    source_item: "Rejected_Item"
+                    model_path: "bows/rejected"
+                """);
+        RecyclingRulesEngine engine = new RecyclingRulesEngine(configuration(validYaml()), registry);
+
+        RecyclingDecision rejected = engine.evaluate(RuleEvaluationInput.runtimeIdentified(
+                "default_item", new RuntimeItemIdentity("bow", 456)));
+        RecyclingDecision missing = engine.evaluate(RuleEvaluationInput.runtimeIdentified(
+                "default_item", new RuntimeItemIdentity("bow", 999)));
+        RecyclingDecision invalid = engine.evaluate(RuleEvaluationInput.invalidRuntimeIdentity("default_item"));
+
+        assertFalse(rejected.recyclable());
+        assertEquals(RecyclingReasonCode.BLOCKED_APPROVED_DECISION_REJECTED, rejected.reasonCode());
+        assertFalse(missing.recyclable());
+        assertTrue(missing.requiresClassification());
+        assertEquals(RecyclingReasonCode.BLOCKED_APPROVED_DECISION_NOT_CONFIGURED, missing.reasonCode());
+        assertFalse(invalid.recyclable());
+        assertEquals(RecyclingReasonCode.BLOCKED_INVALID_IDENTITY, invalid.reasonCode());
+    }
+
+    @Test
+    void legacyBlacklistRemainsHardSafetyAboveApprovedDecision() throws Exception {
+        ApprovedRecyclingRegistryLoader registry = registry("""
+                items:
+                  "diamond_sword:123":
+                    recyclable: true
+                    shards: 5
+                    source_item: "Approved_Item"
+                    model_path: "swords/approved"
+                """);
+        RecyclingDecision decision = new RecyclingRulesEngine(configuration(validYaml()), registry)
+                .evaluate(RuleEvaluationInput.runtimeIdentified(
+                        "hard_block", new RuntimeItemIdentity("diamond_sword", 123)));
+
+        assertFalse(decision.recyclable());
+        assertEquals(0, decision.shardValue());
+        assertEquals(RecyclingReasonCode.BLOCKED_BLACKLISTED_ID, decision.reasonCode());
+    }
+
     private RecyclingRulesEngine engine(String yaml) throws InvalidConfigurationException {
+        return new RecyclingRulesEngine(configuration(yaml));
+    }
+
+    private RulesConfiguration configuration(String yaml) throws InvalidConfigurationException {
         YamlConfiguration configuration = new YamlConfiguration();
         configuration.loadFromString(yaml);
         RulesConfigurationCandidate candidate = RulesConfigurationValidator.validate(configuration);
         assertTrue(candidate.report().isValid(), () -> candidate.report().issues().toString());
-        return new RecyclingRulesEngine(candidate.configuration());
+        return candidate.configuration();
+    }
+
+    private ApprovedRecyclingRegistryLoader registry(String yaml) {
+        ApprovedRecyclingRegistryLoader loader = new ApprovedRecyclingRegistryLoader();
+        assertTrue(loader.reload(yaml).activated());
+        return loader;
     }
 
     private String validYaml() {

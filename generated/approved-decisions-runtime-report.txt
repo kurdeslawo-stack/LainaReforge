@@ -1,0 +1,15 @@
+Approved Decisions Runtime Report
+=================================
+
+Logical decisions: 0
+APPROVED: 0
+REJECTED: 0
+Exported runtime identities: 0
+NOT_CONFIGURED logical items: 691
+Queue logical items: 691
+Conflicts: 0
+Validation errors: 0
+Runtime resource: src/main/resources/recycling-runtime.yml
+Last-known-good tests: PASS (Maven test suite)
+Runtime integration tests: PASS (Maven test suite)
+Shard payout tests: PASS (Maven test suite)

@@ -26,6 +26,7 @@ public record RecyclingDecision(boolean recognized,
     }
 
     public boolean requiresClassification() {
-        return reasonCode == RecyclingReasonCode.BLOCKED_PENDING_CLASSIFICATION;
+        return reasonCode == RecyclingReasonCode.BLOCKED_PENDING_CLASSIFICATION
+                || reasonCode == RecyclingReasonCode.BLOCKED_APPROVED_DECISION_NOT_CONFIGURED;
     }
 }

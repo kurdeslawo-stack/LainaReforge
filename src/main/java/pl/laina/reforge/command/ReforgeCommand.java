@@ -20,6 +20,8 @@ import pl.laina.reforge.rules.RuleEvaluationInput;
 import pl.laina.reforge.rules.RulesConfiguration;
 import pl.laina.reforge.rules.RulesConfigurationCandidate;
 import pl.laina.reforge.rules.RulesConfigurationService;
+import pl.laina.reforge.runtime.ApprovedRecyclingRegistryLoader;
+import pl.laina.reforge.runtime.RuntimeItemIdentity;
 import pl.laina.reforge.service.ItemIdentityService;
 import pl.laina.reforge.service.PendingItemService;
 
@@ -103,7 +105,7 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(color("&d/reforge why &7- wyjasnia decyzje dla itemu w rece"));
         sender.sendMessage(color("&d/reforge audit &7- podsumowuje Rules Engine"));
         sender.sendMessage(color("&d/reforge reload [--check] &7- sprawdza lub aktywuje konfiguracje"));
-        sender.sendMessage(color("&d/reforge value <id> &7- pokazuje polityke dla technicznego ID"));
+        sender.sendMessage(color("&d/reforge value <material:CMD> &7- pokazuje decyzje runtime"));
         sender.sendMessage(color("&d/reforge inspect &7- pokazuje dane diagnostyczne itemu"));
         sender.sendMessage(color("&d/reforge pending &7- pokazuje Discovery Queue"));
         if (itemIdentityService.isDevelopmentEnabled()) {
@@ -123,8 +125,13 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 2) {
             RulesConfigurationCandidate candidate = configurationService.validateDisk();
+            ApprovedRecyclingRegistryLoader.Candidate runtimeCandidate = plugin.validateRuntimeRegistry();
             sender.sendMessage(color("&d--- Rules Engine config check ---"));
             sendValidationSummary(sender, candidate.report());
+            sender.sendMessage(color("&7Approved decisions registry: "
+                    + (runtimeCandidate.valid() ? "&aPOPRAWNY" : "&cBLEDNY")));
+            runtimeCandidate.errors().stream().limit(5)
+                    .forEach(error -> sender.sendMessage(color("&c- " + error)));
             sender.sendMessage(color("&7Zmiany nie zostaly aktywowane."));
             return true;
         }
@@ -136,6 +143,8 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
         } else {
             sender.sendMessage(color("&cKonfiguracja jest bledna. Zachowano ostatnia poprawna wersje."));
             sendValidationSummary(sender, result.report());
+            result.runtimeErrors().stream().limit(5)
+                    .forEach(error -> sender.sendMessage(color("&c- Registry: " + error)));
         }
         return true;
     }
@@ -170,6 +179,8 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(color("&7Bledy ostatniego sprawdzenia: &c" + lastCheck.errorCount()));
         sender.sendMessage(color("&7Ostrzezenia ostatniego sprawdzenia: &e" + lastCheck.warningCount()));
         sender.sendMessage(color("&7Aktywny snapshot: " + (rules.valid() ? "&aPOPRAWNY" : "&cFAIL-CLOSED")));
+        sender.sendMessage(color("&7Approved runtime identities: &f"
+                + rulesEngine.approvedRegistry().snapshot().size()));
         return true;
     }
 
@@ -208,7 +219,12 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(color("&cUzycie: /reforge value <item_id>"));
             return true;
         }
-        RecyclingDecision decision = rulesEngine.evaluate(RuleEvaluationInput.identified(args[1]));
+        RuntimeItemIdentity identity = RuntimeItemIdentity.parse(args[1]).orElse(null);
+        if (identity == null) {
+            sender.sendMessage(color("&cUzycie: /reforge value <material:CMD>"));
+            return true;
+        }
+        RecyclingDecision decision = rulesEngine.evaluate(RuleEvaluationInput.runtimeIdentified(args[1], identity));
         sender.sendMessage(color("&d--- LainaReforge policy ---"));
         sendDecision(sender, decision);
         return true;
@@ -327,8 +343,14 @@ public final class ReforgeCommand implements CommandExecutor, TabCompleter {
                 && sender.hasPermission("lainareforge.admin")) {
             return "--check".startsWith(args[1].toLowerCase(Locale.ROOT)) ? List.of("--check") : List.of();
         }
-        if (args.length == 2
-                && (args[0].equalsIgnoreCase("value") || args[0].equalsIgnoreCase("devitem"))
+        if (args.length == 2 && args[0].equalsIgnoreCase("value")
+                && sender.hasPermission("lainareforge.admin")) {
+            String prefix = args[1].toLowerCase(Locale.ROOT);
+            return rulesEngine.approvedRegistry().snapshot().entries().keySet().stream()
+                    .map(RuntimeItemIdentity::key)
+                    .filter(value -> value.startsWith(prefix)).sorted().toList();
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("devitem")
                 && sender.hasPermission("lainareforge.admin")) {
             String prefix = args[1].toLowerCase(Locale.ROOT);
             return rulesEngine.configuration().configuredItemIds().stream()
