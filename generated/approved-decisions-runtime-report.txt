@@ -10,6 +10,6 @@ Queue logical items: 691
 Conflicts: 0
 Validation errors: 0
 Runtime resource: src/main/resources/recycling-runtime.yml
-Last-known-good tests: PASS (Maven test suite)
-Runtime integration tests: PASS (Maven test suite)
-Shard payout tests: PASS (Maven test suite)
+Compiler validation: PASS
+Runtime config validation: PASS
+Test suite status: NOT_RUN_BY_COMPILER

@@ -49,6 +49,16 @@ class ApprovedRecyclingRegistryLoaderTest {
     }
 
     @Test
+    void acceptsPerItemLimitAndRejectsAnythingAboveIt() {
+        ApprovedRecyclingRegistryLoader loader = new ApprovedRecyclingRegistryLoader();
+
+        assertTrue(loader.validate(VALID.replace("shards: 3",
+                "shards: " + RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM)).valid());
+        assertFalse(loader.validate(VALID.replace("shards: 3",
+                "shards: " + (RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM + 1))).valid());
+    }
+
+    @Test
     void invalidReloadRetainsLastKnownGoodSnapshot() {
         ApprovedRecyclingRegistryLoader loader = new ApprovedRecyclingRegistryLoader();
         assertTrue(loader.reload(VALID).activated());

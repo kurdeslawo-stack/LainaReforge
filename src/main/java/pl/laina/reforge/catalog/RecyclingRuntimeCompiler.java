@@ -17,6 +17,7 @@ import java.util.TreeMap;
 import pl.laina.reforge.runtime.ApprovedRecyclingRegistry;
 import pl.laina.reforge.runtime.ApprovedRecyclingRegistryLoader;
 import pl.laina.reforge.runtime.RuntimeItemIdentity;
+import pl.laina.reforge.runtime.RecyclingSafetyLimits;
 
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.DecisionQueue;
 import static pl.laina.reforge.catalog.RecyclingDecisionQueueGenerator.QueueItem;
@@ -111,6 +112,10 @@ public final class RecyclingRuntimeCompiler {
                         || decision.shards() <= 0) {
                     throw new IllegalArgumentException("Invalid APPROVED decision: " + reviewed.getKey());
                 }
+                if (decision.shards() > RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM) {
+                    throw new IllegalArgumentException("APPROVED decision exceeds max shards per item ("
+                            + RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM + "): " + reviewed.getKey());
+                }
                 approved++;
             } else {
                 if (!Boolean.FALSE.equals(decision.recyclable()) || decision.shards() == null
@@ -150,9 +155,9 @@ public final class RecyclingRuntimeCompiler {
                 + "Conflicts: 0\n"
                 + "Validation errors: 0\n"
                 + "Runtime resource: " + output.toString().replace('\\', '/') + "\n"
-                + "Last-known-good tests: PASS (Maven test suite)\n"
-                + "Runtime integration tests: PASS (Maven test suite)\n"
-                + "Shard payout tests: PASS (Maven test suite)\n";
+                + "Compiler validation: PASS\n"
+                + "Runtime config validation: PASS\n"
+                + "Test suite status: NOT_RUN_BY_COMPILER\n";
     }
 
     private static void writeUtf8Atomic(Path path, String content) throws IOException {

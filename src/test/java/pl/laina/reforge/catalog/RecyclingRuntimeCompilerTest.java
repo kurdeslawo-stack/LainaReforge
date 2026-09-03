@@ -6,6 +6,7 @@ import org.junit.jupiter.api.io.TempDir;
 import pl.laina.reforge.runtime.ApprovedRecyclingRegistryLoader;
 import pl.laina.reforge.runtime.RecyclingLookupResult;
 import pl.laina.reforge.runtime.RuntimeItemIdentity;
+import pl.laina.reforge.runtime.RecyclingSafetyLimits;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -80,6 +81,17 @@ class RecyclingRuntimeCompilerTest {
     }
 
     @Test
+    void compilerAcceptsPerItemLimitAndRejectsAnythingAboveIt() {
+        var atLimit = RecyclingRuntimeCompiler.compile(queue,
+                Map.of(singleIdentity.logicalId(), approved(RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM)));
+        assertEquals(1, atLimit.registry().size());
+
+        assertThrows(IllegalArgumentException.class, () -> RecyclingRuntimeCompiler.compile(queue,
+                Map.of(singleIdentity.logicalId(),
+                        approved(RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM + 1))));
+    }
+
+    @Test
     void duplicateIdentityAssignmentsRejectWholeQueue() {
         var first = queue.items().get(0);
         var secondOriginal = queue.items().get(1);
@@ -123,6 +135,24 @@ class RecyclingRuntimeCompilerTest {
         assertEquals("sentinel", Files.readString(output));
         assertFalse(Files.exists(report));
         assertArrayEquals(catalogBefore, Files.readAllBytes(Path.of("src/main/resources/items.yml")));
+    }
+
+    @Test
+    void reportDoesNotClaimThatCompilerRanTheTestSuite() throws Exception {
+        Path output = temporaryDirectory.resolve("empty-runtime.yml");
+        Path report = temporaryDirectory.resolve("runtime-report.txt");
+
+        int exit = RecyclingRuntimeCompiler.execute(new RecyclingRuntimeCompiler.Options(
+                        Path.of("generated/recycling-decision-queue.yml"),
+                        Path.of("recycling-decisions.yml"), output, report),
+                new PrintStream(new ByteArrayOutputStream()), new PrintStream(new ByteArrayOutputStream()));
+
+        assertEquals(0, exit);
+        String text = Files.readString(report);
+        assertTrue(text.contains("Compiler validation: PASS"));
+        assertTrue(text.contains("Runtime config validation: PASS"));
+        assertTrue(text.contains("Test suite status: NOT_RUN_BY_COMPILER"));
+        assertFalse(text.contains("tests: PASS"));
     }
 
     private static RecyclingReviewPanelGenerator.ReviewDecision approved(int shards) {

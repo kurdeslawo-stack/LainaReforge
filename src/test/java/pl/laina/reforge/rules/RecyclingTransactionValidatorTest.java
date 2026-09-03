@@ -1,6 +1,7 @@
 package pl.laina.reforge.rules;
 
 import org.junit.jupiter.api.Test;
+import pl.laina.reforge.runtime.RecyclingSafetyLimits;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ class RecyclingTransactionValidatorTest {
     }
 
     @Test
-    void rewardOverflowFailsClosedWithoutPartialPayout() {
+    void hugeRewardFailsAtTechnicalLimitWithoutPartialPayout() {
         RecyclingDecision accepted = allowed("first", 1_000_000);
 
         RecyclingTransactionValidator.TransactionPlan plan = validator.validate(List.of(
@@ -54,7 +55,55 @@ class RecyclingTransactionValidatorTest {
         assertFalse(plan.allowed());
         assertEquals(0, plan.totalShards());
         assertTrue(plan.itemAmounts().isEmpty());
-        assertEquals(RecyclingReasonCode.BLOCKED_REWARD_OVERFLOW,
+        assertEquals(RecyclingReasonCode.BLOCKED_REWARD_LIMIT,
+                plan.blockedDecisions().getFirst().reasonCode());
+    }
+
+    @Test
+    void transactionAtTechnicalLimitIsAllowed() {
+        RecyclingDecision accepted = allowed("bounded", RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM);
+
+        RecyclingTransactionValidator.TransactionPlan plan = validator.validate(List.of(
+                new RecyclingTransactionValidator.EvaluatedStack(
+                        RecyclingSafetyLimits.MAX_SHARDS_PER_TRANSACTION
+                                / RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM,
+                        accepted)));
+
+        assertTrue(plan.allowed());
+        assertEquals(RecyclingSafetyLimits.MAX_SHARDS_PER_TRANSACTION, plan.totalShards());
+    }
+
+    @Test
+    void transactionAboveTechnicalLimitIsBlockedWithoutPartialPayout() {
+        RecyclingDecision accepted = allowed("bounded", RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM);
+
+        RecyclingTransactionValidator.TransactionPlan plan = validator.validate(List.of(
+                new RecyclingTransactionValidator.EvaluatedStack(
+                        RecyclingSafetyLimits.MAX_SHARDS_PER_TRANSACTION
+                                / RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM,
+                        accepted),
+                new RecyclingTransactionValidator.EvaluatedStack(1, allowed("extra", 1))));
+
+        assertFalse(plan.allowed());
+        assertEquals(0, plan.totalShards());
+        assertTrue(plan.itemAmounts().isEmpty());
+        assertEquals(1, plan.blockedDecisions().size());
+        assertEquals(RecyclingReasonCode.BLOCKED_REWARD_LIMIT,
+                plan.blockedDecisions().getFirst().reasonCode());
+        assertEquals(RecyclingRuleSource.TRANSACTION_SAFETY,
+                plan.blockedDecisions().getFirst().ruleSource());
+    }
+
+    @Test
+    void unsafePerItemValueIsBlockedAtTransactionBoundary() {
+        RecyclingTransactionValidator.TransactionPlan plan = validator.validate(List.of(
+                new RecyclingTransactionValidator.EvaluatedStack(1,
+                        allowed("unsafe", RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM + 1))));
+
+        assertFalse(plan.allowed());
+        assertEquals(0, plan.totalShards());
+        assertTrue(plan.itemAmounts().isEmpty());
+        assertEquals(RecyclingReasonCode.BLOCKED_REWARD_LIMIT,
                 plan.blockedDecisions().getFirst().reasonCode());
     }
 

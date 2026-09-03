@@ -64,6 +64,10 @@ public final class ApprovedRecyclingRegistry {
             if (recyclable && shards <= 0) {
                 throw new IllegalArgumentException("Recyclable entry requires positive shards");
             }
+            if (recyclable && shards > RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM) {
+                throw new IllegalArgumentException("Recyclable entry exceeds max shards per item ("
+                        + RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM + ")");
+            }
             if (!recyclable && shards != 0) {
                 throw new IllegalArgumentException("Rejected entry requires shards=0");
             }

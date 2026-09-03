@@ -1,5 +1,7 @@
 package pl.laina.reforge.rules;
 
+import pl.laina.reforge.runtime.RecyclingSafetyLimits;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,7 +27,22 @@ public final class RecyclingTransactionValidator {
                 blocked.add(decision);
                 continue;
             }
+            if (decision.shardValue() <= 0
+                    || decision.shardValue() > RecyclingSafetyLimits.MAX_SHARDS_PER_ITEM) {
+                RecyclingDecision limit = new RecyclingDecision(
+                        true, decision.technicalId(), "", "", false, 0,
+                        RecyclingReasonCode.BLOCKED_REWARD_LIMIT,
+                        RecyclingRuleSource.TRANSACTION_SAFETY);
+                return new TransactionPlan(false, 0, Map.of(), List.of(limit));
+            }
             total += (long) decision.shardValue() * stack.amount();
+            if (total > RecyclingSafetyLimits.MAX_SHARDS_PER_TRANSACTION) {
+                RecyclingDecision limit = new RecyclingDecision(
+                        true, decision.technicalId(), "", "", false, 0,
+                        RecyclingReasonCode.BLOCKED_REWARD_LIMIT,
+                        RecyclingRuleSource.TRANSACTION_SAFETY);
+                return new TransactionPlan(false, 0, Map.of(), List.of(limit));
+            }
             amounts.merge(decision.technicalId(), stack.amount(), Integer::sum);
         }
 

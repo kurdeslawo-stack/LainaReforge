@@ -24,6 +24,7 @@ public final class RecyclingReasonText {
             case BLOCKED_APPROVED_DECISION_REJECTED -> "Recykling zostal odrzucony w zatwierdzonych decyzjach.";
             case BLOCKED_APPROVED_DECISION_NOT_CONFIGURED -> "Brak zatwierdzonej decyzji dla tego materialu i CMD.";
             case BLOCKED_INVALID_IDENTITY -> "Przedmiot nie ma poprawnej kombinacji materialu i CMD.";
+            case BLOCKED_REWARD_LIMIT -> "Laczna nagroda przekracza techniczny limit bezpieczenstwa.";
             case BLOCKED_REWARD_OVERFLOW -> "Laczna nagroda przekracza bezpieczny zakres.";
         };
     }
