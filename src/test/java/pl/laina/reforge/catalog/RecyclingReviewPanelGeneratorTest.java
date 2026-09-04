@@ -536,6 +536,7 @@ class RecyclingReviewPanelGeneratorTest {
         assertTrue(html.contains(".layout{min-width:0;padding-bottom:0;overflow:visible}"));
         assertTrue(html.contains(".content-stack{padding-bottom:0;overflow:visible}"));
         assertTrue(html.contains(".economy-box{min-width:0;margin-bottom:0;overflow:hidden"));
+        assertTrue(html.contains(".economy-box{padding:16px 16px 10px;"));
         assertTrue(html.contains(".item-head h2,.item-head .muted"));
         assertTrue(html.contains("overflow-wrap:anywhere"));
     }
