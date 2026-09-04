@@ -10,7 +10,7 @@ HIGH: 176
 MEDIUM: 420
 LOW: 994
 Generated HTML: generated/recycling-review-panel/index.html
-HTML size (UTF-8 bytes): 1105764
+HTML size (UTF-8 bytes): 1111479
 Decision history storage: laina-reforge.recycling-decisions.v1.history
 Economy review assistant: ENABLED (advisory only)
 Minimum approved peers for statistics: 3

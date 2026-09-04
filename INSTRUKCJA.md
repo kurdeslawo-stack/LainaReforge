@@ -1,5 +1,19 @@
 # LainaReforge — instrukcja od zera
 
+## NAJPROSTSZY SPOSÓB
+
+1. Kliknij `START-REVIEW.cmd`.
+2. Wykonaj review w otwartym panelu.
+3. Użyj **EXPORT DECISIONS**, aby pobrać `recycling-decisions.yml`.
+4. Umieść wyeksportowany plik w katalogu głównym repozytorium.
+5. Kliknij `VALIDATE-DECISIONS.cmd`.
+
+Launcher panelu nie wymaga Mavena ani uruchomionego serwera Minecraft. Walidator
+sprawdza decyzje i przygotowuje wyłącznie pliki kontrolne pod `target/`; nie wdraża
+runtime na żaden serwer.
+
+---
+
 LainaReforge składa się z **dwóch osobnych części**:
 
 1. **lokalnego panelu w przeglądarce** — służy do przeglądania itemów i ustawiania, które można recyklingować oraz ile shardów mają dawać,
