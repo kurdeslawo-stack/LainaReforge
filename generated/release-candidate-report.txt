@@ -1,0 +1,91 @@
+LainaReforge 0.1.0-rc1
+=======================
+
+Automated tests: PASS (183 tests, 0 failures, 0 errors, 0 skipped)
+Build: PASS
+git diff --check: PASS
+Release preflight: PASS
+
+Catalog identities: 1757
+Logical items: 1590
+
+Catalog evolution:
+UNCHANGED: 1757
+NEW: 0
+CHANGED: 0
+REMOVED: 0
+
+Automatic approved: 0
+Production decisions: 0
+Production runtime identities: 0
+
+Reviewer workspace: PASS
+- START-REVIEW.cmd -PreflightOnly: PASS
+- VALIDATE-DECISIONS.cmd: PASS (technically valid; NOT READY FOR DEPLOYMENT because 1590 remain pending)
+- Decisions/history mutation by preflight: none
+
+Economy assistant: PASS (automated regression suite)
+Runtime compiler: PASS (isolated real-queue fixture, 2 APPROVED / 1 REJECTED)
+Fail-closed reload: PASS (automated and live Paper last-known-good check)
+Discovery queue: PASS for existing automated regression and console diagnostics;
+  live injection of a new unknown custom is NOT RUN.
+
+Paper boot: PASS (two clean plugin enables on Paper 26.2 / Java 25)
+Command smoke: PASS for console-supported commands; player-held and permission variants NOT RUN
+Transaction smoke: PASS in automated service/rules tests; live physical inventory transaction NOT RUN
+Restart smoke: PASS
+
+Identity and safety checks
+--------------------------
+Exact material+CMD lookup: PASS
+Same CMD on another material remains NOT_CONFIGURED: PASS
+APPROVED shard values preserved: PASS
+REJECTED and NOT_CONFIGURED fail closed: PASS
+Currency and vanilla-without-CMD rejection: PASS in automated Rules Engine tests
+1 and 256 shards/item: PASS in automated tests
+257 shards/item: PASS (rejected)
+4096 total transaction: PASS in automated tests
+Above 4096 total: PASS (blocked atomically in automated tests)
+No partial payout plan on limit failure: PASS in automated tests
+
+Panel
+-----
+Self-contained HTML: PASS
+No external JS/CDN/backend: PASS
+Queue fingerprint: PASS
+Generator self-check/tests: PASS
+Manual browser click-through: NOT RUN in this RC session
+
+Security / hygiene
+------------------
+Tracked C:\Users\ paths: 0
+Tracked ChatGPT/Codex/OpenAI/Claude references: 0
+Tracked API-key/password/secret patterns: 0
+Tracked private logs: 0
+"token" matches reviewed: catalog model/item names, not credentials
+items.zip retained intentionally in the private repository
+
+Fixed during RC
+---------------
+1. Windows PowerShell 5 parsing of a non-ASCII preflight error message was made safe.
+2. Runtime material validation now rejects unknown Minecraft materials when Paper API
+   is available, while offline compiler tools remain runnable without Paper on classpath.
+3. Added isolated decisions -> compiler -> runtime regression coverage and release preflight.
+
+Known limitations / NOT RUN
+---------------------------
+- Live player GUI interaction and visual verification
+- Live physical ItemStack removal and currency payout
+- Live stack 64, multiple stacks, nearly-full inventory and no-result-space scenarios
+- Live currency-item recycling attempt
+- Live unknown-custom discovery insertion
+- Player permission matrix and player-held /reforge why + /reforge inspect
+- Browser click-through of the generated file:// panel
+
+All corresponding automated service/rules/generator tests pass, but they are not
+reported as substitutes for the live player actions above.
+
+Release verdict: FAIL
+Reason: automated RC, compiler, preflight and Paper console/restart smoke passed, but
+the player-only GUI/physical-transaction checklist remains NOT RUN and therefore a
+full end-to-end release sign-off cannot honestly be marked PASS yet.

@@ -234,7 +234,7 @@ mvn clean package
 Gotowy JAR pojawi się tutaj:
 
 ```text
-target/LainaReforge-0.1.0-SNAPSHOT.jar
+target/LainaReforge-0.1.0-rc1.jar
 ```
 
 Plugin jest budowany pod Java 25 i Paper API 26.2.

@@ -6,7 +6,7 @@
 
     <groupId>pl.laina</groupId>
     <artifactId>lainareforge</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0-rc1</version>
     <name>LainaReforge</name>
     <description>Recycling and reforging system for Laina.pl</description>
 

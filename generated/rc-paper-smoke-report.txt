@@ -1,0 +1,70 @@
+LainaReforge 0.1.0-rc1 - Paper Smoke Report
+=============================================
+
+Environment
+-----------
+Paper: 26.2-111 (API 26.2.build.111-stable)
+Java: 25.0.3 LTS
+Server: local minecraftTest
+Fixture: isolated under target/rc-smoke; never copied to production resources
+
+Boot
+----
+Plugin discovered as LainaReforge 0.1.0-rc1: PASS
+Plugin enabled: PASS
+Runtime loaded: PASS (3 test identities)
+Rules Engine config valid: PASS
+LainaReforge enable exceptions: 0
+LainaReforge startup ERROR/WARN: 0
+
+The server emitted Windows OSHI performance-counter errors and warnings before
+plugin enable. They are Paper/OSHI host diagnostics, not emitted by LainaReforge.
+Matylda also emitted backend synchronization warnings; those are outside this repo.
+
+Command smoke
+-------------
+/reforge: PASS
+/reforge audit: PASS
+/reforge value golden_carrot:2350222: PASS (APPROVED, exactly 3 shards)
+/reforge value tropical_fish:2350150: PASS (REJECTED, 0 shards)
+/reforge value baked_potato:2350223: PASS (NOT_CONFIGURED, 0 shards)
+/reforge pending: PASS
+/reforge reload --check: PASS (validated without activation)
+/reforge reload: PASS (valid fixture activated)
+/reforge why: PASS for console guard; player-held-item behavior NOT RUN
+/reforge inspect: PASS for console guard; player-held-item behavior NOT RUN
+Non-admin permission behavior: NOT RUN (no test player connected)
+
+Fail-closed reload
+------------------
+Valid snapshot active: PASS
+Invalid shards=257 rejected by --check: PASS
+Invalid shards=257 rejected by reload: PASS
+Last-known-good APPROVED value remained exactly 3: PASS
+Missing file, malformed YAML, duplicate identity, invalid material and invalid CMD:
+PASS in automated runtime tests; live server variants NOT RUN.
+
+Restart
+-------
+Normal stop: PASS
+Second boot: PASS
+Runtime reloaded from disk with 3 identities: PASS
+APPROVED lookup after restart: PASS (3 shards)
+REJECTED lookup after restart: PASS (0 shards)
+Normal final stop: PASS
+
+Player-only smoke
+-----------------
+Recycler GUI interaction: NOT RUN
+Physical ItemStack insertion/removal and shard payout: NOT RUN
+Stack, multiple-stack and nearly-full-inventory cases: NOT RUN
+Currency ItemStack rejection in live GUI: NOT RUN
+Unknown custom discovery injection in live GUI: NOT RUN
+
+Cleanup
+-------
+Server stopped: PASS
+Previous server JAR restored: PASS
+Previous server recycling-runtime.yml restored: PASS
+Production project runtime identities: 0
+Production project decisions: 0

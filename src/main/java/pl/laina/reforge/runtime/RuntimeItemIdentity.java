@@ -11,6 +11,9 @@ public record RuntimeItemIdentity(String material, int customModelData) implemen
         if (!material.matches("[a-z0-9_]+")) {
             throw new IllegalArgumentException("Invalid Minecraft material: " + material);
         }
+        if (!isKnownMaterialWhenBukkitIsAvailable(material)) {
+            throw new IllegalArgumentException("Unknown Minecraft material: " + material);
+        }
         if (customModelData <= 0) {
             throw new IllegalArgumentException("Custom model data must be positive");
         }
@@ -33,6 +36,18 @@ public record RuntimeItemIdentity(String material, int customModelData) implemen
                     value.substring(0, separator), Integer.parseInt(value.substring(separator + 1))));
         } catch (IllegalArgumentException exception) {
             return Optional.empty();
+        }
+    }
+
+    private static boolean isKnownMaterialWhenBukkitIsAvailable(String material) {
+        try {
+            Class<?> materialType = Class.forName("org.bukkit.Material");
+            return materialType.getMethod("matchMaterial", String.class).invoke(null, material) != null;
+        } catch (ClassNotFoundException ignored) {
+            // Offline catalog/compiler tools deliberately run without the provided Paper API.
+            return true;
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalStateException("Cannot validate Minecraft material", exception);
         }
     }
 
