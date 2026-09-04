@@ -65,13 +65,13 @@ git --version
 ```powershell
 git clone https://github.com/kurdeslawo-stack/LainaReforge.git
 cd LainaReforge
-git switch feature/review-workflow-ux
+git switch feature/reviewer-ui-redesign
 ```
 
 Aktualna wersja panelu i workflow znajduje się na branchu:
 
 ```text
-feature/review-workflow-ux
+feature/reviewer-ui-redesign
 ```
 
 ---
@@ -134,6 +134,11 @@ Item nie ma jeszcze podjętej decyzji i nie powinien działać w recyclerze.
 
 Panel posiada między innymi:
 
+- czytelny pulpit postępu i pokrycia katalogu,
+- pełne dossier itemu na jednym ekranie,
+- przyklejony panel ręcznej decyzji,
+- podgląd ostatniej historii bieżącego itemu,
+- porównania ekonomiczne i ostrzeżenia o ryzyku,
 - wyszukiwarkę,
 - filtrowanie,
 - wyszukiwanie po `material:CMD`,

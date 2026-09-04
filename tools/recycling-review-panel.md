@@ -8,6 +8,12 @@ Panel obejmuje cały katalog: wpisy `MAPPED` zachowują dane Wiki i ekonomii, na
 ograniczyć widok do jednej z tych grup. Dla `UNMAPPED` panel pokazuje badge **BRAK WIKI** i dane
 techniczne bez tworzenia pustego linku Wiki.
 
+Interfejs ma układ stanowiska recenzenta: na górze znajduje się postęp i szybkie kolejki,
+w centrum kompletne dossier bieżącego itemu, a po prawej przyklejony panel decyzji. Na jednym
+ekranie dostępne są identity, stan katalogu i mapowania, źródło zdobycia, evidence, propozycja
+systemu, podobne itemy, statystyki wycen, ryzyko, bieżąca decyzja oraz trzy ostatnie wpisy
+historii itemu. Układ przechodzi w jedną kolumnę na węższych ekranach.
+
 ## Generowanie
 
 Z katalogu głównego repozytorium uruchom:
@@ -52,6 +58,10 @@ Szybkie kolejki pozwalają przejść do pozycji `PENDING`, `HIGH`, `MAPPED`, `UN
 
 Wartość custom shards musi być liczbą całkowitą od 1 do 256. Zmiana istniejącej
 decyzji jest jawna i zapisuje nowy czas `reviewed_at`.
+
+Wybór wartości shards jest etapem analizy. Dopiero osobny przycisk **ZAPISZ APPROVED** tworzy
+decyzję, dzięki czemu propozycje ekonomiczne i skrót `A` nie mogą zatwierdzić itemu samodzielnie.
+Aktualny procent przeglądu oraz liczniki `MAPPED`/`UNMAPPED` odświeżają się natychmiast.
 
 **IMPORT DECISIONS** przyjmuje plik wygenerowany przez panel. Import jest
 odrzucany w całości, jeśli zawiera nieznany item, brakujące lub nadmiarowe pola,

@@ -474,6 +474,46 @@ class RecyclingReviewPanelGeneratorTest {
     }
 
     @Test
+    void redesignedPanelHasAccessibleReviewCockpitLandmarks() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertTrue(html.contains("data-ui-version=\"review-cockpit-v2\""));
+        assertTrue(html.contains("class=\"skip-link\" href=\"#itemCard\""));
+        assertTrue(html.contains("aria-label=\"Panel decyzji\""));
+        assertTrue(html.contains("id=\"message\" class=\"message\" role=\"status\" aria-live=\"polite\""));
+    }
+
+    @Test
+    void redesignedPanelKeepsHumanDecisionBoundaryExplicit() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertTrue(html.contains("System doradza — człowiek zatwierdza"));
+        assertTrue(html.contains("Wartość nie jest zapisywana po samym wyborze."));
+        assertTrue(html.contains("id=\"confirmShardDecision\""));
+        assertTrue(html.contains("disabled>ZAPISZ APPROVED"));
+    }
+
+    @Test
+    void redesignedPanelShowsPerItemHistoryWithoutChangingHistoryStorage() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertTrue(html.contains("id=\"itemHistoryPreview\""));
+        assertTrue(html.contains("function renderItemHistoryPreview()"));
+        assertTrue(html.contains("history.filter(entry=>entry.logical_item_id===item.id)"));
+        assertTrue(html.contains("const HISTORY_STORAGE_KEY = STORAGE_KEY + '.history'"));
+    }
+
+    @Test
+    void redesignedPanelRendersLiveReviewProgress() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertTrue(html.contains("id=\"reviewProgressBar\""));
+        assertTrue(html.contains("id=\"reviewProgressPercent\""));
+        assertTrue(html.contains("Math.round(p.reviewed*100/QUEUE.length)"));
+        assertTrue(html.contains("$('reviewProgressBar').style.width=percent+'%'"));
+    }
+
+    @Test
     void generationIsDeterministic() {
         assertEquals(RecyclingReviewPanelGenerator.renderPanel(queue),
                 RecyclingReviewPanelGenerator.renderPanel(queue));
