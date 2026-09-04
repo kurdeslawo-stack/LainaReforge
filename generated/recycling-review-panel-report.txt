@@ -10,7 +10,8 @@ HIGH: 176
 MEDIUM: 420
 LOW: 994
 Generated HTML: generated/recycling-review-panel/index.html
-HTML size (UTF-8 bytes): 1121525
+HTML size (UTF-8 bytes): 1146430
+Laina logo: EMBEDDED PNG (standalone)
 Decision history storage: laina-reforge.recycling-decisions.v1.history
 Economy review assistant: ENABLED (advisory only)
 Minimum approved peers for statistics: 3

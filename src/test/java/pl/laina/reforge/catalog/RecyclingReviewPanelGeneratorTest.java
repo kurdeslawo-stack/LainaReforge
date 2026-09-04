@@ -487,10 +487,23 @@ class RecyclingReviewPanelGeneratorTest {
     void redesignedPanelKeepsHumanDecisionBoundaryExplicit() {
         String html = RecyclingReviewPanelGenerator.renderPanel(queue);
 
-        assertTrue(html.contains("System doradza — człowiek zatwierdza"));
+        assertFalse(html.contains("System doradza — człowiek zatwierdza"));
         assertTrue(html.contains("Wartość nie jest zapisywana po samym wyborze."));
         assertTrue(html.contains("id=\"confirmShardDecision\""));
         assertTrue(html.contains("disabled>ZAPISZ APPROVED"));
+    }
+
+    @Test
+    void redesignedPanelEmbedsOfficialLainaLogoForStandaloneUse() throws Exception {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+        byte[] logo = Files.readAllBytes(RecyclingReviewPanelGenerator.DEFAULT_LOGO);
+
+        assertTrue(logo.length > 8);
+        assertEquals((byte) 0x89, logo[0]);
+        assertTrue(html.contains("<img class=\"brand-logo\" src=\"data:image/png;base64,"));
+        assertTrue(html.contains("alt=\"Laina.pl\""));
+        assertFalse(html.contains("class=\"brand-mark\""));
+        assertFalse(html.contains("Economy governance"));
     }
 
     @Test
@@ -508,9 +521,22 @@ class RecyclingReviewPanelGeneratorTest {
         String html = RecyclingReviewPanelGenerator.renderPanel(queue);
 
         assertTrue(html.contains("id=\"reviewProgressBar\""));
-        assertTrue(html.contains("id=\"reviewProgressPercent\""));
+        assertTrue(html.contains("id=\"reviewProgressMessage\""));
         assertTrue(html.contains("Math.round(p.reviewed*100/QUEUE.length)"));
         assertTrue(html.contains("$('reviewProgressBar').style.width=percent+'%'"));
+        assertTrue(html.contains("p.reviewed===0?'Jeszcze nie oceniono żadnej pozycji.'"));
+        assertTrue(html.contains("`Oceniono ręcznie ${percent}% katalogu.`"));
+    }
+
+    @Test
+    void visualPolishProtectsLongContentAndBottomCardBoundary() {
+        String html = RecyclingReviewPanelGenerator.renderPanel(queue);
+
+        assertTrue(html.contains(".app{min-width:0;padding-bottom:72px}"));
+        assertTrue(html.contains(".layout{min-width:0;padding-bottom:30px;overflow:visible}"));
+        assertTrue(html.contains(".economy-box{min-width:0;margin-bottom:20px;overflow:hidden"));
+        assertTrue(html.contains(".item-head h2,.item-head .muted"));
+        assertTrue(html.contains("overflow-wrap:anywhere"));
     }
 
     @Test

@@ -100,6 +100,7 @@ Nie trzeba:
 - kompilować panelu.
 
 Panel jest już wygenerowany jako samodzielny HTML.
+Logo Laina.pl również jest osadzone w tym pliku, więc nie trzeba kopiować osobnych grafik.
 
 ---
 

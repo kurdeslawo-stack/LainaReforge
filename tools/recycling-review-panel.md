@@ -30,6 +30,10 @@ Generator czyta `generated/recycling-decision-queue.yml` i tworzy:
 HTML jest self-contained. Otwórz `index.html` bezpośrednio w przeglądarce; panel nie
 wymaga serwera HTTP i nie pobiera danych kolejki z internetu.
 
+Oficjalne logo Laina.pl znajduje się w `tools/assets/laina-logo.png`. Generator osadza
+oryginalny PNG w HTML jako lokalny `data:` URI, dlatego branding działa także po skopiowaniu
+samego `index.html` i nie wymaga internetu ani dodatkowego assetu obok panelu.
+
 ## Praca z decyzjami
 
 Decyzje są przechowywane w `localStorage` bieżącej przeglądarki pod stabilnym
