@@ -1,0 +1,115 @@
+LainaReforge 0.1.0-rc1 — Player Acceptance Checklist
+=====================================================
+
+Stan początkowy: WSZYSTKIE TESTY NOT RUN.
+Nie oznaczaj punktu jako PASS bez faktycznego wykonania go przez gracza.
+
+Przygotowanie
+-------------
+1. Uruchom PREPARE-PLAYER-TEST.cmd przy wyłączonym serwerze.
+2. Uruchom C:\CodexProjects\LainaServer\minecraftTest\start.bat.
+3. Dołącz jako gracz z uprawnieniem lainareforge.admin.
+4. Po testach wpisz stop w konsoli serwera.
+5. Uruchom RESTORE-AFTER-PLAYER-TEST.cmd.
+
+Paper 26.2 przechowuje liczbowe CMD w pierwszej wartości floats komponentu
+minecraft:custom_model_data. Poniższe komendy tworzą ItemStacki odczytywane przez
+ItemIdentityService jako dokładne material+CMD.
+
+Fixture i komendy /give
+-----------------------
+
+A. APPROVED — 3 shardy
+material: golden_carrot
+CMD: 2350222
+model_path: food/am_carrot
+logical item: Ametystowa_Marchew
+oczekiwane: APPROVED, dokładnie 3 shardy za sztukę
+/give @s minecraft:golden_carrot[minecraft:custom_model_data={floats:[2350222.0f]}] 1
+
+B. APPROVED — 7 shardów
+material: baked_potato
+CMD: 2350221
+model_path: food/am_beetroot
+logical item: Ametystowy_Burak
+oczekiwane: APPROVED, dokładnie 7 shardów za sztukę
+/give @s minecraft:baked_potato[minecraft:custom_model_data={floats:[2350221.0f]}] 1
+
+C. REJECTED
+material: tropical_fish
+CMD: 2350150
+model_path: fish/amethyst_fish
+logical item: Ametystowa_Rybka
+oczekiwane: REJECTED, 0 shardów, item pozostaje u gracza
+/give @s minecraft:tropical_fish[minecraft:custom_model_data={floats:[2350150.0f]}] 1
+
+D. NOT_CONFIGURED
+material: baked_potato
+CMD: 2350223
+model_path: food/am_potato
+logical item: Ametystowy_Ziemniak
+oczekiwane: NOT_CONFIGURED, 0 shardów, item pozostaje u gracza
+/give @s minecraft:baked_potato[minecraft:custom_model_data={floats:[2350223.0f]}] 1
+
+E1. Exact identity APPROVED — 3 shardy
+material: carved_pumpkin
+CMD: 2350507
+model_path: pumpkin/pirate_hat
+logical item: unmapped::carved_pumpkin:2350507
+oczekiwane: APPROVED, dokładnie 3 shardy
+/give @s minecraft:carved_pumpkin[minecraft:custom_model_data={floats:[2350507.0f]}] 1
+
+E2. Ten sam CMD, inny material — NOT_CONFIGURED
+material: echo_shard
+CMD: 2350507
+model_path: pumpkin/pirate_hat
+logical item: unmapped::echo_shard:2350507
+oczekiwane: NOT_CONFIGURED; nie może odziedziczyć decyzji E1
+/give @s minecraft:echo_shard[minecraft:custom_model_data={floats:[2350507.0f]}] 1
+
+Vanilla bez CMD
+/give @s minecraft:golden_carrot 1
+oczekiwane: brak poprawnego runtime identity, recycling zablokowany
+
+Nieznany custom do Discovery Queue
+/give @s minecraft:iron_sword[minecraft:custom_model_data={floats:[2999999.0f]}] 1
+oczekiwane: NOT_CONFIGURED; po próbie w GUI sprawdź /reforge pending
+
+Waluta pluginu
+Po poprawnym recyclingu A zachowaj wypłacony „Odłamek Customu”. To jest prawdziwy
+item waluty z PDC LainaReforge. Nie zastępuj go zwykłym amethyst_shard z /give.
+
+Lista testów gracza
+-------------------
+[ ] NOT RUN — /reforge otwiera GUI
+[ ] NOT RUN — APPROVED item można włożyć i zrecyklingować
+[ ] NOT RUN — dokładnie właściwa liczba itemów zostaje odebrana
+[ ] NOT RUN — dokładnie właściwa liczba shardów zostaje wypłacona
+[ ] NOT RUN — REJECTED jest blokowany i nie znika
+[ ] NOT RUN — NOT_CONFIGURED jest blokowany i nie znika
+[ ] NOT RUN — vanilla item bez CMD jest blokowany
+[ ] NOT RUN — prawdziwy currency/shard item nie może zostać zrecyklingowany
+[ ] NOT RUN — echo_shard:2350507 nie dziedziczy APPROVED po carved_pumpkin:2350507
+[ ] NOT RUN — 2 × golden_carrot:2350222 wypłaca dokładnie 6 shardów
+[ ] NOT RUN — stack 64 golden_carrot:2350222 wypłaca dokładnie 192 shardy
+[ ] NOT RUN — wiele stacków rozlicza się zgodnie z limitem transakcji
+[ ] NOT RUN — inventory prawie pełne
+[ ] NOT RUN — brak miejsca na payout nie powoduje utraty itemów; sprawdź też drop obok gracza
+[ ] NOT RUN — /reforge why jako gracz dla APPROVED/REJECTED/NOT_CONFIGURED
+[ ] NOT RUN — /reforge inspect jako gracz pokazuje material i CMD
+[ ] NOT RUN — gracz bez lainareforge.admin otrzymuje permission denied dla komend admina
+[ ] NOT RUN — unknown custom iron_sword:2999999 pozostaje blocked
+[ ] NOT RUN — unknown custom pojawia się w Discovery Queue po próbie w GUI
+
+Uwagi do testów ilości
+----------------------
+- Najpierw sprawdź pojedynczą sztukę, dopiero potem stacki.
+- Dla wielu stacków nie przekraczaj 4096 shardów w jednej transakcji.
+- CurrencyService przy pełnym inventory upuszcza nadmiar payoutu naturalnie obok gracza;
+  sprawdź zarówno inventory, jak i ziemię przed oceną wyniku.
+- POMIŃ/Anuluj/zamknięcie GUI nie może zabrać niezrecyklingowanych itemów.
+
+Po teście
+---------
+Uzupełnij generated/player-acceptance-result.txt na podstawie faktycznych wyników.
+Zatrzymaj serwer i uruchom RESTORE-AFTER-PLAYER-TEST.cmd.

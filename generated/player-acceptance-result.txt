@@ -1,0 +1,29 @@
+LainaReforge 0.1.0-rc1 — Player Acceptance Result
+==================================================
+
+PLAYER ACCEPTANCE: NOT RUN
+
+/reforge opens GUI: NOT RUN
+APPROVED item accepted: NOT RUN
+Exact input quantity removed: NOT RUN
+Exact shard payout: NOT RUN
+REJECTED blocked without item loss: NOT RUN
+NOT_CONFIGURED blocked without item loss: NOT RUN
+Vanilla item without CMD blocked: NOT RUN
+Plugin currency blocked: NOT RUN
+Same CMD on another material remains blocked: NOT RUN
+Multiple item quantity: NOT RUN
+Stack 64: NOT RUN
+Multiple stacks: NOT RUN
+Nearly full inventory: NOT RUN
+No payout space behavior: NOT RUN
+/reforge why as player: NOT RUN
+/reforge inspect as player: NOT RUN
+Non-admin permission denial: NOT RUN
+Unknown custom blocked: NOT RUN
+Unknown custom Discovery Queue entry: NOT RUN
+
+Reviewer:
+Tested at:
+Paper build:
+Notes:
